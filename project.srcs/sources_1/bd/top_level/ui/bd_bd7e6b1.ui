@@ -1,0 +1,68 @@
+{
+   "ActiveEmotionalView":"No Loops",
+   "Default View_ScaleFactor":"0.864198",
+   "Default View_TopLeft":"-522,-10",
+   "DisplayTieOff":"1",
+   "ExpandedHierarchyInLayout":"",
+   "No Loops_ExpandedHierarchyInLayout":"",
+   "No Loops_Layout":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port eth_rx -pg 1 -lvl 4 -x 960 -y 80 -defaultsOSRD -right
+preplace port axis_in -pg 1 -lvl 0 -x 0 -y 60 -defaultsOSRD
+preplace port port-id_clk -pg 1 -lvl 0 -x 0 -y 100 -defaultsOSRD
+preplace port port-id_chan_ok -pg 1 -lvl 4 -x 960 -y 100 -defaultsOSRD
+preplace port port-id_sys_resetn -pg 1 -lvl 0 -x 0 -y 80 -defaultsOSRD
+preplace portBus PACKET_SIZE -pg 1 -lvl 0 -x 0 -y 200 -defaultsOSRD
+preplace portBus FRAME_SIZE -pg 1 -lvl 0 -x 0 -y 220 -defaultsOSRD
+preplace inst data_checker -pg 1 -lvl 2 -x 500 -y 100 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 14 15 13} -defaultsOSRD -pinDir axis_eth right -pinY axis_eth 0R -pinDir axis_pattern left -pinY axis_pattern 0L -pinDir clk left -pinY clk 60L -pinDir resetn left -pinY resetn 80L -pinBusDir PACKET_SIZE left -pinBusY PACKET_SIZE 100L -pinBusDir FRAME_SIZE left -pinBusY FRAME_SIZE 120L -pinBusDir expected_frame_pattern right -pinBusY expected_frame_pattern 100R -pinBusDir error right -pinBusY error 120R -pinDir all_good right -pinY all_good 20R
+preplace inst pattern_fifo -pg 1 -lvl 1 -x 160 -y 60 -defaultsOSRD -pinDir S_AXIS left -pinY S_AXIS 0L -pinDir M_AXIS right -pinY M_AXIS 40R -pinDir s_axis_aresetn left -pinY s_axis_aresetn 20L -pinDir s_axis_aclk left -pinY s_axis_aclk 40L
+preplace inst reporter_ila -pg 1 -lvl 3 -x 840 -y 160 -swap {0 1 2 3 4 5 6 7 8 9 14 13 10 12 11} -defaultsOSRD -pinDir SLOT_0_AXIS left -pinY SLOT_0_AXIS 0L -pinDir clk left -pinY clk 120L -pinDir resetn left -pinY resetn 80L -pinBusDir probe0 left -pinBusY probe0 20L -pinBusDir probe1 left -pinBusY probe1 60L -pinBusDir probe2 left -pinBusY probe2 40L
+preplace netloc pcie_axi_aclk 1 0 3 20 160 280J 280 N
+preplace netloc all_good 1 2 2 740 100 N
+preplace netloc checker_ctl_sys_resetn_out 1 0 2 40 180 NJ
+preplace netloc mindy_core_ctl_0_PACKET_SIZE 1 0 2 NJ 200 NJ
+preplace netloc mindy_core_ctl_0_FRAME_SIZE 1 0 2 NJ 220 NJ
+preplace netloc error 1 2 1 N 220
+preplace netloc expected_frame_pattern 1 2 1 N 200
+preplace netloc eth_rx 1 2 2 720 80 N
+preplace netloc axis_data_fifo_0_M_AXIS 1 1 1 N 100
+preplace netloc axis_in0_1 1 0 1 NJ 60
+levelinfo -pg 1 0 160 500 840 960
+pagesize -pg 1 -db -bbox -sgen -190 0 1070 340
+",
+   "No Loops_ScaleFactor":"1.0",
+   "No Loops_TopLeft":"-235,-173",
+   "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port axis_eth -pg 1 -lvl 0 -x 0 -y 50 -defaultsOSRD
+preplace port axis_eth1 -pg 1 -lvl 0 -x 0 -y 70 -defaultsOSRD
+preplace port axis_pattern0 -pg 1 -lvl 0 -x 0 -y 660 -defaultsOSRD
+preplace port axis_pattern1 -pg 1 -lvl 0 -x 0 -y 460 -defaultsOSRD
+preplace port port-id_clk -pg 1 -lvl 0 -x 0 -y 480 -defaultsOSRD
+preplace port port-id_chan0_ok -pg 1 -lvl 2 -x 590 -y 400 -defaultsOSRD
+preplace port port-id_chan1_ok -pg 1 -lvl 2 -x 590 -y 380 -defaultsOSRD
+preplace port port-id_sys_resetn_out -pg 1 -lvl 0 -x 0 -y 680 -defaultsOSRD
+preplace portBus PACKET_SIZE -pg 1 -lvl 0 -x 0 -y 520 -defaultsOSRD
+preplace portBus FRAME_SIZE -pg 1 -lvl 0 -x 0 -y 540 -defaultsOSRD
+preplace inst system_ila_0 -pg 1 -lvl 1 -x 320 -y 160 -defaultsOSRD
+preplace inst data_checker_0 -pg 1 -lvl 1 -x 320 -y 690 -defaultsOSRD
+preplace inst data_checker_1 -pg 1 -lvl 1 -x 320 -y 490 -defaultsOSRD
+preplace netloc ch0_error 1 0 2 90 340 550
+preplace netloc ch1_error 1 0 2 100 350 540
+preplace netloc ch0_pattern 1 0 2 110 360 530
+preplace netloc ch1_pattern 1 0 2 120 370 520
+preplace netloc pcie_axi_aclk 1 0 1 60 130n
+preplace netloc ch0_ok 1 0 2 80 330 560
+preplace netloc ch1_ok 1 0 2 70 380 570
+preplace netloc checker_ctl_sys_resetn_out 1 0 1 40 500n
+preplace netloc mindy_core_ctl_0_PACKET_SIZE 1 0 1 30 520n
+preplace netloc mindy_core_ctl_0_FRAME_SIZE 1 0 1 20 540n
+preplace netloc eth0_rx 1 0 1 50 50n
+preplace netloc eth1_rx 1 0 1 20 70n
+preplace netloc pattern_0 1 0 1 NJ 660
+preplace netloc axis_data_fifo_1_M_AXIS 1 0 1 NJ 460
+levelinfo -pg 1 0 320 590
+pagesize -pg 1 -db -bbox -sgen -180 0 700 790
+"
+}
+
