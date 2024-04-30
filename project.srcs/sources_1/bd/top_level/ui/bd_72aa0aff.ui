@@ -30,14 +30,14 @@ preplace netloc mindy_core_ctl_0_PACKET_SIZE 1 2 1 740 210n
 preplace netloc pcie_axi_aclk 1 0 4 20 410 320 10 780 480 NJ
 preplace netloc reporter_0_error 1 3 1 N 350
 preplace netloc reporter_0_error_data 1 3 1 N 370
+preplace netloc reporter_0_eth_active 1 3 1 N 410
 preplace netloc reporter_0_expected_frame_pattern 1 3 1 N 390
 preplace netloc reporter_1_chan_ok 1 3 2 1260 640 NJ
 preplace netloc reporter_1_error 1 3 1 1200 520n
 preplace netloc reporter_1_error_data 1 3 1 1220 540n
+preplace netloc reporter_1_eth_active 1 3 1 1180 500n
 preplace netloc reporter_1_expected_frame_pattern 1 3 1 1240 560n
 preplace netloc source_200Mhz_resetn 1 0 4 40 210 340 30 760J 460 N
-preplace netloc reporter_1_eth_active 1 3 1 1180 500n
-preplace netloc reporter_0_eth_active 1 3 1 N 410
 preplace netloc S_AXI_ER_1 1 4 1 NJ 330
 preplace netloc S_AXI_MC_1 1 0 2 NJ 90 NJ
 preplace netloc axis_duplicate_axis_out0 1 2 1 N 330
@@ -50,7 +50,7 @@ levelinfo -pg 1 0 180 520 980 1430 1620
 pagesize -pg 1 -db -bbox -sgen -120 0 1780 830
 ",
    "No Loops_ScaleFactor":"0.712777",
-   "No Loops_TopLeft":"-118,-55",
+   "No Loops_TopLeft":"-118,-76",
    "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
 preplace port S_AXI -pg 1 -lvl 0 -x 0 -y 60 -defaultsOSRD

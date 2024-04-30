@@ -5,18 +5,23 @@
 //
 //   Date     Who   Ver  Changes
 //====================================================================================
-// 26-Jul-22  DWW  1000  Initial creation
+// 26-Jul-22  DWW     1  Initial creation
+//  
+// 29-Apr-24  DWW     2  Added support for RTL_TYPE and RTL_SUBTYPE
 //====================================================================================
 
 /*
 
     This module serves as a simple AXI4-Lite slave for reporting build version:
 
-    On the AXI4-lite slave interface, there are four 32-bit registers:
+    On the AXI4-lite slave interface, there are seven 32-bit registers:
        Offset 0x00 : Read-only = Major Revision
        Offset 0x04 : Read-only = Minor Revision
        Offset 0x08 : Read-only = Build Number
-       Offset 0x0C : Read-only = Build Date
+       Offset 0x0C : Read-only = Release candidate
+       Offset 0x10 : Read-only = Build Date
+       Offset 0x14 : Read-only = RTL type
+       Offset 0x18 : Read-only = RTL subtype
 */
 
 
@@ -69,7 +74,15 @@ module axi_revision#
     //==========================================================================
  );
 
-
+    // Register indices
+    localparam REG_MAJOR       = 0;
+    localparam REG_MINOR       = 1;
+    localparam REG_BUILD       = 2;
+    localparam REG_RCAND       = 3;
+    localparam REG_DATE        = 4;
+    localparam REG_RTL_TYPE    = 5;
+    localparam REG_RTL_SUBTYPE = 6;
+   
     //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
     //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
     //                           This section is standard AXI4-Lite Slave logic
@@ -204,12 +217,6 @@ module axi_revision#
     `include "revision_history.vh"
     localparam VERSION_DATE  = (VERSION_MONTH << 24) | (VERSION_DAY << 16) | VERSION_YEAR; 
 
-    localparam REG_MAJOR = 0;
-    localparam REG_MINOR = 1;
-    localparam REG_BUILD = 2;
-    localparam REG_RCAND = 3;
-    localparam REG_DATE  = 4;
-   
     //=========================================================================================================
     // State machine that handles AXI master reads of our AXI4-Lite slave registers
     //
@@ -227,11 +234,13 @@ module axi_revision#
         end else if (user_read_start) begin
             s_axi_rresp <= OKAY;
             case(s_axi_araddr >> 2)
-                REG_MAJOR:  s_axi_rdata <= VERSION_MAJOR;
-                REG_MINOR:  s_axi_rdata <= VERSION_MINOR;
-                REG_BUILD:  s_axi_rdata <= VERSION_BUILD;
-                REG_RCAND:  s_axi_rdata <= VERSION_RCAND;
-                REG_DATE:   s_axi_rdata <= VERSION_DATE;
+                REG_MAJOR:       s_axi_rdata <= VERSION_MAJOR;
+                REG_MINOR:       s_axi_rdata <= VERSION_MINOR;
+                REG_BUILD:       s_axi_rdata <= VERSION_BUILD;
+                REG_RCAND:       s_axi_rdata <= VERSION_RCAND;
+                REG_DATE:        s_axi_rdata <= VERSION_DATE;
+                REG_RTL_TYPE:    s_axi_rdata <= RTL_TYPE;
+                REG_RTL_SUBTYPE: s_axi_rdata <= RTL_SUBTYPE;
             endcase
         end
     end

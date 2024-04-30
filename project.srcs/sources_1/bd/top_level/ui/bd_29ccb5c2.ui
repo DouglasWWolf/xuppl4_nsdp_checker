@@ -22,6 +22,7 @@ preplace inst pattern_fifo -pg 1 -lvl 1 -x 160 -y 180 -defaultsOSRD -pinDir S_AX
 preplace inst reporter_ila -pg 1 -lvl 2 -x 520 -y 60 -swap {0 1 2 3 4 5 11 10 8 7 9 6} -defaultsOSRD -pinDir SLOT_0_AXIS left -pinY SLOT_0_AXIS 20L -pinDir clk left -pinY clk 60L -pinBusDir probe0 right -pinBusY probe0 60R -pinBusDir probe1 right -pinBusY probe1 20R -pinBusDir probe2 right -pinBusY probe2 0R -pinBusDir probe3 right -pinBusY probe3 40R -pinDir resetn left -pinY resetn 40L
 preplace inst data_checker -pg 1 -lvl 2 -x 520 -y 220 -swap {5 1 2 3 4 0 6 7 8 9 10 11 12 13 14 15 16 17} -defaultsOSRD -pinDir axis_eth left -pinY axis_eth 20L -pinDir axis_pattern left -pinY axis_pattern 0L -pinDir clk left -pinY clk 60L -pinDir resetn left -pinY resetn 80L -pinBusDir PACKET_SIZE left -pinBusY PACKET_SIZE 120L -pinBusDir FRAME_SIZE left -pinBusY FRAME_SIZE 140L -pinDir eth_active right -pinY eth_active 0R -pinBusDir expected_frame_pattern right -pinBusY expected_frame_pattern 20R -pinBusDir error right -pinBusY error 40R -pinBusDir error_data right -pinBusY error_data 60R -pinDir all_good right -pinY all_good 80R
 preplace netloc checker_ctl_sys_resetn_out 1 0 2 40 300 NJ
+preplace netloc data_checker_eth_active 1 2 1 NJ 220
 preplace netloc ila0_all_good 1 2 1 740 120n
 preplace netloc ila0_error 1 2 1 780 80n
 preplace netloc ila0_error_data 1 2 1 760 100n
@@ -29,7 +30,6 @@ preplace netloc ila0_expected_frame_pattern 1 2 1 800 60n
 preplace netloc mindy_core_ctl_0_FRAME_SIZE 1 0 2 NJ 360 NJ
 preplace netloc mindy_core_ctl_0_PACKET_SIZE 1 0 2 NJ 340 NJ
 preplace netloc pcie_axi_aclk 1 0 2 20 280 300
-preplace netloc data_checker_eth_active 1 2 1 NJ 220
 preplace netloc axis_in0_1 1 0 1 NJ 180
 preplace netloc ch0_axis_pattern 1 1 1 N 220
 preplace netloc ila0_eth_rx 1 0 2 NJ 320 280
