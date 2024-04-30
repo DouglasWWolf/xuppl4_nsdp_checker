@@ -10,8 +10,6 @@ setuid_root()
     sudo chmod 4777 $1
 }
 
-setuid_root pcireg
-setuid_root load_bitstream
 setuid_root load_bc_emu
 
 
