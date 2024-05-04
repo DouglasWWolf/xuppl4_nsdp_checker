@@ -25,7 +25,7 @@ module bd_9afd_wrapper
   input SLOT_0_AXIS_tvalid;
   input clk;
   input [0:0]probe0;
-  input [8:0]probe1;
+  input [14:0]probe1;
   input [31:0]probe2;
   input [511:0]probe3;
   input resetn;
@@ -37,7 +37,7 @@ module bd_9afd_wrapper
   wire SLOT_0_AXIS_tvalid;
   wire clk;
   wire [0:0]probe0;
-  wire [8:0]probe1;
+  wire [14:0]probe1;
   wire [31:0]probe2;
   wire [511:0]probe3;
   wire resetn;

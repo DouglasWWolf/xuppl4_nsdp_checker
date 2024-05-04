@@ -7,8 +7,7 @@
       "name": "top_level",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "Hierarchical",
-      "tool_version": "2021.1",
-      "validated": "true"
+      "tool_version": "2021.1"
     },
     "design_tree": {
       "pcie": {
@@ -67,17 +66,7 @@
       "pcie_refclk": {
         "mode": "Slave",
         "vlnv_bus_definition": "xilinx.com:interface:diff_clock:1.0",
-        "vlnv": "xilinx.com:interface:diff_clock_rtl:1.0",
-        "parameters": {
-          "CAN_DEBUG": {
-            "value": "false",
-            "value_src": "default"
-          },
-          "FREQ_HZ": {
-            "value": "100000000",
-            "value_src": "default"
-          }
-        }
+        "vlnv": "xilinx.com:interface:diff_clock_rtl:1.0"
       },
       "pcie_mgt": {
         "mode": "Master",
@@ -89,10 +78,6 @@
         "vlnv_bus_definition": "xilinx.com:interface:diff_clock:1.0",
         "vlnv": "xilinx.com:interface:diff_clock_rtl:1.0",
         "parameters": {
-          "CAN_DEBUG": {
-            "value": "false",
-            "value_src": "default"
-          },
           "FREQ_HZ": {
             "value": "322265625"
           }
@@ -101,34 +86,18 @@
       "qsfp0_gt": {
         "mode": "Master",
         "vlnv_bus_definition": "xilinx.com:interface:gt:1.0",
-        "vlnv": "xilinx.com:interface:gt_rtl:1.0",
-        "parameters": {
-          "CAN_DEBUG": {
-            "value": "false",
-            "value_src": "default"
-          }
-        }
+        "vlnv": "xilinx.com:interface:gt_rtl:1.0"
       },
       "qsfp1_gt": {
         "mode": "Master",
         "vlnv_bus_definition": "xilinx.com:interface:gt:1.0",
-        "vlnv": "xilinx.com:interface:gt_rtl:1.0",
-        "parameters": {
-          "CAN_DEBUG": {
-            "value": "false",
-            "value_src": "default"
-          }
-        }
+        "vlnv": "xilinx.com:interface:gt_rtl:1.0"
       },
       "qsfp1_clk": {
         "mode": "Slave",
         "vlnv_bus_definition": "xilinx.com:interface:diff_clock:1.0",
         "vlnv": "xilinx.com:interface:diff_clock_rtl:1.0",
         "parameters": {
-          "CAN_DEBUG": {
-            "value": "false",
-            "value_src": "default"
-          },
           "FREQ_HZ": {
             "value": "322265625"
           }
@@ -140,24 +109,8 @@
         "type": "clk",
         "direction": "I",
         "parameters": {
-          "CLK_DOMAIN": {
-            "value": "top_level_init_clk",
-            "value_src": "default"
-          },
           "FREQ_HZ": {
             "value": "100000000"
-          },
-          "FREQ_TOLERANCE_HZ": {
-            "value": "0",
-            "value_src": "default"
-          },
-          "INSERT_VIP": {
-            "value": "0",
-            "value_src": "default"
-          },
-          "PHASE": {
-            "value": "0.0",
-            "value_src": "default"
           }
         }
       },
@@ -2712,7 +2665,7 @@
               },
               "error": {
                 "direction": "O",
-                "left": "8",
+                "left": "14",
                 "right": "0"
               },
               "expected_frame_pattern": {
@@ -2722,6 +2675,41 @@
               },
               "eth_active": {
                 "direction": "O"
+              },
+              "RFD_ADDR": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "RFD_SIZE": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "RMD_ADDR": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "RMD_SIZE1": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "RFC_ADDR": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "total_packets_rcvd": {
+                "direction": "O",
+                "left": "63",
+                "right": "0"
+              },
+              "expected_rdmx_addr": {
+                "direction": "O",
+                "left": "63",
+                "right": "0"
               }
             },
             "components": {
@@ -2811,14 +2799,6 @@
                       "HAS_TLAST": {
                         "value": "1",
                         "value_src": "constant"
-                      },
-                      "FREQ_HZ": {
-                        "value": "250000000",
-                        "value_src": "user_prop"
-                      },
-                      "CLK_DOMAIN": {
-                        "value": "top_level_xdma_0_0_axi_aclk",
-                        "value_src": "default_prop"
                       }
                     },
                     "port_maps": {
@@ -2878,14 +2858,6 @@
                       "HAS_TLAST": {
                         "value": "0",
                         "value_src": "constant"
-                      },
-                      "FREQ_HZ": {
-                        "value": "250000000",
-                        "value_src": "user_prop"
-                      },
-                      "CLK_DOMAIN": {
-                        "value": "top_level_xdma_0_0_axi_aclk",
-                        "value_src": "default_prop"
                       }
                     },
                     "port_maps": {
@@ -2918,14 +2890,6 @@
                       "ASSOCIATED_RESET": {
                         "value": "resetn",
                         "value_src": "constant"
-                      },
-                      "FREQ_HZ": {
-                        "value": "250000000",
-                        "value_src": "user_prop"
-                      },
-                      "CLK_DOMAIN": {
-                        "value": "top_level_xdma_0_0_axi_aclk",
-                        "value_src": "default_prop"
                       }
                     }
                   },
@@ -2949,17 +2913,52 @@
                     "left": "31",
                     "right": "0"
                   },
+                  "RFD_ADDR": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
+                  "RFD_SIZE": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
+                  "RMD_ADDR": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
+                  "RMD_SIZE": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
+                  "RFC_ADDR": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
                   "eth_active": {
                     "direction": "O"
+                  },
+                  "total_packets_rcvd": {
+                    "direction": "O",
+                    "left": "63",
+                    "right": "0"
                   },
                   "expected_frame_pattern": {
                     "direction": "O",
                     "left": "31",
                     "right": "0"
                   },
+                  "expected_rdmx_addr": {
+                    "direction": "O",
+                    "left": "63",
+                    "right": "0"
+                  },
                   "error": {
                     "direction": "O",
-                    "left": "8",
+                    "left": "14",
                     "right": "0"
                   },
                   "error_data": {
@@ -2995,6 +2994,36 @@
               }
             },
             "nets": {
+              "RFC_ADDR_1": {
+                "ports": [
+                  "RFC_ADDR",
+                  "data_checker/RFC_ADDR"
+                ]
+              },
+              "RFD_ADDR_1": {
+                "ports": [
+                  "RFD_ADDR",
+                  "data_checker/RFD_ADDR"
+                ]
+              },
+              "RFD_SIZE_1": {
+                "ports": [
+                  "RFD_SIZE",
+                  "data_checker/RFD_SIZE"
+                ]
+              },
+              "RMD_ADDR_1": {
+                "ports": [
+                  "RMD_ADDR",
+                  "data_checker/RMD_ADDR"
+                ]
+              },
+              "RMD_SIZE1_1": {
+                "ports": [
+                  "RMD_SIZE1",
+                  "data_checker/RMD_SIZE"
+                ]
+              },
               "checker_ctl_sys_resetn_out": {
                 "ports": [
                   "sys_resetn",
@@ -3006,6 +3035,18 @@
                 "ports": [
                   "data_checker/eth_active",
                   "eth_active"
+                ]
+              },
+              "data_checker_expected_rdmx_addr": {
+                "ports": [
+                  "data_checker/expected_rdmx_addr",
+                  "expected_rdmx_addr"
+                ]
+              },
+              "data_checker_total_packets_rcvd": {
+                "ports": [
+                  "data_checker/total_packets_rcvd",
+                  "total_packets_rcvd"
                 ]
               },
               "ila0_all_good": {
@@ -3099,7 +3140,7 @@
               },
               "error": {
                 "direction": "O",
-                "left": "8",
+                "left": "14",
                 "right": "0"
               },
               "expected_frame_pattern": {
@@ -3109,6 +3150,41 @@
               },
               "eth_active": {
                 "direction": "O"
+              },
+              "RFD_ADDR": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "RFD_SIZE": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "RMD_ADDR": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "RMD_SIZE": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "RFC_ADDR": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "total_packets_rcvd": {
+                "direction": "O",
+                "left": "63",
+                "right": "0"
+              },
+              "expected_rdmx_addr": {
+                "direction": "O",
+                "left": "63",
+                "right": "0"
               }
             },
             "components": {
@@ -3198,14 +3274,6 @@
                       "HAS_TLAST": {
                         "value": "1",
                         "value_src": "constant"
-                      },
-                      "FREQ_HZ": {
-                        "value": "250000000",
-                        "value_src": "user_prop"
-                      },
-                      "CLK_DOMAIN": {
-                        "value": "top_level_xdma_0_0_axi_aclk",
-                        "value_src": "default_prop"
                       }
                     },
                     "port_maps": {
@@ -3265,14 +3333,6 @@
                       "HAS_TLAST": {
                         "value": "0",
                         "value_src": "constant"
-                      },
-                      "FREQ_HZ": {
-                        "value": "250000000",
-                        "value_src": "user_prop"
-                      },
-                      "CLK_DOMAIN": {
-                        "value": "top_level_xdma_0_0_axi_aclk",
-                        "value_src": "default_prop"
                       }
                     },
                     "port_maps": {
@@ -3305,14 +3365,6 @@
                       "ASSOCIATED_RESET": {
                         "value": "resetn",
                         "value_src": "constant"
-                      },
-                      "FREQ_HZ": {
-                        "value": "250000000",
-                        "value_src": "user_prop"
-                      },
-                      "CLK_DOMAIN": {
-                        "value": "top_level_xdma_0_0_axi_aclk",
-                        "value_src": "default_prop"
                       }
                     }
                   },
@@ -3336,17 +3388,52 @@
                     "left": "31",
                     "right": "0"
                   },
+                  "RFD_ADDR": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
+                  "RFD_SIZE": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
+                  "RMD_ADDR": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
+                  "RMD_SIZE": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
+                  "RFC_ADDR": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
+                  },
                   "eth_active": {
                     "direction": "O"
+                  },
+                  "total_packets_rcvd": {
+                    "direction": "O",
+                    "left": "63",
+                    "right": "0"
                   },
                   "expected_frame_pattern": {
                     "direction": "O",
                     "left": "31",
                     "right": "0"
                   },
+                  "expected_rdmx_addr": {
+                    "direction": "O",
+                    "left": "63",
+                    "right": "0"
+                  },
                   "error": {
                     "direction": "O",
-                    "left": "8",
+                    "left": "14",
                     "right": "0"
                   },
                   "error_data": {
@@ -3382,6 +3469,36 @@
               }
             },
             "nets": {
+              "RFC_ADDR_1": {
+                "ports": [
+                  "RFC_ADDR",
+                  "data_checker/RFC_ADDR"
+                ]
+              },
+              "RFD_ADDR_1": {
+                "ports": [
+                  "RFD_ADDR",
+                  "data_checker/RFD_ADDR"
+                ]
+              },
+              "RFD_SIZE_1": {
+                "ports": [
+                  "RFD_SIZE",
+                  "data_checker/RFD_SIZE"
+                ]
+              },
+              "RMD_ADDR_1": {
+                "ports": [
+                  "RMD_ADDR",
+                  "data_checker/RMD_ADDR"
+                ]
+              },
+              "RMD_SIZE_1": {
+                "ports": [
+                  "RMD_SIZE",
+                  "data_checker/RMD_SIZE"
+                ]
+              },
               "checker_ctl_sys_resetn_out": {
                 "ports": [
                   "sys_resetn",
@@ -3393,6 +3510,18 @@
                 "ports": [
                   "data_checker/eth_active",
                   "eth_active"
+                ]
+              },
+              "data_checker_expected_rdmx_addr": {
+                "ports": [
+                  "data_checker/expected_rdmx_addr",
+                  "expected_rdmx_addr"
+                ]
+              },
+              "data_checker_total_packets_rcvd": {
+                "ports": [
+                  "data_checker/total_packets_rcvd",
+                  "total_packets_rcvd"
                 ]
               },
               "ila1_all_good": {
@@ -4325,10 +4454,6 @@
                     "value": "AXI4LITE",
                     "value_src": "constant"
                   },
-                  "FREQ_HZ": {
-                    "value": "250000000",
-                    "value_src": "user_prop"
-                  },
                   "ID_WIDTH": {
                     "value": "0",
                     "value_src": "constant"
@@ -4412,18 +4537,6 @@
                   "MAX_BURST_LENGTH": {
                     "value": "1",
                     "value_src": "auto"
-                  },
-                  "CLK_DOMAIN": {
-                    "value": "top_level_xdma_0_0_axi_aclk",
-                    "value_src": "default_prop"
-                  },
-                  "RUSER_BITS_PER_BYTE": {
-                    "value": "0",
-                    "value_src": "user_prop"
-                  },
-                  "WUSER_BITS_PER_BYTE": {
-                    "value": "0",
-                    "value_src": "user_prop"
                   }
                 },
                 "port_maps": {
@@ -4536,14 +4649,6 @@
                   "ASSOCIATED_RESET": {
                     "value": "resetn",
                     "value_src": "constant"
-                  },
-                  "FREQ_HZ": {
-                    "value": "250000000",
-                    "value_src": "user_prop"
-                  },
-                  "CLK_DOMAIN": {
-                    "value": "top_level_xdma_0_0_axi_aclk",
-                    "value_src": "default_prop"
                   }
                 }
               },
@@ -4571,12 +4676,12 @@
               },
               "ch0_error": {
                 "direction": "I",
-                "left": "8",
+                "left": "14",
                 "right": "0"
               },
               "ch1_error": {
                 "direction": "I",
-                "left": "8",
+                "left": "14",
                 "right": "0"
               },
               "ch0_error_data": {
@@ -4597,6 +4702,26 @@
               "ch1_expected_fdata": {
                 "direction": "I",
                 "left": "31",
+                "right": "0"
+              },
+              "ch0_expected_taddr": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "ch1_expected_taddr": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "ch0_packets_rcvd": {
+                "direction": "I",
+                "left": "63",
+                "right": "0"
+              },
+              "ch1_packets_rcvd": {
+                "direction": "I",
+                "left": "63",
                 "right": "0"
               }
             }
@@ -4683,6 +4808,41 @@
               "reporter_1/PACKET_SIZE"
             ]
           },
+          "mindy_core_ctl_RFC_ADDR": {
+            "ports": [
+              "mindy_core_ctl/RFC_ADDR",
+              "reporter_0/RFC_ADDR",
+              "reporter_1/RFC_ADDR"
+            ]
+          },
+          "mindy_core_ctl_RFD_ADDR": {
+            "ports": [
+              "mindy_core_ctl/RFD_ADDR",
+              "reporter_0/RFD_ADDR",
+              "reporter_1/RFD_ADDR"
+            ]
+          },
+          "mindy_core_ctl_RFD_SIZE": {
+            "ports": [
+              "mindy_core_ctl/RFD_SIZE",
+              "reporter_0/RFD_SIZE",
+              "reporter_1/RFD_SIZE"
+            ]
+          },
+          "mindy_core_ctl_RMD_ADDR": {
+            "ports": [
+              "mindy_core_ctl/RMD_ADDR",
+              "reporter_0/RMD_ADDR",
+              "reporter_1/RMD_ADDR"
+            ]
+          },
+          "mindy_core_ctl_RMD_SIZE": {
+            "ports": [
+              "mindy_core_ctl/RMD_SIZE",
+              "reporter_0/RMD_SIZE1",
+              "reporter_1/RMD_SIZE"
+            ]
+          },
           "pcie_axi_aclk": {
             "ports": [
               "clk",
@@ -4718,6 +4878,18 @@
               "axi_reporter/ch0_expected_fdata"
             ]
           },
+          "reporter_0_expected_rdmx_addr": {
+            "ports": [
+              "reporter_0/expected_rdmx_addr",
+              "axi_reporter/ch0_expected_taddr"
+            ]
+          },
+          "reporter_0_total_packets_rcvd": {
+            "ports": [
+              "reporter_0/total_packets_rcvd",
+              "axi_reporter/ch0_packets_rcvd"
+            ]
+          },
           "reporter_1_chan_ok": {
             "ports": [
               "reporter_1/chan_ok",
@@ -4747,6 +4919,18 @@
             "ports": [
               "reporter_1/expected_frame_pattern",
               "axi_reporter/ch1_expected_fdata"
+            ]
+          },
+          "reporter_1_expected_rdmx_addr": {
+            "ports": [
+              "reporter_1/expected_rdmx_addr",
+              "axi_reporter/ch1_expected_taddr"
+            ]
+          },
+          "reporter_1_total_packets_rcvd": {
+            "ports": [
+              "reporter_1/total_packets_rcvd",
+              "axi_reporter/ch1_packets_rcvd"
             ]
           },
           "source_200Mhz_resetn": {

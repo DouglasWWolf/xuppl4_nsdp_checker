@@ -36,12 +36,19 @@ MC_BASE=0x2000
 REG_PACKETS_PER_GROUP=$((MC_BASE + 12* 4))
 
 ER_BASE=0x3000
- REG_RUN_STATUS=$((ER_BASE +  0 * 4))
- REG_ETH_ACTIVE=$((ER_BASE +  1 * 4))
- REG_ERR_CODE_0=$((ER_BASE +  2 * 4))
- REG_ERR_CODE_1=$((ER_BASE +  3 * 4))
-REG_EXP_FDATA_0=$((ER_BASE +  4 * 4))
-REG_EXP_FDATA_1=$((ER_BASE +  5 * 4))
+  REG_RUN_STATUS=$((ER_BASE +  0 * 4))
+  REG_ETH_ACTIVE=$((ER_BASE +  1 * 4))
+  REG_ERR_CODE_0=$((ER_BASE +  2 * 4))
+  REG_ERR_CODE_1=$((ER_BASE +  3 * 4))
+ REG_EXP_FDATA_0=$((ER_BASE +  4 * 4))
+ REG_EXP_FDATA_1=$((ER_BASE +  5 * 4))
+ REG_PKTS_RCVD_0=$((ER_BASE +  6 * 4))
+ REG_PKTS_RCVD_1=$((ER_BASE +  8 * 4))
+REG_EXP_TADDRH_0=$((ER_BASE + 10 * 4))
+REG_EXP_TADDRL_0=$((ER_BASE + 11 * 4))
+REG_EXP_TADDRH_1=$((ER_BASE + 12 * 4))
+REG_EXP_TADDRL_1=$((ER_BASE + 13 * 4))
+
  REG_ERR_DATA_0=$((ER_BASE + 16 * 4))
  REG_ERR_DATA_1=$((ER_BASE + 32 * 4))
 
@@ -106,20 +113,32 @@ lower32()
 
 
 #==============================================================================
-# This reads a PCI register and displays its value in decimal
+# This reads a 32-bit PCI register and displays its value in decimal
 #==============================================================================
 read_reg()
 {
-    # Capture the value of the AXI register
-    text=$(pcireg -dec $1)
-
-    # Convert the text into a number
-    value=$((text))
-
-    # Hand the value to the caller
-    echo $value
+    pcireg -dec $1
 }
 #==============================================================================
+
+#==============================================================================
+# This reads a 64-bit PCI register and displays its value in decimal
+#==============================================================================
+read_reg64()
+{
+    # What are the two 32-bit address we're going to read?
+    local addrh=$1
+    local addrl=$((addrh + 4))
+
+    # What are the 32-bit values at those addresses?
+    local hi=$(pcireg -dec $addrh)
+    local lo=$(pcireg -dec $addrl)
+
+    # Display the 64-bit value
+    echo $(( (hi << 32) | lo ))
+}
+#==============================================================================
+
 
 
 #==============================================================================
@@ -480,6 +499,9 @@ show_errors()
     local error_code=0
     local exp_fdata=0
     local reg_err_data=0
+    local packets_rcvd=0
+    local exp_taddrh=0
+    local exp_taddrl=0
     local a b c d
             
     # Make sure the caller give us a channel number
@@ -494,10 +516,16 @@ show_errors()
     if [ $channel -eq 0 ]; then
         error_code=$(read_reg $REG_ERR_CODE_0)
         exp_fdata=$(read_reg $REG_EXP_FDATA_0)
+        packets_rcvd=$(read_reg64 $REG_PKTS_RCVD_0)
+        exp_taddrh=$(read_reg $REG_EXP_TADDRH_0)
+        exp_taddrl=$(read_reg $REG_EXP_TADDRL_0)
         reg_err_data=$REG_ERR_DATA_0
     elif [ $channel -eq 1 ]; then 
         error_code=$(read_reg $REG_ERR_CODE_1)
         exp_fdata=$(read_reg $REG_EXP_FDATA_1)
+        packets_rcvd=$(read_reg64 $REG_PKTS_RCVD_0)        
+        exp_taddrh=$(read_reg $REG_EXP_TADDRH_1)
+        exp_taddrl=$(read_reg $REG_EXP_TADDRL_1)
         reg_err_data=$REG_ERR_DATA_1
     else
         echo "Bad parameter [$channel] on show_error()" 1>&2
@@ -512,24 +540,37 @@ show_errors()
 
     # Tell the user what channel this is for
     printf "\n"
-    printf "       channel: %u\n" $channel
-    
+    printf "       channel: %u (%u packets received)\n" $channel $packets_rcvd
+
     # Display the error code
     printf "    error code: 0x%03X" $error_code
-    test $((error_code &   1)) -ne 0  && printf " (BAD_FD_HDR)"
-    test $((error_code &   2)) -ne 0  && printf " (BAD_FD)"
-    test $((error_code &   4)) -ne 0  && printf " (BAD_FD_PLEN)"
-    test $((error_code &   8)) -ne 0  && printf " (BAD_MD_HDR)"
-    test $((error_code &  16)) -ne 0  && printf " (BAD_MD)"
-    test $((error_code &  32)) -ne 0  && printf " (BAD_MD_PLEN)"
-    test $((error_code &  64)) -ne 0  && printf " (BAD_FC_HDR)"
-    test $((error_code & 128)) -ne 0  && printf " (BAD_FC)"
-    test $((error_code & 256)) -ne 0  && printf " (BAD_FC_PLEN)"    
+    test $((error_code &     1)) -ne 0 && printf " (BAD_FD_MAGIC)"
+    test $((error_code &     2)) -ne 0 && printf " (BAD_FD_PSIZE)"
+    test $((error_code &     4)) -ne 0 && printf " (BAD_FD_TADDR)"
+    test $((error_code &     8)) -ne 0 && printf " (BAD_FD)"
+    test $((error_code &    16)) -ne 0 && printf " (BAD_FD_PLEN)"
+    
+    test $((error_code &    32)) -ne 0 && printf " (BAD_MD_MAGIC)"
+    test $((error_code &    64)) -ne 0 && printf " (BAD_MD_PSIZE)"
+    test $((error_code &   128)) -ne 0 && printf " (BAD_MD_TADDR)"
+    test $((error_code &   256)) -ne 0 && printf " (BAD_MD)"
+    test $((error_code &   512)) -ne 0 && printf " (BAD_MD_PLEN)"
+
+    test $((error_code &  1024)) -ne 0 && printf " (BAD_FC_MAGIC)"
+    test $((error_code &  2048)) -ne 0 && printf " (BAD_FC_PSIZE)"
+    test $((error_code &  4096)) -ne 0 && printf " (BAD_FC_TADDR)"
+    test $((error_code &  8192)) -ne 0 && printf " (BAD_FC)"
+    test $((error_code & 16384)) -ne 0 && printf " (BAD_FC_PLEN)"    
     printf "\n"
+
+    printf
 
     # Display the expected frame data
     printf "expected fdata: 0x%08X  (%u)\n" $exp_fdata $exp_fdata
     
+    # Display the expected RDMX target address
+    printf "expected taddr: 0x%08X_%08X\n" $exp_taddrh $exp_taddrl
+
     # Display the error data
     a=$(read_reg $((reg_err_data +  0)))
     b=$(read_reg $((reg_err_data +  4)))
@@ -567,12 +608,22 @@ monitor()
 {
     while [ 1 -eq 1 ] ; do
         
-        # We'll check the run-status once per second
-        sleep 1
+        # We'll check the run-status once per half-second
+        sleep .5
 
+        # If we detect that an error has occured on either channel, wait
+        # one second to allow time for the other channel to see an error
+        # (in case one occurs), then report the error(s)
         if [ $(read_reg $REG_RUN_STATUS) -ne 3 ]; then
+            sleep 1
             show_errors 0
             show_errors 1
+            return
+        fi
+    
+        # If packets have stopped arriving, we're done
+        if [ $(is_ethernet_active) -eq 0 ]; then
+            echo "Job completed with no errors"
             return
         fi
 

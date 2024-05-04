@@ -18,9 +18,11 @@ module axi_reporter
 
     input        ch0_eth_active,     ch1_eth_active,
     input        ch0_status,         ch1_status,
-    input[  8:0] ch0_error,          ch1_error,
+    input[ 14:0] ch0_error,          ch1_error,
     input[511:0] ch0_error_data,     ch1_error_data,
     input[ 31:0] ch0_expected_fdata, ch1_expected_fdata,
+    input[ 63:0] ch0_expected_taddr, ch1_expected_taddr,
+    input[ 63:0] ch0_packets_rcvd,   ch1_packets_rcvd,
 
     //================== This is an AXI4-Lite slave interface ==================
         
@@ -63,6 +65,15 @@ localparam REG_ERROR_0      = 2;
 localparam REG_ERROR_1      = 3;
 localparam REG_EXP_FDATA_0  = 4;
 localparam REG_EXP_FDATA_1  = 5;
+localparam REG_PKTS_RCVDH_0 = 6;
+localparam REG_PKTS_RCVDL_0 = 7;
+localparam REG_PKTS_RCVDH_1 = 8;
+localparam REG_PKTS_RCVDL_1 = 9;
+localparam REG_EXP_TADDRH_0 = 10;
+localparam REG_EXP_TADDRL_0 = 11;
+localparam REG_EXP_TADDRH_1 = 12;
+localparam REG_EXP_TADDRL_1 = 13;
+
 
 localparam REG_ERR_DATA_0   = 16;
 localparam REG_ERR_DATA_1   = 32;
@@ -165,6 +176,15 @@ always @(posedge clk) begin
             REG_ERROR_1:            ashi_rdata <= ch1_error;
             REG_EXP_FDATA_0:        ashi_rdata <= ch0_expected_fdata;
             REG_EXP_FDATA_1:        ashi_rdata <= ch1_expected_fdata;
+            REG_PKTS_RCVDH_0:       ashi_rdata <= ch0_packets_rcvd[63:32];
+            REG_PKTS_RCVDL_0:       ashi_rdata <= ch0_packets_rcvd[31:00];
+            REG_PKTS_RCVDH_1:       ashi_rdata <= ch1_packets_rcvd[63:32];
+            REG_PKTS_RCVDL_1:       ashi_rdata <= ch1_packets_rcvd[31:00];
+            REG_EXP_TADDRH_0:       ashi_rdata <= ch0_expected_taddr[63:32];
+            REG_EXP_TADDRL_0:       ashi_rdata <= ch0_expected_taddr[31:00];
+            REG_EXP_TADDRH_1:       ashi_rdata <= ch1_expected_taddr[63:32];
+            REG_EXP_TADDRL_1:       ashi_rdata <= ch1_expected_taddr[31:00];
+            
 
             REG_ERR_DATA_0 +  0:    ashi_rdata <= ch0_error_data[15 * 32 +: 32];
             REG_ERR_DATA_0 +  1:    ashi_rdata <= ch0_error_data[14 * 32 +: 32];          

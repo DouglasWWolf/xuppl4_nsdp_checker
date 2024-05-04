@@ -64,10 +64,19 @@ if [ $(is_ethernet_active) -ne 0 ]; then
 fi
 
 # Our packets are 4K each
-set_packet_size 4096
+set_packet_size 0x1000
 
 # A frame is 4M bytes
 set_frame_size 0x40_0000
+
+# Define the address and size of the remote frame-data ring buffer
+define_fd_ring 0x0001_0000_0000_0000 0x4000
+
+# Define the address and size of the remote meta-data ring buffer
+define_md_ring 0x0002_0000_0000_0000 1024
+
+# Define the address of the remote frame-counter 
+set_frame_counter_addr 0x1234_5678_9ABC_DEF0
 
 # Store 100 psuedo-random values into the first FIFO
 source fill_fifo_with_prbs.sh
@@ -75,6 +84,14 @@ fill_fifo_with_prbs $REG_LOAD_F0 100
 
 # Start receiving frames and comparing them to what we expect 
 start_fifo 1
+
+# Report when packets begin arriving
+echo "Waiting for incoming traffic..."
+while [ $(is_ethernet_active) -eq 0 ]; do
+    sleep .5
+done
+
+# Tell the user we're sitting
 echo "Monitoring incoming packets..."
 monitor
 

@@ -5,10 +5,11 @@
 //   Date     Who   Ver  Changes
 //=============================================================================
 // 27-Apr-24  DWW     1  Initial creation
+//
+// 04-May-24  DWW     2  Added support for checking RDMX target addresses
 //=============================================================================
 
-
-module data_checker
+module data_checker # (FREQ_HZ = 250000000)
 (
     input   clk, resetn,
 
@@ -29,14 +30,29 @@ module data_checker
     // Expected size of a full-frame (i.e., one phase) in bytes
     input[31:0]     FRAME_SIZE,
 
+    // Expected range of RDMX target-addresses for frame-data
+    input[63:0]     RFD_ADDR, RFD_SIZE,
+
+    // Expected ranged of RMDX target-addresses for meta-data
+    input[63:0]     RMD_ADDR, RMD_SIZE,
+
+    // Expected address of RDMX target-address for frame-counter
+    input[63:0]     RFC_ADDR,
+
     // This is asserted when we detect activity on axis_eth
-    output reg eth_active,
+    output eth_active,
+
+    // The total number of packets completely received
+    output reg[63:0] total_packets_rcvd,
 
     // This is the data-pattern we expect to see in the frame-data
     output reg[31:0] expected_frame_pattern,
 
+    // This is the RDMX target address we expected to see
+    output reg[63:0] expected_rdmx_addr, 
+
     // Contains error status bits
-    output reg[8:0] error,
+    output reg[14:0] error,
 
     // Contains the data that failed to match
     output reg[511:0] error_data,
@@ -44,6 +60,10 @@ module data_checker
     // This is high while "error = 0"
     output all_good
 );
+
+// If this many clock cycles pass without seeing incoming ethernet 
+// data, we declare the incoming ethernet port to be "inactive"
+localparam DATA_TIMEOUT = FREQ_HZ * 2;
 
 // This IP packet sizes of the various kinds of packets we expect to arrive
 localparam PACKET_OVERHEAD   = 50;
@@ -114,15 +134,80 @@ reg[511:0] expected_frame_data;
 // This is the frame-counter we expect to receive
 reg[31:0] expected_fc;
 
+//=============================================================================
+// This block manages the expected incoming RDMX address of frame-data
+//=============================================================================
+// Any cycle where this is '1' will incredment 'expected_fd_offs'
+reg        inc_fd_offs;
+
+// "Expected offset" cycles between 0 and RFD_SIZE
+reg [63:0] expected_fd_offs;
+
+// The next "expected offset" if it doesn't wrap around
+wire[63:0] next_fd_offs = expected_fd_offs + PACKET_SIZE;
+
+// The expected target address of the frame-data is base address + offset
+wire[63:0] expected_fd_addr = RFD_ADDR + expected_fd_offs;
+
+// This state machine increments 'expected_fd_offs' and handles the wrap
+always @(posedge clk) begin
+    if (resetn === 0)
+        expected_fd_offs <= 0;
+    else if (inc_fd_offs) begin
+        if (next_fd_offs < RFD_SIZE)
+            expected_fd_offs <= next_fd_offs;
+        else
+            expected_fd_offs <= 0;
+    end
+end
+//=============================================================================
+
+
+//=============================================================================
+// This block manages the expected incoming RDMX address of meta-data
+//=============================================================================
+// Any cycle where this is '1' will incredment 'expected_md_offs'
+reg        inc_md_offs;
+
+// "Expected offset" cycles between 0 and RMD_SIZE
+reg [63:0] expected_md_offs;
+
+// The next "expected offset" if it doesn't wrap around
+wire[63:0] next_md_offs = expected_md_offs + 128;
+
+// The expected target address of the meta-data is base address + offset
+wire[63:0] expected_md_addr = RMD_ADDR + expected_md_offs;
+
+// This state machine increments 'expected_md_offs' and handles the wrap
+always @(posedge clk) begin
+    if (resetn === 0)
+        expected_md_offs <= 0;
+    else if (inc_md_offs) begin
+        if (next_md_offs < RMD_SIZE)
+            expected_md_offs <= next_md_offs;
+        else
+            expected_md_offs <= 0;
+    end
+end
+//=============================================================================
+
+
 
 //=============================================================================
 // This block asserts "eth_active" when it detects incoming ethernet data
 //=============================================================================
+reg[31:0] eth_active_timer;
+assign eth_active = (eth_active_timer != 0);
 always @(posedge clk) begin
-    if (resetn == 0)
-        eth_active <= 0;
+    
+    if (eth_active_timer)
+        eth_active_timer <= eth_active_timer - 1;
+    
+    if (resetn == 0) 
+        eth_active_timer <= 0;
     else if (axis_eth_tvalid)
-        eth_active <= 1;
+        eth_active_timer = FREQ_HZ * 2;
+
 end
 //=============================================================================
 
@@ -169,10 +254,12 @@ reg        reg_valid;
 reg        reg_tlast;
 reg[511:0] reg_tdata, reg_be_tdata;
 reg[ 15:0] reg_rdmx_magic;
+reg[ 63:0] reg_rdmx_address;
 reg[ 15:0] reg_ip4_length;
 reg[ 31:0] reg_frame_counter;
 always @(posedge clk) begin
     reg_valid <= 0;
+    reg_tlast <= 0;
 
     if (axis_eth_handshake) begin
         reg_tdata         <= axis_eth_tdata;
@@ -180,6 +267,7 @@ always @(posedge clk) begin
         reg_tlast         <= axis_eth_tlast;
         reg_frame_counter <= axis_eth_tdata[31:0];
         reg_rdmx_magic    <= w_rdmx_magic;
+        reg_rdmx_address  <= w_rdmx_address;
         reg_ip4_length    <= w_ip4_length;
         reg_valid         <= 1;
     end
@@ -191,35 +279,53 @@ end
 //=============================================================================
 // Error codes - corresponds to bit-numbers in the "error" port
 //=============================================================================
-localparam BAD_FD_HDR  = 0;
-localparam BAD_FD      = 1;
-localparam BAD_FD_PLEN = 2;
-localparam BAD_MD_HDR  = 3;
-localparam BAD_MD      = 4;
-localparam BAD_MD_PLEN = 5;
-localparam BAD_FC_HDR  = 6;
-localparam BAD_FC      = 7;
-localparam BAD_FC_PLEN = 8;
+localparam BAD_FD_MAGIC = 0;
+localparam BAD_FD_PSIZE = 1;
+localparam BAD_FD_TADDR = 2;
+localparam BAD_FD       = 3;
+localparam BAD_FD_PLEN  = 4;
+
+localparam BAD_MD_MAGIC = 5;
+localparam BAD_MD_PSIZE = 6;
+localparam BAD_MD_TADDR = 7;
+localparam BAD_MD       = 8;
+localparam BAD_MD_PLEN  = 9;
+
+localparam BAD_FC_MAGIC = 10;
+localparam BAD_FC_PSIZE = 11;
+localparam BAD_FC_TADDR = 12;
+localparam BAD_FC       = 13;
+localparam BAD_FC_PLEN  = 14;
 //=============================================================================
 
 
 //=============================================================================
-// This state machine 
+// This state machine watches incoming packets and checks to see if all
+// the data is as expected
 //=============================================================================
-reg have_initial_fc;
-
 always @(posedge clk) begin
-    
+
+    // These will only strobe high for a single cycle
+    inc_fd_offs <= 0;
+    inc_md_offs <= 0;
+
     // Count the number of data-cycles in a packet
-    if (reg_valid) begin
+    if (reg_valid)
         cycles_in_packet <= cycles_in_packet + 1;
-    end
+
+    // Count the total number of packets received.  We must be sure to
+    // stop incrementing the counter when we're in error state so that 
+    // the error-reporting logic can get an accurate count of how many
+    // packets had arrived prior to the error being detected
+    if (reg_tlast & error == 0)
+        total_packets_rcvd <= total_packets_rcvd + 1;
 
     // If we're in reset, start over
     if (resetn == 0) begin
-        fsm_state       <= 0;
-        have_initial_fc <= 0;
-        error           <= 0;
+        fsm_state          <= 0;
+        expected_fc        <= 0;
+        error              <= 0;
+        total_packets_rcvd <= 0;
     end
 
     // If there's an error, HANG!
@@ -244,15 +350,22 @@ always @(posedge clk) begin
             if (reg_valid) begin
 
                 if (reg_rdmx_magic != RDMX_MAGIC) begin
-                    error[BAD_FD_HDR] <= 1; 
-                    error_data        <= reg_be_tdata;                   
+                    error[BAD_FD_MAGIC] <= 1; 
+                    error_data          <= reg_be_tdata;                   
                 end
 
                 if (reg_ip4_length != FD_IP_PACKET_SIZE) begin
-                    error[BAD_FD_HDR] <= 1;
-                    error_data        <= reg_be_tdata;
+                    error[BAD_FD_PSIZE] <= 1;
+                    error_data          <= reg_be_tdata;
                 end
 
+                if (reg_rdmx_address != expected_fd_addr) begin
+                    error[BAD_FD_TADDR] <= 1;
+                    error_data          <= reg_be_tdata;
+                    expected_rdmx_addr  <= expected_fd_addr;
+                end
+
+                inc_fd_offs      <= 1;
                 fd_packet_count  <= fd_packet_count + 1;
                 cycles_in_packet <= 1;
                 fsm_state        <= FSM_GET_FDATA_PACKET;
@@ -289,15 +402,22 @@ always @(posedge clk) begin
             if (reg_valid) begin
 
                 if (reg_rdmx_magic != RDMX_MAGIC) begin
-                    error[BAD_MD_HDR] <= 1;                    
-                    error_data        <= reg_be_tdata;
+                    error[BAD_MD_MAGIC] <= 1;                    
+                    error_data          <= reg_be_tdata;
                 end
 
                 if (reg_ip4_length != MD_IP_PACKET_SIZE) begin
-                    error[BAD_MD_HDR] <= 1;
-                    error_data        <= reg_be_tdata;                    
+                    error[BAD_MD_PSIZE] <= 1;
+                    error_data          <= reg_be_tdata;                    
                 end
 
+                if (reg_rdmx_address != expected_md_addr) begin
+                    error[BAD_MD_TADDR] <= 1;
+                    expected_rdmx_addr  <= expected_md_addr;                    
+                    error_data          <= reg_be_tdata;
+                end
+
+                inc_md_offs      <= 1;
                 cycles_in_packet <= 1;
                 fsm_state        <= FSM_GET_MDATA_PACKET;
             end
@@ -319,13 +439,19 @@ always @(posedge clk) begin
             if (reg_valid) begin
 
                 if (reg_rdmx_magic != RDMX_MAGIC) begin
-                    error[BAD_FC_HDR] <= 1; 
-                    error_data        <= reg_be_tdata;
+                    error[BAD_FC_MAGIC] <= 1; 
+                    error_data          <= reg_be_tdata;
                 end
 
                 if (reg_ip4_length != FC_IP_PACKET_SIZE) begin
-                    error[BAD_FC_HDR] <= 1;
-                    error_data        <= reg_be_tdata;                    
+                    error[BAD_FC_PSIZE] <= 1;
+                    error_data          <= reg_be_tdata;                    
+                end
+
+                if (reg_rdmx_address != RFC_ADDR) begin
+                    error[BAD_FC_TADDR] <= 1;
+                    expected_rdmx_addr  <= RFC_ADDR;
+                    error_data          <= reg_be_tdata;
                 end
 
                 cycles_in_packet <= 1;
@@ -338,16 +464,11 @@ always @(posedge clk) begin
             if (reg_valid) begin
 
                 // Check to see if we received the expected frame-counter
-                if (have_initial_fc) begin
-                    if (reg_frame_counter != expected_fc) begin
-                        error[BAD_FC] <= 1;
-                        error_data    <= {expected_fc, reg_frame_counter};
-                    end
-                end else begin
-                    have_initial_fc <= 1;
-                    expected_fc     <= reg_frame_counter;
+                if (reg_frame_counter != expected_fc) begin
+                    error[BAD_FC] <= 1;
+                    error_data    <= {expected_fc, reg_frame_counter};
                 end
-
+    
                 // Check to make sure we have the correct packet length
                 if (reg_tlast) begin
                     if (cycles_in_packet != 1) begin

@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x2ADF88E6481DCADA",
+      "boundary_crc": "0x56B3BE97BE972593",
       "design_src": "SBD",
       "device": "xcvu3p-ffvc1517-2-e",
       "name": "bd_c462",
@@ -116,7 +116,7 @@
       },
       "probe1": {
         "direction": "I",
-        "left": "8",
+        "left": "14",
         "right": "0"
       },
       "probe2": {
@@ -197,7 +197,7 @@
             "value": "0"
           },
           "C_PROBE1_WIDTH": {
-            "value": "9"
+            "value": "15"
           },
           "C_PROBE2_MU_CNT": {
             "value": "1"
