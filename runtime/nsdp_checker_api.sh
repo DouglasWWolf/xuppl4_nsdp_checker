@@ -544,6 +544,7 @@ show_errors()
 
     # Display the error code
     printf "    error code: 0x%03X" $error_code
+
     test $((error_code &     1)) -ne 0 && printf " (BAD_FD_MAGIC)"
     test $((error_code &     2)) -ne 0 && printf " (BAD_FD_PSIZE)"
     test $((error_code &     4)) -ne 0 && printf " (BAD_FD_TADDR)"
@@ -562,8 +563,6 @@ show_errors()
     test $((error_code &  8192)) -ne 0 && printf " (BAD_FC)"
     test $((error_code & 16384)) -ne 0 && printf " (BAD_FC_PLEN)"    
     printf "\n"
-
-    printf
 
     # Display the expected frame data
     printf "expected fdata: 0x%08X  (%u)\n" $exp_fdata $exp_fdata

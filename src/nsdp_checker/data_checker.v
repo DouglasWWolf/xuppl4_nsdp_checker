@@ -326,6 +326,7 @@ always @(posedge clk) begin
         expected_fc        <= 0;
         error              <= 0;
         total_packets_rcvd <= 0;
+        expected_rdmx_addr <= 0;
     end
 
     // If there's an error, HANG!
