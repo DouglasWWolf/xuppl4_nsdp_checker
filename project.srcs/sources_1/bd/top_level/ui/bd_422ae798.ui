@@ -18,10 +18,10 @@ preplace inst bad_packet_filter -pg 1 -lvl 1 -x 190 -y 60 -defaultsOSRD -pinDir 
 preplace netloc clk_1 1 0 3 40 160 360 180 NJ
 preplace netloc resetn_cdc_dest_arst 1 0 3 20 180 340 20 620J
 preplace netloc sys_clk_1 1 0 3 NJ 200 NJ 200 NJ
-preplace netloc axis_data_cdc_M_AXIS 1 3 1 N 80
-preplace netloc rdmx_pkt_filter_AXIS_OUT 1 2 1 N 80
 preplace netloc AXIS_IN_1 1 0 1 NJ 60
+preplace netloc axis_data_cdc_M_AXIS 1 3 1 N 80
 preplace netloc bad_packet_filter_AXIS_OUT 1 1 1 N 80
+preplace netloc rdmx_pkt_filter_AXIS_OUT 1 2 1 N 80
 levelinfo -pg 1 0 190 490 740 880
 pagesize -pg 1 -db -bbox -sgen -130 0 990 260
 ",

@@ -32,11 +32,11 @@ preplace netloc axi_clk_1 1 0 2 NJ 20 440
 preplace netloc axi_resetn_1 1 0 2 20J 210 360
 preplace netloc eth_0_stat_rx_aligned_0 1 1 2 380 540 NJ
 preplace netloc eth_0_stream_clk 1 0 2 NJ 420 420
+preplace netloc eth_0_stream_resetn 1 1 1 360 120n
 preplace netloc eth_1_stat_rx_aligned_0 1 1 2 340 560 NJ
 preplace netloc eth_1_stream_clk 1 0 2 NJ 400 400
-preplace netloc init_clk_0_1 1 0 1 40 140n
-preplace netloc eth_0_stream_resetn 1 1 1 360 120n
 preplace netloc eth_1_stream_resetn 1 1 1 400 290n
+preplace netloc init_clk_0_1 1 0 1 40 140n
 preplace netloc S_AXI_ETH_STATUS_1 1 2 1 N 420
 preplace netloc axis_tx0_1 1 0 1 NJ 100
 preplace netloc axis_tx1_1 1 0 1 NJ 310

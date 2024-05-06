@@ -16,14 +16,14 @@ module axi_reporter
 (
     input clk, resetn,
 
-    input        ch0_eth_active,     ch1_eth_active,
-    input        ch0_status,         ch1_status,
-    input[ 14:0] ch0_error,          ch1_error,
-    input[511:0] ch0_error_data,     ch1_error_data,
-    input[ 31:0] ch0_expected_fdata, ch1_expected_fdata,
-    input[ 63:0] ch0_expected_taddr, ch1_expected_taddr,
-    input[ 31:0] ch0_expected_fc,    ch1_expected_fc,
-    input[ 63:0] ch0_packets_rcvd,   ch1_packets_rcvd,
+    input        eth_active,
+    input        run_status,  
+    input[ 14:0] error, 
+    input[511:0] error_data,
+    input[ 31:0] expected_fdata,
+    input[ 63:0] expected_taddr,
+    input[ 31:0] expected_fc,
+    input[ 63:0] packets_rcvd,
 
     //================== This is an AXI4-Lite slave interface ==================
         
@@ -60,26 +60,18 @@ module axi_reporter
 
 
 //=========================  AXI Register Map  =============================
-localparam REG_STATUS       = 0;
-localparam REG_ETH_ACTIVE   = 1;
-localparam REG_ERROR_0      = 2;
-localparam REG_ERROR_1      = 3;
-localparam REG_EXP_FDATA_0  = 4;
-localparam REG_EXP_FDATA_1  = 5;
-localparam REG_PKTS_RCVDH_0 = 6;
-localparam REG_PKTS_RCVDL_0 = 7;
-localparam REG_PKTS_RCVDH_1 = 8;
-localparam REG_PKTS_RCVDL_1 = 9;
-localparam REG_EXP_TADDRH_0 = 10;
-localparam REG_EXP_TADDRL_0 = 11;
-localparam REG_EXP_TADDRH_1 = 12;
-localparam REG_EXP_TADDRL_1 = 13;
-localparam REG_EXP_FCTR_0   = 14;
-localparam REG_EXP_FCTR_1   = 15;
+localparam REG_RUN_STATUS = 0;
+localparam REG_ETH_ACTIVE = 1;
+localparam REG_ERROR      = 2;
+localparam REG_PKTS_RCVDH = 3;
+localparam REG_PKTS_RCVDL = 4;
+localparam REG_EXP_FDATA  = 5;
+localparam REG_EXP_TADDRH = 6;
+localparam REG_EXP_TADDRL = 7;
+localparam REG_EXP_FCTR   = 8;
 
+localparam REG_ERR_DATA   = 16;
 
-localparam REG_ERR_DATA_0   = 32;
-localparam REG_ERR_DATA_1   = 48;
 //==========================================================================
 
 
@@ -173,57 +165,33 @@ always @(posedge clk) begin
         case (ashi_rindx)
             
             // Allow a read from any valid register                
-            REG_STATUS:             ashi_rdata <= {ch1_status,     ch0_status};
-            REG_ETH_ACTIVE:         ashi_rdata <= {ch1_eth_active, ch0_eth_active};
-            REG_ERROR_0:            ashi_rdata <= ch0_error;
-            REG_ERROR_1:            ashi_rdata <= ch1_error;
-            REG_EXP_FDATA_0:        ashi_rdata <= ch0_expected_fdata;
-            REG_EXP_FDATA_1:        ashi_rdata <= ch1_expected_fdata;
-            REG_PKTS_RCVDH_0:       ashi_rdata <= ch0_packets_rcvd[63:32];
-            REG_PKTS_RCVDL_0:       ashi_rdata <= ch0_packets_rcvd[31:00];
-            REG_PKTS_RCVDH_1:       ashi_rdata <= ch1_packets_rcvd[63:32];
-            REG_PKTS_RCVDL_1:       ashi_rdata <= ch1_packets_rcvd[31:00];
-            REG_EXP_TADDRH_0:       ashi_rdata <= ch0_expected_taddr[63:32];
-            REG_EXP_TADDRL_0:       ashi_rdata <= ch0_expected_taddr[31:00];
-            REG_EXP_TADDRH_1:       ashi_rdata <= ch1_expected_taddr[63:32];
-            REG_EXP_TADDRL_1:       ashi_rdata <= ch1_expected_taddr[31:00];
-            REG_EXP_FCTR_0:         ashi_rdata <= ch0_expected_fc;
-            REG_EXP_FCTR_1:         ashi_rdata <= ch1_expected_fc;
-            
+            REG_RUN_STATUS:       ashi_rdata <= run_status;
+            REG_ETH_ACTIVE:       ashi_rdata <= eth_active;
+            REG_ERROR:            ashi_rdata <= error;
+            REG_EXP_FDATA:        ashi_rdata <= expected_fdata;
+            REG_PKTS_RCVDH:       ashi_rdata <= packets_rcvd[63:32];
+            REG_PKTS_RCVDL:       ashi_rdata <= packets_rcvd[31:00];
+            REG_EXP_TADDRH:       ashi_rdata <= expected_taddr[63:32];
+            REG_EXP_TADDRL:       ashi_rdata <= expected_taddr[31:00];
+            REG_EXP_FCTR:         ashi_rdata <= expected_fc;
 
-            REG_ERR_DATA_0 +  0:    ashi_rdata <= ch0_error_data[15 * 32 +: 32];
-            REG_ERR_DATA_0 +  1:    ashi_rdata <= ch0_error_data[14 * 32 +: 32];          
-            REG_ERR_DATA_0 +  2:    ashi_rdata <= ch0_error_data[13 * 32 +: 32];         
-            REG_ERR_DATA_0 +  3:    ashi_rdata <= ch0_error_data[12 * 32 +: 32];           
-            REG_ERR_DATA_0 +  4:    ashi_rdata <= ch0_error_data[11 * 32 +: 32];           
-            REG_ERR_DATA_0 +  5:    ashi_rdata <= ch0_error_data[10 * 32 +: 32];           
-            REG_ERR_DATA_0 +  6:    ashi_rdata <= ch0_error_data[ 9 * 32 +: 32];           
-            REG_ERR_DATA_0 +  7:    ashi_rdata <= ch0_error_data[ 8 * 32 +: 32];           
-            REG_ERR_DATA_0 +  8:    ashi_rdata <= ch0_error_data[ 7 * 32 +: 32];           
-            REG_ERR_DATA_0 +  9:    ashi_rdata <= ch0_error_data[ 6 * 32 +: 32];
-            REG_ERR_DATA_0 + 10:    ashi_rdata <= ch0_error_data[ 5 * 32 +: 32];           
-            REG_ERR_DATA_0 + 11:    ashi_rdata <= ch0_error_data[ 4 * 32 +: 32];           
-            REG_ERR_DATA_0 + 12:    ashi_rdata <= ch0_error_data[ 3 * 32 +: 32];           
-            REG_ERR_DATA_0 + 13:    ashi_rdata <= ch0_error_data[ 2 * 32 +: 32];           
-            REG_ERR_DATA_0 + 14:    ashi_rdata <= ch0_error_data[ 1 * 32 +: 32];           
-            REG_ERR_DATA_0 + 15:    ashi_rdata <= ch0_error_data[ 0 * 32 +: 32];           
+            REG_ERR_DATA +  0:    ashi_rdata <= error_data[15 * 32 +: 32];
+            REG_ERR_DATA +  1:    ashi_rdata <= error_data[14 * 32 +: 32];          
+            REG_ERR_DATA +  2:    ashi_rdata <= error_data[13 * 32 +: 32];         
+            REG_ERR_DATA +  3:    ashi_rdata <= error_data[12 * 32 +: 32];           
+            REG_ERR_DATA +  4:    ashi_rdata <= error_data[11 * 32 +: 32];           
+            REG_ERR_DATA +  5:    ashi_rdata <= error_data[10 * 32 +: 32];           
+            REG_ERR_DATA +  6:    ashi_rdata <= error_data[ 9 * 32 +: 32];           
+            REG_ERR_DATA +  7:    ashi_rdata <= error_data[ 8 * 32 +: 32];           
+            REG_ERR_DATA +  8:    ashi_rdata <= error_data[ 7 * 32 +: 32];           
+            REG_ERR_DATA +  9:    ashi_rdata <= error_data[ 6 * 32 +: 32];
+            REG_ERR_DATA + 10:    ashi_rdata <= error_data[ 5 * 32 +: 32];           
+            REG_ERR_DATA + 11:    ashi_rdata <= error_data[ 4 * 32 +: 32];           
+            REG_ERR_DATA + 12:    ashi_rdata <= error_data[ 3 * 32 +: 32];           
+            REG_ERR_DATA + 13:    ashi_rdata <= error_data[ 2 * 32 +: 32];           
+            REG_ERR_DATA + 14:    ashi_rdata <= error_data[ 1 * 32 +: 32];           
+            REG_ERR_DATA + 15:    ashi_rdata <= error_data[ 0 * 32 +: 32];           
 
-            REG_ERR_DATA_1 +  0:    ashi_rdata <= ch1_error_data[15 * 32 +: 32];
-            REG_ERR_DATA_1 +  1:    ashi_rdata <= ch1_error_data[14 * 32 +: 32];          
-            REG_ERR_DATA_1 +  2:    ashi_rdata <= ch1_error_data[13 * 32 +: 32];         
-            REG_ERR_DATA_1 +  3:    ashi_rdata <= ch1_error_data[12 * 32 +: 32];           
-            REG_ERR_DATA_1 +  4:    ashi_rdata <= ch1_error_data[11 * 32 +: 32];           
-            REG_ERR_DATA_1 +  5:    ashi_rdata <= ch1_error_data[10 * 32 +: 32];           
-            REG_ERR_DATA_1 +  6:    ashi_rdata <= ch1_error_data[ 9 * 32 +: 32];           
-            REG_ERR_DATA_1 +  7:    ashi_rdata <= ch1_error_data[ 8 * 32 +: 32];           
-            REG_ERR_DATA_1 +  8:    ashi_rdata <= ch1_error_data[ 7 * 32 +: 32];           
-            REG_ERR_DATA_1 +  9:    ashi_rdata <= ch1_error_data[ 6 * 32 +: 32];
-            REG_ERR_DATA_1 + 10:    ashi_rdata <= ch1_error_data[ 5 * 32 +: 32];           
-            REG_ERR_DATA_1 + 11:    ashi_rdata <= ch1_error_data[ 4 * 32 +: 32];           
-            REG_ERR_DATA_1 + 12:    ashi_rdata <= ch1_error_data[ 3 * 32 +: 32];           
-            REG_ERR_DATA_1 + 13:    ashi_rdata <= ch1_error_data[ 2 * 32 +: 32];           
-            REG_ERR_DATA_1 + 14:    ashi_rdata <= ch1_error_data[ 1 * 32 +: 32];           
-            REG_ERR_DATA_1 + 15:    ashi_rdata <= ch1_error_data[ 0 * 32 +: 32];           
 
             // Reads of any other register are a decode-error
             default: ashi_rresp <= DECERR;

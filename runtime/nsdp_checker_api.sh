@@ -35,24 +35,28 @@ MC_BASE=0x2000
       REG_PACKET_SIZE=$((MC_BASE + 11* 4))
 REG_PACKETS_PER_GROUP=$((MC_BASE + 12* 4))
 
-ER_BASE=0x3000
-  REG_RUN_STATUS=$((ER_BASE +  0 * 4))
-  REG_ETH_ACTIVE=$((ER_BASE +  1 * 4))
-  REG_ERR_CODE_0=$((ER_BASE +  2 * 4))
-  REG_ERR_CODE_1=$((ER_BASE +  3 * 4))
- REG_EXP_FDATA_0=$((ER_BASE +  4 * 4))
- REG_EXP_FDATA_1=$((ER_BASE +  5 * 4))
- REG_PKTS_RCVD_0=$((ER_BASE +  6 * 4))
- REG_PKTS_RCVD_1=$((ER_BASE +  8 * 4))
-REG_EXP_TADDRH_0=$((ER_BASE + 10 * 4))
-REG_EXP_TADDRL_0=$((ER_BASE + 11 * 4))
-REG_EXP_TADDRH_1=$((ER_BASE + 12 * 4))
-REG_EXP_TADDRL_1=$((ER_BASE + 13 * 4))
-  REG_EXP_FCTR_0=$((ER_BASE + 14 * 4))
-  REG_EXP_FCTR_1=$((ER_BASE + 15 * 4))
 
- REG_ERR_DATA_0=$((ER_BASE + 32 * 4))
- REG_ERR_DATA_1=$((ER_BASE + 48 * 4))
+
+ER0_BASE=0x3000
+REG_RUN_STATUS_0=$((ER0_BASE +  0 * 4))
+REG_ETH_ACTIVE_0=$((ER0_BASE +  1 * 4))
+  REG_ERR_CODE_0=$((ER0_BASE +  2 * 4))
+ REG_PKTS_RCVD_0=$((ER0_BASE +  3 * 4))
+ REG_EXP_FDATA_0=$((ER0_BASE +  5 * 4))
+ REG_EXP_TADDR_0=$((ER0_BASE +  6 * 4))
+  REG_EXP_FCTR_0=$((ER0_BASE +  8 * 4))
+  REG_ERR_DATA_0=$((ER0_BASE + 16 * 4))
+
+
+ER1_BASE=0x4000
+REG_RUN_STATUS_1=$((ER1_BASE +  0 * 4))
+REG_ETH_ACTIVE_1=$((ER1_BASE +  1 * 4))
+  REG_ERR_CODE_1=$((ER1_BASE +  2 * 4))
+ REG_PKTS_RCVD_1=$((ER1_BASE +  3 * 4))
+ REG_EXP_FDATA_1=$((ER1_BASE +  5 * 4))
+ REG_EXP_TADDR_1=$((ER1_BASE +  6 * 4))
+  REG_EXP_FCTR_1=$((ER1_BASE +  8 * 4))
+  REG_ERR_DATA_1=$((ER1_BASE + 16 * 4))
 
 
 #==============================================================================
@@ -98,7 +102,7 @@ strip_underscores()
 upper32()
 {
     local value=$(strip_underscores $1)
-    echo $(((value >> 32) & 0xFFFFFFFF))
+    echo $(( (value >> 32) & 0xFFFFFFFF ))
 }
 #==============================================================================
 
@@ -123,6 +127,7 @@ read_reg()
     pcireg -dec $1
 }
 #==============================================================================
+
 
 #==============================================================================
 # This reads a 64-bit PCI register and displays its value in decimal
@@ -330,7 +335,9 @@ reset_system()
 #==============================================================================
 is_ethernet_active()
 {
-    pcireg -dec $REG_ETH_ACTIVE
+    local eth0_active=$(read_reg $REG_ETH_ACTIVE_0)
+    local eth1_active=$(read_reg $REG_ETH_ACTIVE_1)
+    echo $(( eth0_active | eth1_active ))
 }
 #==============================================================================
 
@@ -494,6 +501,18 @@ get_rtl_version()
 #==============================================================================
 
 #==============================================================================
+# Returns the run status of both channels
+#==============================================================================
+get_run_status()
+{
+    local rs0=$(read_reg $REG_RUN_STATUS_0)
+    local rs1=$(read_reg $REG_RUN_STATUS_1)
+    echo $(( (rs1<<1) | rs0 ))    
+}
+#==============================================================================
+
+
+#==============================================================================
 # Displays the error registers for one of the channels
 #==============================================================================
 show_errors()
@@ -505,6 +524,7 @@ show_errors()
     local packets_rcvd=0
     local exp_taddrh=0
     local exp_taddrl=0
+    local exp_fctr=0
     local a b c d
             
     # Make sure the caller give us a channel number
@@ -517,18 +537,20 @@ show_errors()
     local channel=$1
 
     if [ $channel -eq 0 ]; then
-        error_code=$(read_reg $REG_ERR_CODE_0)
-        exp_fdata=$(read_reg $REG_EXP_FDATA_0)
+          error_code=$(read_reg   $REG_ERR_CODE_0)
+           exp_fdata=$(read_reg   $REG_EXP_FDATA_0)
         packets_rcvd=$(read_reg64 $REG_PKTS_RCVD_0)
-        exp_taddrh=$(read_reg $REG_EXP_TADDRH_0)
-        exp_taddrl=$(read_reg $REG_EXP_TADDRL_0)
+          exp_taddrh=$(read_reg   $REG_EXP_TADDRH_0)
+          exp_taddrl=$(read_reg   $REG_EXP_TADDRL_0)
+            exp_fctr=$(read_reg   $REG_EXP_FCTR_0)
         reg_err_data=$REG_ERR_DATA_0
     elif [ $channel -eq 1 ]; then 
-        error_code=$(read_reg $REG_ERR_CODE_1)
-        exp_fdata=$(read_reg $REG_EXP_FDATA_1)
-        packets_rcvd=$(read_reg64 $REG_PKTS_RCVD_0)        
-        exp_taddrh=$(read_reg $REG_EXP_TADDRH_1)
-        exp_taddrl=$(read_reg $REG_EXP_TADDRL_1)
+          error_code=$(read_reg   $REG_ERR_CODE_1)
+           exp_fdata=$(read_reg   $REG_EXP_FDATA_1)
+        packets_rcvd=$(read_reg64 $REG_PKTS_RCVD_1)        
+          exp_taddrh=$(read_reg   $REG_EXP_TADDRH_1)
+          exp_taddrl=$(read_reg   $REG_EXP_TADDRL_1)
+            exp_fctr=$(read_reg   $REG_EXP_FCTR_1)
         reg_err_data=$REG_ERR_DATA_1
     else
         echo "Bad parameter [$channel] on show_error()" 1>&2
@@ -573,6 +595,9 @@ show_errors()
     # Display the expected RDMX target address
     printf "expected taddr: 0x%08X_%08X\n" $exp_taddrh $exp_taddrl
 
+    # Display the expected frame-counter
+    printf " expected fctr: 0x%08X  (%u)\n" $exp_fctr $exp_fctr
+
     # Display the error data
     a=$(read_reg $((reg_err_data +  0)))
     b=$(read_reg $((reg_err_data +  4)))
@@ -616,7 +641,7 @@ monitor()
         # If we detect that an error has occured on either channel, wait
         # one second to allow time for the other channel to see an error
         # (in case one occurs), then report the error(s)
-        if [ $(read_reg $REG_RUN_STATUS) -ne 3 ]; then
+        if [ $(get_run_status) -ne 3 ]; then
             sleep 1
             show_errors 0
             show_errors 1
