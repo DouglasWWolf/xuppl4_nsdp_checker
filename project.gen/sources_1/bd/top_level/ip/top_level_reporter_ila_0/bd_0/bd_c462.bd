@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x56B3BE97BE972593",
+      "boundary_crc": "0x63768A1EB6CF469C",
       "design_src": "SBD",
       "device": "xcvu3p-ffvc1517-2-e",
       "name": "bd_c462",
@@ -70,8 +70,8 @@
             "value_src": "default"
           },
           "TUSER_WIDTH": {
-            "value": "0",
-            "value_src": "default"
+            "value": "1",
+            "value_src": "default_prop"
           }
         }
       }
@@ -179,7 +179,7 @@
             "value": "Native"
           },
           "C_NUM_OF_PROBES": {
-            "value": "9"
+            "value": "10"
           },
           "C_PROBE0_MU_CNT": {
             "value": "1"
@@ -247,6 +247,12 @@
           "C_PROBE8_WIDTH": {
             "value": "1"
           },
+          "C_PROBE9_TYPE": {
+            "value": "0"
+          },
+          "C_PROBE9_WIDTH": {
+            "value": "1"
+          },
           "C_TIME_TAG_WIDTH": {
             "value": "32"
           },
@@ -286,7 +292,7 @@
             "value": "0"
           },
           "C_SLOT_0_AXIS_TUSER_WIDTH": {
-            "value": "0"
+            "value": "1"
           },
           "C_SLOT_0_AXI_PROTOCOL": {
             "value": "AXI4S"
@@ -337,19 +343,25 @@
       "net_slot_0_axis_tlast": {
         "ports": [
           "g_inst/m_slot_0_axis_tlast",
-          "ila_lib/probe8"
+          "ila_lib/probe9"
         ]
       },
       "net_slot_0_axis_tready": {
         "ports": [
           "g_inst/m_slot_0_axis_tready",
-          "ila_lib/probe7"
+          "ila_lib/probe8"
+        ]
+      },
+      "net_slot_0_axis_tuser": {
+        "ports": [
+          "g_inst/m_slot_0_axis_tuser",
+          "ila_lib/probe6"
         ]
       },
       "net_slot_0_axis_tvalid": {
         "ports": [
           "g_inst/m_slot_0_axis_tvalid",
-          "ila_lib/probe6"
+          "ila_lib/probe7"
         ]
       },
       "probe0_1": {

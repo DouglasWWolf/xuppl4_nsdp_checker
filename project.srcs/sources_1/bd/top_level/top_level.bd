@@ -30,12 +30,12 @@
           "cmac_control": "",
           "reset_inverter": ""
         },
-        "rdmx_0": {
+        "rx0_path": {
           "axis_data_cdc": "",
           "resetn_cdc": "",
           "rdmx_pkt_filter": ""
         },
-        "rdmx_1": {
+        "rx1_path": {
           "axis_data_cdc": "",
           "resetn_cdc": "",
           "rdmx_pkt_filter": ""
@@ -57,7 +57,8 @@
         "checker_ctl": "",
         "mindy_core_ctl": "",
         "axis_duplicate": "",
-        "axi_reporter": ""
+        "axi_reporter": "",
+        "eth_rx_ila": ""
       },
       "qsfp_pins": "",
       "status_leds": "",
@@ -1422,7 +1423,7 @@
               }
             }
           },
-          "rdmx_0": {
+          "rx0_path": {
             "interface_ports": {
               "AXIS_IN": {
                 "mode": "Slave",
@@ -1451,7 +1452,7 @@
                 "vlnv": "xilinx.com:ip:axis_data_fifo:2.0",
                 "xci_name": "top_level_axis_data_fifo_0_0",
                 "xci_path": "ip/top_level_axis_data_fifo_0_0/top_level_axis_data_fifo_0_0.xci",
-                "inst_hier_path": "ethernet/rdmx_0/axis_data_cdc",
+                "inst_hier_path": "ethernet/rx0_path/axis_data_cdc",
                 "parameters": {
                   "FIFO_DEPTH": {
                     "value": "256"
@@ -1465,7 +1466,7 @@
                 "vlnv": "xilinx.com:ip:xpm_cdc_gen:1.0",
                 "xci_name": "top_level_xpm_cdc_gen_0_0",
                 "xci_path": "ip/top_level_xpm_cdc_gen_0_0/top_level_xpm_cdc_gen_0_0.xci",
-                "inst_hier_path": "ethernet/rdmx_0/resetn_cdc",
+                "inst_hier_path": "ethernet/rx0_path/resetn_cdc",
                 "parameters": {
                   "CDC_TYPE": {
                     "value": "xpm_cdc_async_rst"
@@ -1479,7 +1480,7 @@
                 "vlnv": "xilinx.com:module_ref:rdmx_pkt_filter:1.0",
                 "xci_name": "top_level_rdmx_pkt_filter_0_0",
                 "xci_path": "ip/top_level_rdmx_pkt_filter_0_0/top_level_rdmx_pkt_filter_0_0.xci",
-                "inst_hier_path": "ethernet/rdmx_0/rdmx_pkt_filter",
+                "inst_hier_path": "ethernet/rx0_path/rdmx_pkt_filter",
                 "reference_info": {
                   "ref_type": "hdl",
                   "ref_name": "rdmx_pkt_filter",
@@ -1504,7 +1505,7 @@
                         "value_src": "constant"
                       },
                       "TUSER_WIDTH": {
-                        "value": "0",
+                        "value": "1",
                         "value_src": "constant"
                       },
                       "HAS_TREADY": {
@@ -1549,6 +1550,10 @@
                         "physical_name": "AXIS_IN_TLAST",
                         "direction": "I"
                       },
+                      "TUSER": {
+                        "physical_name": "AXIS_IN_TUSER",
+                        "direction": "I"
+                      },
                       "TVALID": {
                         "physical_name": "AXIS_IN_TVALID",
                         "direction": "I"
@@ -1577,7 +1582,7 @@
                         "value_src": "constant"
                       },
                       "TUSER_WIDTH": {
-                        "value": "0",
+                        "value": "1",
                         "value_src": "constant"
                       },
                       "HAS_TREADY": {
@@ -1620,6 +1625,10 @@
                       },
                       "TLAST": {
                         "physical_name": "AXIS_OUT_TLAST",
+                        "direction": "O"
+                      },
+                      "TUSER": {
+                        "physical_name": "AXIS_OUT_TUSER",
                         "direction": "O"
                       },
                       "TVALID": {
@@ -1719,7 +1728,7 @@
               }
             }
           },
-          "rdmx_1": {
+          "rx1_path": {
             "interface_ports": {
               "AXIS_IN": {
                 "mode": "Slave",
@@ -1748,7 +1757,7 @@
                 "vlnv": "xilinx.com:ip:axis_data_fifo:2.0",
                 "xci_name": "top_level_axis_data_cdc_0",
                 "xci_path": "ip/top_level_axis_data_cdc_0/top_level_axis_data_cdc_0.xci",
-                "inst_hier_path": "ethernet/rdmx_1/axis_data_cdc",
+                "inst_hier_path": "ethernet/rx1_path/axis_data_cdc",
                 "parameters": {
                   "FIFO_DEPTH": {
                     "value": "256"
@@ -1762,7 +1771,7 @@
                 "vlnv": "xilinx.com:ip:xpm_cdc_gen:1.0",
                 "xci_name": "top_level_resetn_cdc_0",
                 "xci_path": "ip/top_level_resetn_cdc_0/top_level_resetn_cdc_0.xci",
-                "inst_hier_path": "ethernet/rdmx_1/resetn_cdc",
+                "inst_hier_path": "ethernet/rx1_path/resetn_cdc",
                 "parameters": {
                   "CDC_TYPE": {
                     "value": "xpm_cdc_async_rst"
@@ -1776,7 +1785,7 @@
                 "vlnv": "xilinx.com:module_ref:rdmx_pkt_filter:1.0",
                 "xci_name": "top_level_rdmx_pkt_filter_1",
                 "xci_path": "ip/top_level_rdmx_pkt_filter_1/top_level_rdmx_pkt_filter_1.xci",
-                "inst_hier_path": "ethernet/rdmx_1/rdmx_pkt_filter",
+                "inst_hier_path": "ethernet/rx1_path/rdmx_pkt_filter",
                 "reference_info": {
                   "ref_type": "hdl",
                   "ref_name": "rdmx_pkt_filter",
@@ -1801,7 +1810,7 @@
                         "value_src": "constant"
                       },
                       "TUSER_WIDTH": {
-                        "value": "0",
+                        "value": "1",
                         "value_src": "constant"
                       },
                       "HAS_TREADY": {
@@ -1846,6 +1855,10 @@
                         "physical_name": "AXIS_IN_TLAST",
                         "direction": "I"
                       },
+                      "TUSER": {
+                        "physical_name": "AXIS_IN_TUSER",
+                        "direction": "I"
+                      },
                       "TVALID": {
                         "physical_name": "AXIS_IN_TVALID",
                         "direction": "I"
@@ -1874,7 +1887,7 @@
                         "value_src": "constant"
                       },
                       "TUSER_WIDTH": {
-                        "value": "0",
+                        "value": "1",
                         "value_src": "constant"
                       },
                       "HAS_TREADY": {
@@ -1917,6 +1930,10 @@
                       },
                       "TLAST": {
                         "physical_name": "AXIS_OUT_TLAST",
+                        "direction": "O"
+                      },
+                      "TUSER": {
+                        "physical_name": "AXIS_OUT_TUSER",
                         "direction": "O"
                       },
                       "TVALID": {
@@ -2296,13 +2313,13 @@
           },
           "eth_0_axis_rx": {
             "interface_ports": [
-              "rdmx_0/AXIS_IN",
+              "rx0_path/AXIS_IN",
               "eth_0/axis_rx"
             ]
           },
           "eth_1_axis_rx": {
             "interface_ports": [
-              "rdmx_1/AXIS_IN",
+              "rx1_path/AXIS_IN",
               "eth_1/axis_rx"
             ]
           },
@@ -2327,13 +2344,13 @@
           "rdmx_0_M_AXIS": {
             "interface_ports": [
               "ETH0_RX",
-              "rdmx_0/M_AXIS"
+              "rx0_path/M_AXIS"
             ]
           },
           "rdmx_1_M_AXIS": {
             "interface_ports": [
               "ETH1_RX",
-              "rdmx_1/M_AXIS"
+              "rx1_path/M_AXIS"
             ]
           }
         },
@@ -2341,16 +2358,16 @@
           "axi_clk_1": {
             "ports": [
               "sys_clk",
-              "rdmx_0/sys_clk",
-              "rdmx_1/sys_clk",
+              "rx0_path/sys_clk",
+              "rx1_path/sys_clk",
               "axi_eth_status/axi_clk"
             ]
           },
           "axi_resetn_1": {
             "ports": [
               "sys_resetn",
-              "rdmx_0/sys_resetn",
-              "rdmx_1/sys_resetn",
+              "rx0_path/sys_resetn",
+              "rx1_path/sys_resetn",
               "axi_eth_status/axi_resetn",
               "eth_0/sys_resetn_in",
               "eth_1/sys_resetn_in"
@@ -2367,7 +2384,7 @@
             "ports": [
               "eth_0/stream_clk",
               "eth0_tx_clk",
-              "rdmx_0/eth_clk"
+              "rx0_path/eth_clk"
             ]
           },
           "eth_1_stat_rx_aligned_0": {
@@ -2381,7 +2398,7 @@
             "ports": [
               "eth_1/stream_clk",
               "eth1_tx_clk",
-              "rdmx_1/eth_clk"
+              "rx1_path/eth_clk"
             ]
           },
           "init_clk_0_1": {
@@ -4844,6 +4861,38 @@
                 "right": "0"
               }
             }
+          },
+          "eth_rx_ila": {
+            "vlnv": "xilinx.com:ip:system_ila:1.1",
+            "xci_name": "top_level_system_ila_0_4",
+            "xci_path": "ip/top_level_system_ila_0_4/top_level_system_ila_0_4.xci",
+            "inst_hier_path": "datapath_checker/eth_rx_ila",
+            "parameters": {
+              "C_NUM_MONITOR_SLOTS": {
+                "value": "2"
+              },
+              "C_SLOT": {
+                "value": "1"
+              },
+              "C_SLOT_0_INTF_TYPE": {
+                "value": "xilinx.com:interface:axis_rtl:1.0"
+              },
+              "C_SLOT_1_INTF_TYPE": {
+                "value": "xilinx.com:interface:axis_rtl:1.0"
+              }
+            },
+            "interface_ports": {
+              "SLOT_0_AXIS": {
+                "mode": "Monitor",
+                "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
+                "vlnv": "xilinx.com:interface:axis_rtl:1.0"
+              },
+              "SLOT_1_AXIS": {
+                "mode": "Monitor",
+                "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
+                "vlnv": "xilinx.com:interface:axis_rtl:1.0"
+              }
+            }
           }
         },
         "interface_nets": {
@@ -4880,13 +4929,15 @@
           "eth0_rx": {
             "interface_ports": [
               "eth0_rx",
-              "reporter_0/eth_rx"
+              "reporter_0/eth_rx",
+              "eth_rx_ila/SLOT_0_AXIS"
             ]
           },
           "eth1_rx": {
             "interface_ports": [
               "eth1_rx",
-              "reporter_1/eth_rx"
+              "reporter_1/eth_rx",
+              "eth_rx_ila/SLOT_1_AXIS"
             ]
           },
           "smartconnect_M00_AXI": {
@@ -4970,7 +5021,8 @@
               "checker_ctl/clk",
               "mindy_core_ctl/clk",
               "axis_duplicate/clk",
-              "axi_reporter/clk"
+              "axi_reporter/clk",
+              "eth_rx_ila/clk"
             ]
           },
           "reporter_0_error": {

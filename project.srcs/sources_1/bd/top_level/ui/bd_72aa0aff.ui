@@ -8,23 +8,24 @@
    "No Loops_Layout":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
 preplace port S_AXI_CC -pg 1 -lvl 0 -x 0 -y 310 -defaultsOSRD
-preplace port eth0_rx -pg 1 -lvl 5 -x 1760 -y 310 -defaultsOSRD -right
-preplace port eth1_rx -pg 1 -lvl 5 -x 1760 -y 800 -defaultsOSRD -right
+preplace port eth0_rx -pg 1 -lvl 6 -x 1980 -y 310 -defaultsOSRD -right
+preplace port eth1_rx -pg 1 -lvl 6 -x 1980 -y 860 -defaultsOSRD -right
 preplace port S_AXI_MC -pg 1 -lvl 0 -x 0 -y 190 -defaultsOSRD
-preplace port S_AXI_ER -pg 1 -lvl 5 -x 1760 -y 390 -defaultsOSRD -right
+preplace port S_AXI_ER -pg 1 -lvl 6 -x 1980 -y 390 -defaultsOSRD -right
 preplace port port-id_clk -pg 1 -lvl 0 -x 0 -y 330 -defaultsOSRD
 preplace port port-id_resetn -pg 1 -lvl 0 -x 0 -y 350 -defaultsOSRD
-preplace port port-id_sys_resetn_out -pg 1 -lvl 5 -x 1760 -y 990 -defaultsOSRD
-preplace port port-id_ch0_ok -pg 1 -lvl 5 -x 1760 -y 330 -defaultsOSRD
-preplace port port-id_ch1_ok -pg 1 -lvl 5 -x 1760 -y 780 -defaultsOSRD
-preplace inst reporter_0 -pg 1 -lvl 3 -x 1080 -y 310 -swap {0 1 2 3 4 5 6 7 8 9 10 11 23 22 21 15 16 17 18 12 13 14 19 20 24 25} -defaultsOSRD -pinDir eth_rx right -pinY eth_rx 0R -pinDir axis_in left -pinY axis_in 20L -pinDir clk left -pinY clk 40L -pinDir chan_ok right -pinY chan_ok 20R -pinDir sys_resetn left -pinY sys_resetn 200L -pinBusDir PACKET_SIZE left -pinBusY PACKET_SIZE 180L -pinBusDir FRAME_SIZE left -pinBusY FRAME_SIZE 160L -pinBusDir error_data right -pinBusY error_data 100R -pinBusDir error right -pinBusY error 120R -pinBusDir expected_frame_pattern right -pinBusY expected_frame_pattern 140R -pinDir eth_active right -pinY eth_active 160R -pinBusDir RFD_ADDR left -pinBusY RFD_ADDR 60L -pinBusDir RFD_SIZE left -pinBusY RFD_SIZE 80L -pinBusDir RMD_ADDR left -pinBusY RMD_ADDR 100L -pinBusDir RMD_SIZE1 left -pinBusY RMD_SIZE1 120L -pinBusDir RFC_ADDR left -pinBusY RFC_ADDR 140L -pinBusDir total_packets_rcvd right -pinBusY total_packets_rcvd 180R -pinBusDir expected_rdmx_addr right -pinBusY expected_rdmx_addr 200R
-preplace inst reporter_1 -pg 1 -lvl 3 -x 1080 -y 640 -swap {0 1 2 3 4 5 6 7 8 9 10 25 23 22 21 17 16 18 24 12 13 14 19 20 15 11} -defaultsOSRD -pinDir eth_rx right -pinY eth_rx 160R -pinDir axis_in left -pinY axis_in 0L -pinDir clk left -pinY clk 20L -pinDir chan_ok right -pinY chan_ok 300R -pinDir sys_resetn left -pinY sys_resetn 180L -pinBusDir PACKET_SIZE left -pinBusY PACKET_SIZE 160L -pinBusDir FRAME_SIZE left -pinBusY FRAME_SIZE 140L -pinBusDir error_data right -pinBusY error_data 240R -pinBusDir error right -pinBusY error 220R -pinBusDir expected_frame_pattern right -pinBusY expected_frame_pattern 260R -pinDir eth_active right -pinY eth_active 280R -pinBusDir RFD_ADDR left -pinBusY RFD_ADDR 40L -pinBusDir RFD_SIZE left -pinBusY RFD_SIZE 60L -pinBusDir RMD_ADDR left -pinBusY RMD_ADDR 80L -pinBusDir RMD_SIZE left -pinBusY RMD_SIZE 100L -pinBusDir RFC_ADDR left -pinBusY RFC_ADDR 120L -pinBusDir total_packets_rcvd right -pinBusY total_packets_rcvd 200R -pinBusDir expected_rdmx_addr right -pinBusY expected_rdmx_addr 180R
+preplace port port-id_sys_resetn_out -pg 1 -lvl 6 -x 1980 -y 1050 -defaultsOSRD
+preplace port port-id_ch0_ok -pg 1 -lvl 6 -x 1980 -y 330 -defaultsOSRD
+preplace port port-id_ch1_ok -pg 1 -lvl 6 -x 1980 -y 840 -defaultsOSRD
+preplace inst reporter_0 -pg 1 -lvl 3 -x 1080 -y 310 -swap {0 1 2 3 4 5 6 7 8 9 10 22 21 20 14 15 16 17 11 12 13 18 19 23 24} -defaultsOSRD -pinDir eth_rx right -pinY eth_rx 0R -pinDir axis_in left -pinY axis_in 20L -pinDir clk left -pinY clk 40L -pinDir chan_ok right -pinY chan_ok 20R -pinDir sys_resetn left -pinY sys_resetn 200L -pinBusDir PACKET_SIZE left -pinBusY PACKET_SIZE 180L -pinBusDir FRAME_SIZE left -pinBusY FRAME_SIZE 160L -pinBusDir error_data right -pinBusY error_data 100R -pinBusDir error right -pinBusY error 120R -pinBusDir expected_frame_pattern right -pinBusY expected_frame_pattern 140R -pinDir eth_active right -pinY eth_active 160R -pinBusDir RFD_ADDR left -pinBusY RFD_ADDR 60L -pinBusDir RFD_SIZE left -pinBusY RFD_SIZE 80L -pinBusDir RMD_ADDR left -pinBusY RMD_ADDR 100L -pinBusDir RMD_SIZE1 left -pinBusY RMD_SIZE1 120L -pinBusDir RFC_ADDR left -pinBusY RFC_ADDR 140L -pinBusDir total_packets_rcvd right -pinBusY total_packets_rcvd 180R -pinBusDir expected_rdmx_addr right -pinBusY expected_rdmx_addr 200R
+preplace inst reporter_1 -pg 1 -lvl 3 -x 1080 -y 640 -swap {0 1 2 3 4 5 6 7 8 9 24 22 21 20 16 15 17 23 11 12 13 18 19 14 10} -defaultsOSRD -pinDir eth_rx right -pinY eth_rx 220R -pinDir axis_in left -pinY axis_in 0L -pinDir clk left -pinY clk 20L -pinDir chan_ok right -pinY chan_ok 360R -pinDir sys_resetn left -pinY sys_resetn 180L -pinBusDir PACKET_SIZE left -pinBusY PACKET_SIZE 160L -pinBusDir FRAME_SIZE left -pinBusY FRAME_SIZE 140L -pinBusDir error_data right -pinBusY error_data 300R -pinBusDir error right -pinBusY error 280R -pinBusDir expected_frame_pattern right -pinBusY expected_frame_pattern 320R -pinDir eth_active right -pinY eth_active 340R -pinBusDir RFD_ADDR left -pinBusY RFD_ADDR 40L -pinBusDir RFD_SIZE left -pinBusY RFD_SIZE 60L -pinBusDir RMD_ADDR left -pinBusY RMD_ADDR 80L -pinBusDir RMD_SIZE left -pinBusY RMD_SIZE 100L -pinBusDir RFC_ADDR left -pinBusY RFC_ADDR 120L -pinBusDir total_packets_rcvd right -pinBusY total_packets_rcvd 260R -pinBusDir expected_rdmx_addr right -pinBusY expected_rdmx_addr 240R
 preplace inst checker_ctl -pg 1 -lvl 1 -x 180 -y 310 -defaultsOSRD -pinDir AXIS_OUT right -pinY AXIS_OUT 20R -pinDir S_AXI left -pinY S_AXI 0L -pinDir clk left -pinY clk 20L -pinDir resetn left -pinY resetn 40L -pinDir sys_resetn_out right -pinY sys_resetn_out 40R
 preplace inst mindy_core_ctl -pg 1 -lvl 2 -x 520 -y 90 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 21 20 23 24 25 26 27 28 29 22} -defaultsOSRD -pinDir S_AXI left -pinY S_AXI 100L -pinDir clk left -pinY clk 140L -pinDir resetn left -pinY resetn 120L -pinBusDir RFD_ADDR right -pinBusY RFD_ADDR 20R -pinBusDir RFD_SIZE right -pinBusY RFD_SIZE 40R -pinBusDir RMD_ADDR right -pinBusY RMD_ADDR 60R -pinBusDir RMD_SIZE right -pinBusY RMD_SIZE 80R -pinBusDir RFC_ADDR right -pinBusY RFC_ADDR 100R -pinBusDir FRAME_SIZE right -pinBusY FRAME_SIZE 120R -pinBusDir PACKET_SIZE right -pinBusY PACKET_SIZE 140R -pinBusDir PACKETS_PER_GROUP right -pinBusY PACKETS_PER_GROUP 0R
 preplace inst axis_duplicate -pg 1 -lvl 2 -x 520 -y 330 -swap {0 1 2 3 4 5 6 7 8 9 10 11 13 12} -defaultsOSRD -pinDir axis_in left -pinY axis_in 0L -pinDir axis_out0 right -pinY axis_out0 0R -pinDir axis_out1 right -pinY axis_out1 310R -pinDir clk left -pinY clk 40L -pinDir resetn left -pinY resetn 20L
-preplace inst axi_reporter -pg 1 -lvl 4 -x 1570 -y 390 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 28 27 24 34 20 35 22 31 21 32 23 33 26 29 25 30} -defaultsOSRD -pinDir S_AXI right -pinY S_AXI 0R -pinDir clk left -pinY clk 190L -pinDir resetn left -pinY resetn 170L -pinDir ch0_eth_active left -pinY ch0_eth_active 80L -pinDir ch1_eth_active left -pinY ch1_eth_active 310L -pinDir ch0_status left -pinY ch0_status 0L -pinDir ch1_status left -pinY ch1_status 330L -pinBusDir ch0_error left -pinBusY ch0_error 40L -pinBusDir ch1_error left -pinBusY ch1_error 250L -pinBusDir ch0_error_data left -pinBusY ch0_error_data 20L -pinBusDir ch1_error_data left -pinBusY ch1_error_data 270L -pinBusDir ch0_expected_fdata left -pinBusY ch0_expected_fdata 60L -pinBusDir ch1_expected_fdata left -pinBusY ch1_expected_fdata 290L -pinBusDir ch0_expected_taddr left -pinBusY ch0_expected_taddr 120L -pinBusDir ch1_expected_taddr left -pinBusY ch1_expected_taddr 210L -pinBusDir ch0_packets_rcvd left -pinBusY ch0_packets_rcvd 100L -pinBusDir ch1_packets_rcvd left -pinBusY ch1_packets_rcvd 230L
-preplace netloc ch0_ok 1 3 2 1280 330 NJ
-preplace netloc checker_ctl_sys_resetn_out 1 1 4 340 700 800 990 NJ 990 NJ
+preplace inst axi_reporter -pg 1 -lvl 4 -x 1590 -y 390 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 28 27 24 34 20 35 22 31 21 32 23 33 26 29 25 30} -defaultsOSRD -pinDir S_AXI right -pinY S_AXI 0R -pinDir clk left -pinY clk 190L -pinDir resetn left -pinY resetn 170L -pinDir ch0_eth_active left -pinY ch0_eth_active 80L -pinDir ch1_eth_active left -pinY ch1_eth_active 310L -pinDir ch0_status left -pinY ch0_status 0L -pinDir ch1_status left -pinY ch1_status 330L -pinBusDir ch0_error left -pinBusY ch0_error 40L -pinBusDir ch1_error left -pinBusY ch1_error 250L -pinBusDir ch0_error_data left -pinBusY ch0_error_data 20L -pinBusDir ch1_error_data left -pinBusY ch1_error_data 270L -pinBusDir ch0_expected_fdata left -pinBusY ch0_expected_fdata 60L -pinBusDir ch1_expected_fdata left -pinBusY ch1_expected_fdata 290L -pinBusDir ch0_expected_taddr left -pinBusY ch0_expected_taddr 120L -pinBusDir ch1_expected_taddr left -pinBusY ch1_expected_taddr 210L -pinBusDir ch0_packets_rcvd left -pinBusY ch0_packets_rcvd 100L -pinBusDir ch1_packets_rcvd left -pinBusY ch1_packets_rcvd 230L
+preplace inst eth_rx_ila -pg 1 -lvl 5 -x 1860 -y 450 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 21 20} -defaultsOSRD -pinDir SLOT_0_AXIS left -pinY SLOT_0_AXIS 0L -pinDir SLOT_1_AXIS left -pinY SLOT_1_AXIS 290L -pinDir clk left -pinY clk 330L -pinDir resetn left -pinY resetn 310L
+preplace netloc ch0_ok 1 3 3 1340 330 NJ 330 N
+preplace netloc checker_ctl_sys_resetn_out 1 1 5 340 700 800 1050 NJ 1050 NJ 1050 N
 preplace netloc mindy_core_ctl_0_FRAME_SIZE 1 2 1 720 210n
 preplace netloc mindy_core_ctl_0_PACKET_SIZE 1 2 1 700 230n
 preplace netloc mindy_core_ctl_RFC_ADDR 1 2 1 740 190n
@@ -32,34 +33,34 @@ preplace netloc mindy_core_ctl_RFD_ADDR 1 2 1 840 110n
 preplace netloc mindy_core_ctl_RFD_SIZE 1 2 1 820 130n
 preplace netloc mindy_core_ctl_RMD_ADDR 1 2 1 780 150n
 preplace netloc mindy_core_ctl_RMD_SIZE 1 2 1 760 170n
-preplace netloc pcie_axi_aclk 1 0 4 20 410 320 10 880 580 NJ
+preplace netloc pcie_axi_aclk 1 0 5 20 410 320 10 880 580 1340J 780 N
 preplace netloc reporter_0_error 1 3 1 N 430
 preplace netloc reporter_0_error_data 1 3 1 N 410
 preplace netloc reporter_0_eth_active 1 3 1 N 470
 preplace netloc reporter_0_expected_frame_pattern 1 3 1 N 450
-preplace netloc reporter_1_chan_ok 1 3 2 1400 780 NJ
-preplace netloc reporter_1_error 1 3 1 1320 640n
-preplace netloc reporter_1_error_data 1 3 1 1340 660n
-preplace netloc reporter_1_eth_active 1 3 1 1380 700n
-preplace netloc reporter_1_expected_frame_pattern 1 3 1 1360 680n
-preplace netloc source_200Mhz_resetn 1 0 4 40 210 340 30 860J 560 N
-preplace netloc reporter_1_total_packets_rcvd 1 3 1 1300 620n
-preplace netloc reporter_0_total_packets_rcvd 1 3 1 N 490
 preplace netloc reporter_0_expected_rdmx_addr 1 3 1 N 510
+preplace netloc reporter_0_total_packets_rcvd 1 3 1 N 490
+preplace netloc reporter_1_chan_ok 1 3 3 1420 840 NJ 840 N
+preplace netloc reporter_1_error 1 3 1 1320 640n
+preplace netloc reporter_1_error_data 1 3 1 1360 660n
+preplace netloc reporter_1_eth_active 1 3 1 1400 700n
+preplace netloc reporter_1_expected_frame_pattern 1 3 1 1380 680n
 preplace netloc reporter_1_expected_rdmx_addr 1 3 1 1280 600n
-preplace netloc S_AXI_ER_1 1 4 1 NJ 390
+preplace netloc reporter_1_total_packets_rcvd 1 3 1 1300 620n
+preplace netloc source_200Mhz_resetn 1 0 4 40 210 340 30 860J 560 N
+preplace netloc S_AXI_ER_1 1 4 2 NJ 390 N
 preplace netloc S_AXI_MC_1 1 0 2 NJ 190 NJ
 preplace netloc axis_duplicate_axis_out0 1 2 1 N 330
 preplace netloc axis_duplicate_axis_out1 1 2 1 N 640
 preplace netloc checker_output 1 1 1 N 330
-preplace netloc eth0_rx 1 3 2 NJ 310 NJ
-preplace netloc eth1_rx 1 3 2 NJ 800 NJ
+preplace netloc eth0_rx 1 3 3 NJ 310 1760J 310 N
+preplace netloc eth1_rx 1 3 3 NJ 860 1760J 860 N
 preplace netloc smartconnect_M00_AXI 1 0 1 NJ 310
-levelinfo -pg 1 0 180 520 1080 1570 1760
-pagesize -pg 1 -db -bbox -sgen -120 0 1920 1010
+levelinfo -pg 1 0 180 520 1080 1590 1860 1980
+pagesize -pg 1 -db -bbox -sgen -120 0 2140 1070
 ",
-   "No Loops_ScaleFactor":"0.663717",
-   "No Loops_TopLeft":"-118,-23",
+   "No Loops_ScaleFactor":"0.780834",
+   "No Loops_TopLeft":"-118,-22",
    "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
 preplace port S_AXI -pg 1 -lvl 0 -x 0 -y 60 -defaultsOSRD
