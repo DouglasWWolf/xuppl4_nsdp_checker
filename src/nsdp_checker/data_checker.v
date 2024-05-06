@@ -22,6 +22,7 @@ module data_checker # (FREQ_HZ = 250000000)
     input[511:0]    axis_eth_tdata,
     input           axis_eth_tvalid,
     input           axis_eth_tlast,
+    input           axis_eth_tuser,
     output          axis_eth_tready,
 
     // Expected size of frame-data packets, in bytes
@@ -44,6 +45,9 @@ module data_checker # (FREQ_HZ = 250000000)
 
     // The total number of packets completely received
     output reg[63:0] total_packets_rcvd,
+
+    // The frame counter we expect to see in the frame-counter packet
+    output reg[31:0] expected_fc,
 
     // This is the data-pattern we expect to see in the frame-data
     output reg[31:0] expected_frame_pattern,
@@ -131,9 +135,6 @@ wire axis_eth_handshake     = axis_eth_tvalid     & axis_eth_tready;
 // This is the currently expected frame data
 reg[511:0] expected_frame_data;
 
-// This is the frame-counter we expect to receive
-reg[31:0] expected_fc;
-
 //=============================================================================
 // This block manages the expected incoming RDMX address of frame-data
 //=============================================================================
@@ -151,7 +152,7 @@ wire[63:0] expected_fd_addr = RFD_ADDR + expected_fd_offs;
 
 // This state machine increments 'expected_fd_offs' and handles the wrap
 always @(posedge clk) begin
-    if (resetn === 0)
+    if (resetn == 0)
         expected_fd_offs <= 0;
     else if (inc_fd_offs) begin
         if (next_fd_offs < RFD_SIZE)
@@ -180,7 +181,7 @@ wire[63:0] expected_md_addr = RMD_ADDR + expected_md_offs;
 
 // This state machine increments 'expected_md_offs' and handles the wrap
 always @(posedge clk) begin
-    if (resetn === 0)
+    if (resetn == 0)
         expected_md_offs <= 0;
     else if (inc_md_offs) begin
         if (next_md_offs < RMD_SIZE)
@@ -206,7 +207,7 @@ always @(posedge clk) begin
     if (resetn == 0) 
         eth_active_timer <= 0;
     else if (axis_eth_tvalid)
-        eth_active_timer = FREQ_HZ * 2;
+        eth_active_timer <= FREQ_HZ * 2;
 
 end
 //=============================================================================
@@ -467,7 +468,7 @@ always @(posedge clk) begin
                 // Check to see if we received the expected frame-counter
                 if (reg_frame_counter != expected_fc) begin
                     error[BAD_FC] <= 1;
-                    error_data    <= {expected_fc, reg_frame_counter};
+                    error_data    <= reg_be_tdata;
                 end
     
                 // Check to make sure we have the correct packet length

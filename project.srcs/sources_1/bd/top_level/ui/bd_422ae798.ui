@@ -7,26 +7,26 @@
    "No Loops_ExpandedHierarchyInLayout":"",
    "No Loops_Layout":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
-preplace port AXIS_IN -pg 1 -lvl 0 -x -450 -y 100 -defaultsOSRD
-preplace port M_AXIS -pg 1 -lvl 4 -x 330 -y 100 -defaultsOSRD
-preplace port port-id_eth_clk -pg 1 -lvl 0 -x -450 -y 120 -defaultsOSRD
-preplace port port-id_sys_resetn -pg 1 -lvl 0 -x -450 -y 200 -defaultsOSRD
-preplace port port-id_sys_clk -pg 1 -lvl 0 -x -450 -y 20 -defaultsOSRD
-preplace inst axis_data_cdc -pg 1 -lvl 3 -x 190 -y 100 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 15 16 14} -defaultsOSRD -pinDir S_AXIS left -pinY S_AXIS 0L -pinDir M_AXIS right -pinY M_AXIS 0R -pinDir s_axis_aresetn left -pinY s_axis_aresetn 160L -pinDir s_axis_aclk left -pinY s_axis_aclk 180L -pinDir m_axis_aclk left -pinY m_axis_aclk 140L
-preplace inst resetn_cdc -pg 1 -lvl 1 -x -330 -y 180 -defaultsOSRD -pinDir dest_clk left -pinY dest_clk 0L -pinDir dest_arst right -pinY dest_arst 0R -pinDir src_arst left -pinY src_arst 20L
-preplace inst rdmx_pkt_filter -pg 1 -lvl 2 -x -80 -y 100 -defaultsOSRD -pinDir AXIS_IN left -pinY AXIS_IN 0L -pinDir AXIS_OUT right -pinY AXIS_OUT 0R -pinDir clk left -pinY clk 140L -pinDir resetn left -pinY resetn 160L
-preplace netloc clk_1 1 0 3 -430 120 -230 320 70
-preplace netloc resetn_cdc_dest_arst 1 1 2 -210 40 50
-preplace netloc sys_clk_1 1 0 3 NJ 20 NJ 20 70J
-preplace netloc sys_resetn_1 1 0 1 NJ 200
-preplace netloc AXIS_IN_1 1 0 2 NJ 100 NJ
-preplace netloc axis_data_cdc_M_AXIS 1 3 1 N 100
-preplace netloc rdmx_pkt_filter_AXIS_OUT 1 2 1 N 100
-levelinfo -pg 1 -450 -330 -80 190 330
-pagesize -pg 1 -db -bbox -sgen -580 0 440 340
+preplace port AXIS_IN -pg 1 -lvl 0 -x 0 -y 60 -defaultsOSRD
+preplace port M_AXIS -pg 1 -lvl 4 -x 880 -y 80 -defaultsOSRD
+preplace port port-id_eth_clk -pg 1 -lvl 0 -x 0 -y 80 -defaultsOSRD
+preplace port port-id_eth_resetn -pg 1 -lvl 0 -x 0 -y 100 -defaultsOSRD
+preplace port port-id_sys_clk -pg 1 -lvl 0 -x 0 -y 200 -defaultsOSRD
+preplace inst axis_data_cdc -pg 1 -lvl 3 -x 740 -y 80 -defaultsOSRD -pinDir S_AXIS left -pinY S_AXIS 0L -pinDir M_AXIS right -pinY M_AXIS 0R -pinDir s_axis_aresetn left -pinY s_axis_aresetn 20L -pinDir s_axis_aclk left -pinY s_axis_aclk 100L -pinDir m_axis_aclk left -pinY m_axis_aclk 120L
+preplace inst rdmx_pkt_filter -pg 1 -lvl 2 -x 490 -y 80 -defaultsOSRD -pinDir AXIS_IN left -pinY AXIS_IN 0L -pinDir AXIS_OUT right -pinY AXIS_OUT 0R -pinDir clk left -pinY clk 20L -pinDir resetn left -pinY resetn 40L
+preplace inst bad_packet_filter -pg 1 -lvl 1 -x 190 -y 60 -defaultsOSRD -pinDir AXIS_IN left -pinY AXIS_IN 0L -pinDir AXIS_OUT right -pinY AXIS_OUT 20R -pinDir clk left -pinY clk 20L -pinDir resetn left -pinY resetn 40L -pinDir bad_packet_found right -pinY bad_packet_found 40R
+preplace netloc clk_1 1 0 3 40 160 360 180 NJ
+preplace netloc resetn_cdc_dest_arst 1 0 3 20 180 340 20 620J
+preplace netloc sys_clk_1 1 0 3 NJ 200 NJ 200 NJ
+preplace netloc axis_data_cdc_M_AXIS 1 3 1 N 80
+preplace netloc rdmx_pkt_filter_AXIS_OUT 1 2 1 N 80
+preplace netloc AXIS_IN_1 1 0 1 NJ 60
+preplace netloc bad_packet_filter_AXIS_OUT 1 1 1 N 80
+levelinfo -pg 1 0 190 490 740 880
+pagesize -pg 1 -db -bbox -sgen -130 0 990 260
 ",
    "No Loops_ScaleFactor":"1.0",
-   "No Loops_TopLeft":"-747,-180",
+   "No Loops_TopLeft":"-247,-221",
    "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
 levelinfo -pg 1 0 10

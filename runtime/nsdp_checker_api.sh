@@ -48,9 +48,11 @@ REG_EXP_TADDRH_0=$((ER_BASE + 10 * 4))
 REG_EXP_TADDRL_0=$((ER_BASE + 11 * 4))
 REG_EXP_TADDRH_1=$((ER_BASE + 12 * 4))
 REG_EXP_TADDRL_1=$((ER_BASE + 13 * 4))
+  REG_EXP_FCTR_0=$((ER_BASE + 14 * 4))
+  REG_EXP_FCTR_1=$((ER_BASE + 15 * 4))
 
- REG_ERR_DATA_0=$((ER_BASE + 16 * 4))
- REG_ERR_DATA_1=$((ER_BASE + 32 * 4))
+ REG_ERR_DATA_0=$((ER_BASE + 32 * 4))
+ REG_ERR_DATA_1=$((ER_BASE + 48 * 4))
 
 
 #==============================================================================
@@ -77,6 +79,7 @@ confirm_rtl()
     test $rtl_type -eq $VALID_RTL_TYPE && echo "1" || echo "0"
 }
 #==============================================================================
+
 
 #==============================================================================
 # This strips underscores from a string and converts it to decimal
