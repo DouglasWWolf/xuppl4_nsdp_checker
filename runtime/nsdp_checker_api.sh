@@ -650,7 +650,7 @@ monitor()
         # If we detect that an error has occured on either channel, wait
         # one second to allow time for the other channel to see an error
         # (in case one occurs), then report the error(s)
-        if [ error_trapped -eq 0 && $(get_run_status) -ne 3 ]; then
+        if [ $error_trapped -eq 0] && [ $(get_run_status) -ne 3 ]; then
             error_trapped=1
             sleep 1
             show_errors 0
