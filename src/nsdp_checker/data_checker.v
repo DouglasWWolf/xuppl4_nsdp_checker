@@ -125,11 +125,13 @@ localparam FSM_GET_MDATA_PACKET = 4;
 localparam FSM_GET_FC_HEADER    = 5;
 localparam FSM_GET_FC_PACKET    = 6;
 
-// 'axis_pattern_tready' is valid any time we're fetching a new pattern
-assign axis_pattern_tready = (fsm_state == FSM_GET_PATTERN && resetn == 1);
+// 'axis_pattern_tready' is valid any time we're fetching a new pattern.  It's also
+// valid when we're in the "error" state because we need to allow patterns to be
+// consumed.
+assign axis_pattern_tready = (resetn == 1) & (error || (fsm_state == FSM_GET_PATTERN));
 
 // 'axis_eth_tready' is valid whenever we're ready for ethernet data
-assign axis_eth_tready     = (fsm_state != FSM_GET_PATTERN && resetn == 1);
+assign axis_eth_tready     = (resetn == 1) & (error || (fsm_state != FSM_GET_PATTERN));
 
 // Define the AXI stream data handshakes
 wire axis_pattern_handshake = axis_pattern_tvalid & axis_pattern_tready;
@@ -341,7 +343,7 @@ always @(posedge clk) begin
         expected_rdmx_addr <= 0;
     end
 
-    // If there's an error, HANG!
+    // If there's an error, we halt error checking!
     else if (error) begin
         error <= error;
     end
