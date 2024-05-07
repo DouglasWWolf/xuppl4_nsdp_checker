@@ -46,6 +46,9 @@ module data_checker # (FREQ_HZ = 250000000)
     // The total number of packets completely received
     output reg[63:0] total_packets_rcvd,
 
+    // The total number of malformed (i.e., bad Ethernet FCS) packets
+    output reg[63:0] malformed_packets,
+
     // The frame counter we expect to see in the frame-counter packet
     output reg[31:0] expected_fc,
 
@@ -258,11 +261,13 @@ reg[ 15:0] reg_rdmx_magic;
 reg[ 63:0] reg_rdmx_address;
 reg[ 15:0] reg_ip4_length;
 reg[ 31:0] reg_frame_counter;
+reg        reg_well_formed;
 always @(posedge clk) begin
     reg_valid <= 0;
     reg_tlast <= 0;
 
     if (axis_eth_handshake) begin
+        reg_well_formed   <= !axis_eth_tuser;
         reg_tdata         <= axis_eth_tdata;
         reg_be_tdata      <= be_tdata;
         reg_tlast         <= axis_eth_tlast;
@@ -321,12 +326,18 @@ always @(posedge clk) begin
     if (reg_tlast & error == 0)
         total_packets_rcvd <= total_packets_rcvd + 1;
 
+    // Keep track of the number of Ethernet frames we received that
+    // have a bad FCS
+    if (reg_tlast & !reg_well_formed)
+        malformed_packets <= malformed_packets + 1;
+
     // If we're in reset, start over
     if (resetn == 0) begin
         fsm_state          <= 0;
         expected_fc        <= 0;
         error              <= 0;
         total_packets_rcvd <= 0;
+        malformed_packets  <= 0;
         expected_rdmx_addr <= 0;
     end
 
@@ -351,46 +362,52 @@ always @(posedge clk) begin
         FSM_GET_FDATA_HEADER:
             if (reg_valid) begin
 
-                if (reg_rdmx_magic != RDMX_MAGIC) begin
-                    error[BAD_FD_MAGIC] <= 1; 
-                    error_data          <= reg_be_tdata;                   
-                end
+                if (reg_well_formed) begin
+                    if (reg_rdmx_magic != RDMX_MAGIC) begin
+                        error[BAD_FD_MAGIC] <= 1; 
+                        error_data          <= reg_be_tdata;                   
+                    end
 
-                if (reg_ip4_length != FD_IP_PACKET_SIZE) begin
-                    error[BAD_FD_PSIZE] <= 1;
-                    error_data          <= reg_be_tdata;
-                end
+                    if (reg_ip4_length != FD_IP_PACKET_SIZE) begin
+                        error[BAD_FD_PSIZE] <= 1;
+                        error_data          <= reg_be_tdata;
+                    end
 
-                if (reg_rdmx_address != expected_fd_addr) begin
-                    error[BAD_FD_TADDR] <= 1;
-                    error_data          <= reg_be_tdata;
-                    expected_rdmx_addr  <= expected_fd_addr;
+                    if (reg_rdmx_address != expected_fd_addr) begin
+                        error[BAD_FD_TADDR] <= 1;
+                        error_data          <= reg_be_tdata;
+                        expected_rdmx_addr  <= expected_fd_addr;
+                    end
                 end
 
                 inc_fd_offs      <= 1;
                 fd_packet_count  <= fd_packet_count + 1;
                 cycles_in_packet <= 1;
                 fsm_state        <= FSM_GET_FDATA_PACKET;
+
             end
 
         // Fetch the data from a frame-data packet
         FSM_GET_FDATA_PACKET:
             if (reg_valid) begin
 
-                // Check to see if the packet data is what we expect
-                if (reg_tdata != expected_frame_data) begin
-                    error_data    <= reg_tdata;
-                    error[BAD_FD] <= 1;
+                if (reg_well_formed) begin
+                    
+                    // Check to see if the packet data is what we expect
+                    if (reg_tdata != expected_frame_data) begin
+                        error_data    <= reg_tdata;
+                        error[BAD_FD] <= 1;
+                    end
+
+                    // Check to see if we received the correct number of data-cycles
+                    if (reg_tlast & (cycles_in_packet != cycles_per_fdata_packet)) begin
+                        error_data         <= cycles_in_packet;                        
+                        error[BAD_FD_PLEN] <= 1;
+                    end
                 end
 
                 // If this is the last cycle of the packet...
                 if (reg_tlast) begin
-                    
-                    if (cycles_in_packet != cycles_per_fdata_packet) begin
-                        error_data         <= cycles_in_packet;                        
-                        error[BAD_FD_PLEN] <= 1;
-                    end
-
                     if (fd_packet_count == packets_per_half_frame)
                         fsm_state <= FSM_GET_MDATA_HEADER;
                     else
@@ -403,20 +420,24 @@ always @(posedge clk) begin
         FSM_GET_MDATA_HEADER:
             if (reg_valid) begin
 
-                if (reg_rdmx_magic != RDMX_MAGIC) begin
-                    error[BAD_MD_MAGIC] <= 1;                    
-                    error_data          <= reg_be_tdata;
-                end
+                if (reg_well_formed) begin
 
-                if (reg_ip4_length != MD_IP_PACKET_SIZE) begin
-                    error[BAD_MD_PSIZE] <= 1;
-                    error_data          <= reg_be_tdata;                    
-                end
+                    if (reg_rdmx_magic != RDMX_MAGIC) begin
+                        error[BAD_MD_MAGIC] <= 1;                    
+                        error_data          <= reg_be_tdata;
+                    end
 
-                if (reg_rdmx_address != expected_md_addr) begin
-                    error[BAD_MD_TADDR] <= 1;
-                    expected_rdmx_addr  <= expected_md_addr;                    
-                    error_data          <= reg_be_tdata;
+                    if (reg_ip4_length != MD_IP_PACKET_SIZE) begin
+                        error[BAD_MD_PSIZE] <= 1;
+                        error_data          <= reg_be_tdata;                    
+                    end
+
+                    if (reg_rdmx_address != expected_md_addr) begin
+                        error[BAD_MD_TADDR] <= 1;
+                        expected_rdmx_addr  <= expected_md_addr;                    
+                        error_data          <= reg_be_tdata;
+                    end
+
                 end
 
                 inc_md_offs      <= 1;
@@ -427,33 +448,36 @@ always @(posedge clk) begin
         // Fetch the data from a meta-data packet
         FSM_GET_MDATA_PACKET:
             if (reg_valid) begin
-                if (reg_tlast) begin
-                    if (cycles_in_packet != 2) begin
+                if (reg_well_formed) begin
+                    if (reg_tlast & (cycles_in_packet != 2)) begin
                         error[BAD_MD_PLEN] <= 1;
                         error_data         <= cycles_in_packet;
                     end
-                    fsm_state <= FSM_GET_FC_HEADER;
                 end
+
+                if (reg_tlast) fsm_state <= FSM_GET_FC_HEADER;
             end
 
         // Get the RDMX header for a frame-counter packet
         FSM_GET_FC_HEADER:
             if (reg_valid) begin
 
-                if (reg_rdmx_magic != RDMX_MAGIC) begin
-                    error[BAD_FC_MAGIC] <= 1; 
-                    error_data          <= reg_be_tdata;
-                end
+                if (reg_well_formed) begin
+                    if (reg_rdmx_magic != RDMX_MAGIC) begin
+                        error[BAD_FC_MAGIC] <= 1; 
+                        error_data          <= reg_be_tdata;
+                    end
 
-                if (reg_ip4_length != FC_IP_PACKET_SIZE) begin
-                    error[BAD_FC_PSIZE] <= 1;
-                    error_data          <= reg_be_tdata;                    
-                end
+                    if (reg_ip4_length != FC_IP_PACKET_SIZE) begin
+                        error[BAD_FC_PSIZE] <= 1;
+                        error_data          <= reg_be_tdata;                    
+                    end
 
-                if (reg_rdmx_address != RFC_ADDR) begin
-                    error[BAD_FC_TADDR] <= 1;
-                    expected_rdmx_addr  <= RFC_ADDR;
-                    error_data          <= reg_be_tdata;
+                    if (reg_rdmx_address != RFC_ADDR) begin
+                        error[BAD_FC_TADDR] <= 1;
+                        expected_rdmx_addr  <= RFC_ADDR;
+                        error_data          <= reg_be_tdata;
+                    end
                 end
 
                 cycles_in_packet <= 1;
@@ -465,20 +489,24 @@ always @(posedge clk) begin
         FSM_GET_FC_PACKET:
             if (reg_valid) begin
 
-                // Check to see if we received the expected frame-counter
-                if (reg_frame_counter != expected_fc) begin
-                    error[BAD_FC] <= 1;
-                    error_data    <= reg_be_tdata;
-                end
-    
-                // Check to make sure we have the correct packet length
-                if (reg_tlast) begin
-                    if (cycles_in_packet != 1) begin
+                if (reg_well_formed) begin
+
+                    // Check to see if we received the expected frame-counter
+                    if (reg_frame_counter != expected_fc) begin
+                        error[BAD_FC] <= 1;
+                        error_data    <= reg_be_tdata;
+                    end
+
+                    // Check for the correct number of cycles in the packet
+                    if (reg_tlast & (cycles_in_packet != 1)) begin
                         error[BAD_FC_PLEN] <= 1;
                         error_data         <= cycles_in_packet;                          
                     end
-                    fsm_state <= FSM_GET_PATTERN;
+
                 end
+
+                // On the last cycle of the packet, go wait for the next frame
+                if (reg_tlast) fsm_state <= FSM_GET_PATTERN;
             end
 
     endcase

@@ -22,14 +22,12 @@
           "axis_register_slice": "",
           "cmac": "",
           "reset_inverter": "",
-          "cmac_rx_ila": "",
           "cmac_control": ""
         },
         "eth_0": {
           "axis_register_slice": "",
           "cmac": "",
           "reset_inverter": "",
-          "cmac_rx_ila": "",
           "cmac_control": ""
         },
         "rx0_path": {
@@ -639,24 +637,6 @@
                   }
                 }
               },
-              "cmac_rx_ila": {
-                "vlnv": "xilinx.com:ip:system_ila:1.1",
-                "xci_name": "top_level_cmac_rx_ila_0",
-                "xci_path": "ip/top_level_cmac_rx_ila_0/top_level_cmac_rx_ila_0.xci",
-                "inst_hier_path": "ethernet/eth_1/cmac_rx_ila",
-                "parameters": {
-                  "C_SLOT_0_INTF_TYPE": {
-                    "value": "xilinx.com:interface:axis_rtl:1.0"
-                  }
-                },
-                "interface_ports": {
-                  "SLOT_0_AXIS": {
-                    "mode": "Monitor",
-                    "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
-                    "vlnv": "xilinx.com:interface:axis_rtl:1.0"
-                  }
-                }
-              },
               "cmac_control": {
                 "vlnv": "xilinx.com:module_ref:cmac_control:1.0",
                 "xci_name": "top_level_cmac_control_1",
@@ -921,8 +901,7 @@
               "cmac1_axis_rx": {
                 "interface_ports": [
                   "cmac_control/rx_in",
-                  "cmac/axis_rx",
-                  "cmac_rx_ila/SLOT_0_AXIS"
+                  "cmac/axis_rx"
                 ]
               },
               "cmac_control_ctl_rx": {
@@ -982,7 +961,6 @@
                   "stream_clk",
                   "axis_register_slice/aclk",
                   "cmac/rx_clk",
-                  "cmac_rx_ila/clk",
                   "cmac_control/rx_clk"
                 ]
               },
@@ -1114,24 +1092,6 @@
                   },
                   "C_SIZE": {
                     "value": "1"
-                  }
-                }
-              },
-              "cmac_rx_ila": {
-                "vlnv": "xilinx.com:ip:system_ila:1.1",
-                "xci_name": "top_level_system_ila_0_5",
-                "xci_path": "ip/top_level_system_ila_0_5/top_level_system_ila_0_5.xci",
-                "inst_hier_path": "ethernet/eth_0/cmac_rx_ila",
-                "parameters": {
-                  "C_SLOT_0_INTF_TYPE": {
-                    "value": "xilinx.com:interface:axis_rtl:1.0"
-                  }
-                },
-                "interface_ports": {
-                  "SLOT_0_AXIS": {
-                    "mode": "Monitor",
-                    "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
-                    "vlnv": "xilinx.com:interface:axis_rtl:1.0"
                   }
                 }
               },
@@ -1399,8 +1359,7 @@
               "cmac0_axis_rx": {
                 "interface_ports": [
                   "cmac_control/rx_in",
-                  "cmac/axis_rx",
-                  "cmac_rx_ila/SLOT_0_AXIS"
+                  "cmac/axis_rx"
                 ]
               },
               "cmac_control_ctl_rx": {
@@ -1460,7 +1419,6 @@
                   "stream_clk",
                   "axis_register_slice/aclk",
                   "cmac/rx_clk",
-                  "cmac_rx_ila/clk",
                   "cmac_control/rx_clk"
                 ]
               },
@@ -3491,6 +3449,11 @@
                     "left": "63",
                     "right": "0"
                   },
+                  "malformed_packets": {
+                    "direction": "O",
+                    "left": "63",
+                    "right": "0"
+                  },
                   "expected_fc": {
                     "direction": "O",
                     "left": "31",
@@ -3812,6 +3775,11 @@
                     "direction": "I",
                     "left": "63",
                     "right": "0"
+                  },
+                  "malformed_packets": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
                   }
                 }
               }
@@ -3898,6 +3866,12 @@
                 "ports": [
                   "data_checker/expected_rdmx_addr",
                   "axi_reporter/expected_taddr"
+                ]
+              },
+              "data_checker_malformed_packets": {
+                "ports": [
+                  "data_checker/malformed_packets",
+                  "axi_reporter/malformed_packets"
                 ]
               },
               "data_checker_total_packets_rcvd": {
@@ -4285,6 +4259,11 @@
                     "left": "63",
                     "right": "0"
                   },
+                  "malformed_packets": {
+                    "direction": "O",
+                    "left": "63",
+                    "right": "0"
+                  },
                   "expected_fc": {
                     "direction": "O",
                     "left": "31",
@@ -4606,6 +4585,11 @@
                     "direction": "I",
                     "left": "63",
                     "right": "0"
+                  },
+                  "malformed_packets": {
+                    "direction": "I",
+                    "left": "63",
+                    "right": "0"
                   }
                 }
               }
@@ -4692,6 +4676,12 @@
                 "ports": [
                   "data_checker/expected_rdmx_addr",
                   "axi_reporter/expected_taddr"
+                ]
+              },
+              "data_checker_malformed_packets": {
+                "ports": [
+                  "data_checker/malformed_packets",
+                  "axi_reporter/malformed_packets"
                 ]
               },
               "data_checker_total_packets_rcvd": {

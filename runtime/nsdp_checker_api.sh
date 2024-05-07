@@ -43,8 +43,10 @@ REG_ETH_ACTIVE_0=$((ER0_BASE +  1 * 4))
   REG_ERR_CODE_0=$((ER0_BASE +  2 * 4))
  REG_PKTS_RCVD_0=$((ER0_BASE +  3 * 4))
  REG_EXP_FDATA_0=$((ER0_BASE +  5 * 4))
- REG_EXP_TADDR_0=$((ER0_BASE +  6 * 4))
+REG_EXP_TADDRH_0=$((ER0_BASE +  6 * 4))
+REG_EXP_TADDRL_0=$((ER0_BASE +  7 * 4))
   REG_EXP_FCTR_0=$((ER0_BASE +  8 * 4))
+ REG_MALFORMED_0=$((ER0_BASE +  9 * 4))
   REG_ERR_DATA_0=$((ER0_BASE + 16 * 4))
 
 
@@ -54,8 +56,10 @@ REG_ETH_ACTIVE_1=$((ER1_BASE +  1 * 4))
   REG_ERR_CODE_1=$((ER1_BASE +  2 * 4))
  REG_PKTS_RCVD_1=$((ER1_BASE +  3 * 4))
  REG_EXP_FDATA_1=$((ER1_BASE +  5 * 4))
- REG_EXP_TADDR_1=$((ER1_BASE +  6 * 4))
+REG_EXP_TADDRH_1=$((ER0_BASE +  6 * 4))
+REG_EXP_TADDRL_1=$((ER0_BASE +  7 * 4))
   REG_EXP_FCTR_1=$((ER1_BASE +  8 * 4))
+ REG_MALFORMED_1=$((ER0_BASE +  9 * 4))  
   REG_ERR_DATA_1=$((ER1_BASE + 16 * 4))
 
 
@@ -633,21 +637,46 @@ show_errors()
 #==============================================================================
 monitor()
 {
+    local error_trapped=0
+    local malformed0=0
+    local malformed1=0
+
+
     while [ 1 -eq 1 ] ; do
         
-        # We'll check the run-status once per half-second
-        sleep .5
+        # We'll check the run-status once per second
+        sleep 1
 
         # If we detect that an error has occured on either channel, wait
         # one second to allow time for the other channel to see an error
         # (in case one occurs), then report the error(s)
-        if [ $(get_run_status) -ne 3 ]; then
+        if [ error_trapped -eq 0 && $(get_run_status) -ne 3 ]; then
+            error_trapped=1
             sleep 1
             show_errors 0
             show_errors 1
-            return
         fi
     
+        # Find out how many malformed packets there are
+        new_malformed0=$(read_reg64 $REG_MALFORMED_0)
+        new_malformed1=$(read_reg64 $REG_MALFORMED_1)
+
+        # Warn the user if malformed packets are encountered on channel 0
+        if [ $new_malformed0 -ne $malformed0 ]; then
+            malformed0=$new_malformed0
+            echo   "----------------------------------------------"
+            printf ">>>> Channel 0: Malformed packets = %u\n" $malformed0
+            echo   "----------------------------------------------"
+        fi
+
+        # Warn the user if malformed packets are encountered on channel 1
+        if [ $new_malformed1 -ne $malformed1 ]; then
+            malformed0=$new_malformed1
+            echo   "----------------------------------------------"
+            printf ">>>> Channel 1: Malformed packets = %u\n" $malformed1
+            echo   "----------------------------------------------"
+        fi
+
         # If packets have stopped arriving, we're done
         if [ $(is_ethernet_active) -eq 0 ]; then
             echo "Job completed with no errors"

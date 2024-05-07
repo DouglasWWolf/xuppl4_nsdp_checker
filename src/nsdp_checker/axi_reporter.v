@@ -24,6 +24,7 @@ module axi_reporter
     input[ 63:0] expected_taddr,
     input[ 31:0] expected_fc,
     input[ 63:0] packets_rcvd,
+    input[ 63:0] malformed_packets,
 
     //================== This is an AXI4-Lite slave interface ==================
         
@@ -60,18 +61,19 @@ module axi_reporter
 
 
 //=========================  AXI Register Map  =============================
-localparam REG_RUN_STATUS = 0;
-localparam REG_ETH_ACTIVE = 1;
-localparam REG_ERROR      = 2;
-localparam REG_PKTS_RCVDH = 3;
-localparam REG_PKTS_RCVDL = 4;
-localparam REG_EXP_FDATA  = 5;
-localparam REG_EXP_TADDRH = 6;
-localparam REG_EXP_TADDRL = 7;
-localparam REG_EXP_FCTR   = 8;
+localparam REG_RUN_STATUS =  0;
+localparam REG_ETH_ACTIVE =  1;
+localparam REG_ERROR      =  2;
+localparam REG_PKTS_RCVDH =  3;
+localparam REG_PKTS_RCVDL =  4;
+localparam REG_EXP_FDATA  =  5;
+localparam REG_EXP_TADDRH =  6;
+localparam REG_EXP_TADDRL =  7;
+localparam REG_EXP_FCTR   =  8;
+localparam REG_MALFORMEDH =  9;
+localparam REG_MALFORMEDL = 10;
 
 localparam REG_ERR_DATA   = 16;
-
 //==========================================================================
 
 
@@ -174,6 +176,8 @@ always @(posedge clk) begin
             REG_EXP_TADDRH:       ashi_rdata <= expected_taddr[63:32];
             REG_EXP_TADDRL:       ashi_rdata <= expected_taddr[31:00];
             REG_EXP_FCTR:         ashi_rdata <= expected_fc;
+            REG_MALFORMEDH:       ashi_rdata <= malformed_packets[63:32];
+            REG_MALFORMEDL:       ashi_rdata <= malformed_packets[32:00];
 
             REG_ERR_DATA +  0:    ashi_rdata <= error_data[15 * 32 +: 32];
             REG_ERR_DATA +  1:    ashi_rdata <= error_data[14 * 32 +: 32];          
