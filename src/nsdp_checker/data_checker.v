@@ -269,7 +269,7 @@ always @(posedge clk) begin
     reg_tlast <= 0;
 
     if (axis_eth_handshake) begin
-        reg_well_formed   <= !axis_eth_tuser;
+        reg_well_formed   <= (axis_eth_tuser == 0);
         reg_tdata         <= axis_eth_tdata;
         reg_be_tdata      <= be_tdata;
         reg_tlast         <= axis_eth_tlast;
