@@ -530,6 +530,7 @@ show_errors()
     local exp_taddrh=0
     local exp_taddrl=0
     local exp_fctr=0
+    local exp_seq=0
     local a b c d
             
     # Make sure the caller give us a channel number
@@ -551,6 +552,7 @@ show_errors()
           exp_taddrh=$(read_reg   $REG_EXP_TADDRH_0)
           exp_taddrl=$(read_reg   $REG_EXP_TADDRL_0)
             exp_fctr=$(read_reg   $REG_EXP_FCTR_0)
+             exp_seq=$(read_reg   $REG_EXP_SEQ_0)
         reg_err_data=$REG_ERR_DATA_0
     elif [ $channel -eq 1 ]; then 
           error_code=$(read_reg   $REG_ERR_CODE_1)
@@ -559,6 +561,7 @@ show_errors()
           exp_taddrh=$(read_reg   $REG_EXP_TADDRH_1)
           exp_taddrl=$(read_reg   $REG_EXP_TADDRL_1)
             exp_fctr=$(read_reg   $REG_EXP_FCTR_1)
+             exp_seq=$(read_reg   $REG_EXP_SEQ_1)            
         reg_err_data=$REG_ERR_DATA_1
     else
         echo "Bad parameter [$channel] on show_error()" 1>&2
@@ -601,6 +604,9 @@ show_errors()
     test $((error_code & 0x10000)) -ne 0 && printf " (BAD_FC)"
     test $((error_code & 0x20000)) -ne 0 && printf " (BAD_FC_PLEN)"    
     printf "\n"
+
+    # Display the expected sequence number
+    printf "  expected seq: 0x%04X  (%u)\n" $exp_seq $exp_seq
 
     # Display the expected frame data
     printf "expected fdata: 0x%08X  (%u)\n" $exp_fdata $exp_fdata
