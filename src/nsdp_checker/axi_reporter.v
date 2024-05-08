@@ -18,11 +18,12 @@ module axi_reporter
 
     input        eth_active,
     input        run_status,  
-    input[ 14:0] error, 
+    input[ 17:0] error, 
     input[511:0] error_data,
     input[ 31:0] expected_fdata,
     input[ 63:0] expected_taddr,
     input[ 31:0] expected_fc,
+    input[ 15:0] expected_seq,
     input[ 63:0] packets_rcvd,
     input[ 63:0] malformed_packets,
 
@@ -70,8 +71,9 @@ localparam REG_EXP_FDATA  =  5;
 localparam REG_EXP_TADDRH =  6;
 localparam REG_EXP_TADDRL =  7;
 localparam REG_EXP_FCTR   =  8;
-localparam REG_MALFORMEDH =  9;
-localparam REG_MALFORMEDL = 10;
+localparam REG_EXP_SEQ    =  9;
+localparam REG_MALFORMEDH = 10;
+localparam REG_MALFORMEDL = 11;
 
 localparam REG_ERR_DATA   = 16;
 //==========================================================================
@@ -176,6 +178,7 @@ always @(posedge clk) begin
             REG_EXP_TADDRH:       ashi_rdata <= expected_taddr[63:32];
             REG_EXP_TADDRL:       ashi_rdata <= expected_taddr[31:00];
             REG_EXP_FCTR:         ashi_rdata <= expected_fc;
+            REG_EXP_SEQ:          ashi_rdata <= expected_seq;
             REG_MALFORMEDH:       ashi_rdata <= malformed_packets[63:32];
             REG_MALFORMEDL:       ashi_rdata <= malformed_packets[32:00];
 

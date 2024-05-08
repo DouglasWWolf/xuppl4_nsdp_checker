@@ -58,8 +58,11 @@ module data_checker # (FREQ_HZ = 250000000)
     // This is the RDMX target address we expected to see
     output reg[63:0] expected_rdmx_addr, 
 
+    // This is the RDMX sequence number we expected to see
+    output reg[15:0] expected_rdmx_seq,
+
     // Contains error status bits
-    output reg[14:0] error,
+    output reg[17:0] error,
 
     // Contains the data that failed to match
     output reg[511:0] error_data,
@@ -110,6 +113,7 @@ wire[15:0]  w_udp_length     = be_tdata[207:192];
 wire[15:0]  w_udp_checksum   = be_tdata[191:176];
 wire[15:0]  w_rdmx_magic     = be_tdata[175:160];
 wire[63:0]  w_rdmx_address   = be_tdata[159:096];
+wire[15:0]  w_rdmx_seq_num   = be_tdata[095:080];
 //=============================================================================
 
 // This is high when there is no error detected
@@ -143,7 +147,7 @@ reg[511:0] expected_frame_data;
 //=============================================================================
 // This block manages the expected incoming RDMX address of frame-data
 //=============================================================================
-// Any cycle where this is '1' will incredment 'expected_fd_offs'
+// Any cycle where this is '1' will increment 'expected_fd_offs'
 reg        inc_fd_offs;
 
 // "Expected offset" cycles between 0 and RFD_SIZE
@@ -261,9 +265,11 @@ reg        reg_tlast;
 reg[511:0] reg_tdata, reg_be_tdata;
 reg[ 15:0] reg_rdmx_magic;
 reg[ 63:0] reg_rdmx_address;
+reg[ 15:0] reg_rdmx_seq_num;
 reg[ 15:0] reg_ip4_length;
 reg[ 31:0] reg_frame_counter;
 reg        reg_well_formed;
+
 always @(posedge clk) begin
     reg_valid <= 0;
     reg_tlast <= 0;
@@ -276,6 +282,7 @@ always @(posedge clk) begin
         reg_frame_counter <= axis_eth_tdata[31:0];
         reg_rdmx_magic    <= w_rdmx_magic;
         reg_rdmx_address  <= w_rdmx_address;
+        reg_rdmx_seq_num  <= w_rdmx_seq_num;
         reg_ip4_length    <= w_ip4_length;
         reg_valid         <= 1;
     end
@@ -287,23 +294,26 @@ end
 //=============================================================================
 // Error codes - corresponds to bit-numbers in the "error" port
 //=============================================================================
-localparam BAD_FD_MAGIC = 0;
-localparam BAD_FD_PSIZE = 1;
-localparam BAD_FD_TADDR = 2;
-localparam BAD_FD       = 3;
-localparam BAD_FD_PLEN  = 4;
+localparam BAD_FD_MAGIC =  0;
+localparam BAD_FD_SEQ   =  1;
+localparam BAD_FD_PSIZE =  2;
+localparam BAD_FD_TADDR =  3;
+localparam BAD_FD       =  4;
+localparam BAD_FD_PLEN  =  5;
 
-localparam BAD_MD_MAGIC = 5;
-localparam BAD_MD_PSIZE = 6;
-localparam BAD_MD_TADDR = 7;
-localparam BAD_MD       = 8;
-localparam BAD_MD_PLEN  = 9;
+localparam BAD_MD_MAGIC =  6;
+localparam BAD_MD_SEQ   =  7;
+localparam BAD_MD_PSIZE =  8;
+localparam BAD_MD_TADDR =  9;
+localparam BAD_MD       = 10;
+localparam BAD_MD_PLEN  = 11;
 
-localparam BAD_FC_MAGIC = 10;
-localparam BAD_FC_PSIZE = 11;
-localparam BAD_FC_TADDR = 12;
-localparam BAD_FC       = 13;
-localparam BAD_FC_PLEN  = 14;
+localparam BAD_FC_MAGIC = 12;
+localparam BAD_FC_SEQ   = 13;
+localparam BAD_FC_PSIZE = 14;
+localparam BAD_FC_TADDR = 15;
+localparam BAD_FC       = 16;
+localparam BAD_FC_PLEN  = 17;
 //=============================================================================
 
 
@@ -317,39 +327,39 @@ always @(posedge clk) begin
     inc_fd_offs <= 0;
     inc_md_offs <= 0;
 
-    // Count the number of data-cycles in a packet
-    if (reg_valid)
-        cycles_in_packet <= cycles_in_packet + 1;
-
-    // Count the total number of packets received.  We must be sure to
-    // stop incrementing the counter when we're in error state so that 
-    // the error-reporting logic can get an accurate count of how many
-    // packets had arrived prior to the error being detected
-    if (reg_tlast & error == 0)
-        total_packets_rcvd <= total_packets_rcvd + 1;
-
-    // Keep track of the number of Ethernet frames we received that
-    // have a bad FCS
-    if (reg_tlast & !reg_well_formed)
+    // Keep track of the number of Ethernet frames we receive that
+    // have a bad FCS.  We count these even if testing has otherwise
+    // been halted due to an error-condition.
+    if (reg_valid & reg_tlast & !reg_well_formed)
         malformed_packets <= malformed_packets + 1;
 
     // If we're in reset, start over
     if (resetn == 0) begin
-        fsm_state          <= 0;
+        fsm_state          <= FSM_GET_PATTERN;
         expected_fc        <= 0;
         error              <= 0;
         total_packets_rcvd <= 0;
         malformed_packets  <= 0;
         expected_rdmx_addr <= 0;
+        expected_rdmx_seq  <= 1;
     end
 
-    // If there's an error, we halt error checking!
-    else if (error) begin
-        error <= error;
-    end
+    // If we're still looking for errors...
+    else if (error == 0) begin
 
-    // Otherwise, run the state machine
-    else case(fsm_state)
+        // Count the number of data-cycles in a packet
+        if (reg_valid)
+            cycles_in_packet <= cycles_in_packet + 1;
+
+        // Keep track of the total number of packets received
+        // and the next expected RDMX sequence number
+        if (reg_valid & reg_tlast) begin
+            total_packets_rcvd <= total_packets_rcvd + 1;
+            expected_rdmx_seq  <= expected_rdmx_seq  + 1;
+        end
+
+        // Run the state machine
+        case(fsm_state)
 
         // Wait for a new frame-data-pattern to arrive
         FSM_GET_PATTERN:
@@ -369,6 +379,11 @@ always @(posedge clk) begin
                     if (reg_rdmx_magic != RDMX_MAGIC) begin
                         error[BAD_FD_MAGIC] <= 1; 
                         error_data          <= reg_be_tdata;                   
+                    end
+
+                    if (reg_rdmx_seq_num != expected_rdmx_seq) begin
+                        error[BAD_FD_SEQ] <= 1;
+                        error_data        <= reg_be_tdata;                   
                     end
 
                     if (reg_ip4_length != FD_IP_PACKET_SIZE) begin
@@ -430,6 +445,11 @@ always @(posedge clk) begin
                         error_data          <= reg_be_tdata;
                     end
 
+                    if (reg_rdmx_seq_num != expected_rdmx_seq) begin
+                        error[BAD_MD_SEQ]   <= 1;
+                        error_data          <= reg_be_tdata;                   
+                    end
+
                     if (reg_ip4_length != MD_IP_PACKET_SIZE) begin
                         error[BAD_MD_PSIZE] <= 1;
                         error_data          <= reg_be_tdata;                    
@@ -466,9 +486,15 @@ always @(posedge clk) begin
             if (reg_valid) begin
 
                 if (reg_well_formed) begin
+
                     if (reg_rdmx_magic != RDMX_MAGIC) begin
                         error[BAD_FC_MAGIC] <= 1; 
                         error_data          <= reg_be_tdata;
+                    end
+
+                    if (reg_rdmx_seq_num != expected_rdmx_seq) begin
+                        error[BAD_FC_SEQ]   <= 1;
+                        error_data          <= reg_be_tdata;                   
                     end
 
                     if (reg_ip4_length != FC_IP_PACKET_SIZE) begin
@@ -481,6 +507,7 @@ always @(posedge clk) begin
                         expected_rdmx_addr  <= RFC_ADDR;
                         error_data          <= reg_be_tdata;
                     end
+
                 end
 
                 cycles_in_packet <= 1;
@@ -510,8 +537,9 @@ always @(posedge clk) begin
                 // On the last cycle of the packet, go wait for the next frame
                 if (reg_tlast) fsm_state <= FSM_GET_PATTERN;
             end
-
-    endcase
+        
+        endcase
+    end
 
 end
 //=============================================================================

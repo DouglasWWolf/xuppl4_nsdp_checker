@@ -23,8 +23,9 @@ preplace inst reporter_1 -pg 1 -lvl 3 -x 1000 -y 600 -swap {11 1 2 3 4 5 6 7 8 9
 preplace inst checker_ctl -pg 1 -lvl 1 -x 180 -y 290 -defaultsOSRD -pinDir AXIS_OUT right -pinY AXIS_OUT 20R -pinDir S_AXI left -pinY S_AXI 0L -pinDir clk left -pinY clk 20L -pinDir resetn left -pinY resetn 40L -pinDir sys_resetn_out right -pinY sys_resetn_out 40R
 preplace inst mindy_core_ctl -pg 1 -lvl 2 -x 520 -y 70 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 21 20 26 23 24 28 29 27 25 22} -defaultsOSRD -pinDir S_AXI left -pinY S_AXI 0L -pinDir clk left -pinY clk 140L -pinDir resetn left -pinY resetn 120L -pinBusDir RFD_ADDR right -pinBusY RFD_ADDR 80R -pinBusDir RFD_SIZE right -pinBusY RFD_SIZE 20R -pinBusDir RMD_ADDR right -pinBusY RMD_ADDR 40R -pinBusDir RMD_SIZE right -pinBusY RMD_SIZE 120R -pinBusDir RFC_ADDR right -pinBusY RFC_ADDR 140R -pinBusDir FRAME_SIZE right -pinBusY FRAME_SIZE 100R -pinBusDir PACKET_SIZE right -pinBusY PACKET_SIZE 60R -pinBusDir PACKETS_PER_GROUP right -pinBusY PACKETS_PER_GROUP 0R
 preplace inst axis_duplicate -pg 1 -lvl 2 -x 520 -y 310 -swap {0 1 2 3 4 5 6 7 8 9 10 11 13 12} -defaultsOSRD -pinDir axis_in left -pinY axis_in 0L -pinDir axis_out0 right -pinY axis_out0 0R -pinDir axis_out1 right -pinY axis_out1 290R -pinDir clk left -pinY clk 40L -pinDir resetn left -pinY resetn 20L
-preplace inst eth_rx_ila -pg 1 -lvl 4 -x 1330 -y 460 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 16 15 14 17} -defaultsOSRD -pinDir SLOT_0_AXIS left -pinY SLOT_0_AXIS 0L -pinDir SLOT_1_AXIS left -pinY SLOT_1_AXIS 20L -pinDir clk left -pinY clk 80L -pinDir resetn left -pinY resetn 60L -pinBusDir probe0 left -pinBusY probe0 40L -pinBusDir probe1 left -pinBusY probe1 100L
+preplace inst eth_rx_ila -pg 1 -lvl 4 -x 1330 -y 460 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 16 14 17 15} -defaultsOSRD -pinDir SLOT_0_AXIS left -pinY SLOT_0_AXIS 0L -pinDir SLOT_1_AXIS left -pinY SLOT_1_AXIS 20L -pinDir clk left -pinY clk 80L -pinBusDir probe0 left -pinBusY probe0 40L -pinBusDir probe1 left -pinBusY probe1 100L -pinDir resetn left -pinY resetn 60L
 preplace netloc ch0_ok 1 3 2 1180 360 N
+preplace netloc ch1_ok 1 3 2 1220 640 NJ
 preplace netloc checker_ctl_sys_resetn_out 1 1 4 320 660 780 830 NJ 830 N
 preplace netloc mindy_core_ctl_0_FRAME_SIZE 1 2 1 740 170n
 preplace netloc mindy_core_ctl_0_PACKET_SIZE 1 2 1 800 130n
@@ -34,7 +35,6 @@ preplace netloc mindy_core_ctl_RFD_SIZE 1 2 1 840 90n
 preplace netloc mindy_core_ctl_RMD_ADDR 1 2 1 820 110n
 preplace netloc mindy_core_ctl_RMD_SIZE 1 2 1 720 190n
 preplace netloc pcie_axi_aclk 1 0 4 20 390 340 10 860 540 NJ
-preplace netloc ch1_ok 1 3 2 1220 640 NJ
 preplace netloc source_200Mhz_resetn 1 0 2 40 190 N
 preplace netloc S_AXI_ER1_1 1 3 2 1160 400 N
 preplace netloc S_AXI_ER_1 1 3 2 N 310 N

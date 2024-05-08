@@ -3456,7 +3456,7 @@
                   },
                   "error": {
                     "direction": "I",
-                    "left": "14",
+                    "left": "17",
                     "right": "0"
                   },
                   "error_data": {
@@ -3477,6 +3477,11 @@
                   "expected_fc": {
                     "direction": "I",
                     "left": "31",
+                    "right": "0"
+                  },
+                  "expected_seq": {
+                    "direction": "I",
+                    "left": "15",
                     "right": "0"
                   },
                   "packets_rcvd": {
@@ -3733,9 +3738,14 @@
                     "left": "63",
                     "right": "0"
                   },
+                  "expected_rdmx_seq": {
+                    "direction": "O",
+                    "left": "15",
+                    "right": "0"
+                  },
                   "error": {
                     "direction": "O",
-                    "left": "14",
+                    "left": "17",
                     "right": "0"
                   },
                   "error_data": {
@@ -3830,6 +3840,12 @@
                 "ports": [
                   "data_checker/expected_rdmx_addr",
                   "axi_reporter/expected_taddr"
+                ]
+              },
+              "data_checker_expected_rdmx_seq": {
+                "ports": [
+                  "data_checker/expected_rdmx_seq",
+                  "axi_reporter/expected_seq"
                 ]
               },
               "data_checker_malformed_packets": {
@@ -4227,7 +4243,7 @@
                   },
                   "error": {
                     "direction": "I",
-                    "left": "14",
+                    "left": "17",
                     "right": "0"
                   },
                   "error_data": {
@@ -4248,6 +4264,11 @@
                   "expected_fc": {
                     "direction": "I",
                     "left": "31",
+                    "right": "0"
+                  },
+                  "expected_seq": {
+                    "direction": "I",
+                    "left": "15",
                     "right": "0"
                   },
                   "packets_rcvd": {
@@ -4504,9 +4525,14 @@
                     "left": "63",
                     "right": "0"
                   },
+                  "expected_rdmx_seq": {
+                    "direction": "O",
+                    "left": "15",
+                    "right": "0"
+                  },
                   "error": {
                     "direction": "O",
-                    "left": "14",
+                    "left": "17",
                     "right": "0"
                   },
                   "error_data": {
@@ -4601,6 +4627,12 @@
                 "ports": [
                   "data_checker/expected_rdmx_addr",
                   "axi_reporter/expected_taddr"
+                ]
+              },
+              "data_checker_expected_rdmx_seq": {
+                "ports": [
+                  "data_checker/expected_rdmx_seq",
+                  "axi_reporter/expected_seq"
                 ]
               },
               "data_checker_malformed_packets": {
@@ -5524,6 +5556,9 @@
             "xci_path": "ip/top_level_system_ila_0_4/top_level_system_ila_0_4.xci",
             "inst_hier_path": "datapath_checker/eth_rx_ila",
             "parameters": {
+              "C_DATA_DEPTH": {
+                "value": "2048"
+              },
               "C_MON_TYPE": {
                 "value": "MIX"
               },

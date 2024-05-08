@@ -36,7 +36,6 @@ MC_BASE=0x2000
 REG_PACKETS_PER_GROUP=$((MC_BASE + 12* 4))
 
 
-
 ER0_BASE=0x3000
 REG_RUN_STATUS_0=$((ER0_BASE +  0 * 4))
 REG_ETH_ACTIVE_0=$((ER0_BASE +  1 * 4))
@@ -46,7 +45,8 @@ REG_ETH_ACTIVE_0=$((ER0_BASE +  1 * 4))
 REG_EXP_TADDRH_0=$((ER0_BASE +  6 * 4))
 REG_EXP_TADDRL_0=$((ER0_BASE +  7 * 4))
   REG_EXP_FCTR_0=$((ER0_BASE +  8 * 4))
- REG_MALFORMED_0=$((ER0_BASE +  9 * 4))
+   REG_EXP_SEQ_0=$((ER0_BASE +  9 * 4))
+ REG_MALFORMED_0=$((ER0_BASE + 10 * 4))
   REG_ERR_DATA_0=$((ER0_BASE + 16 * 4))
 
 
@@ -59,7 +59,8 @@ REG_ETH_ACTIVE_1=$((ER1_BASE +  1 * 4))
 REG_EXP_TADDRH_1=$((ER1_BASE +  6 * 4))
 REG_EXP_TADDRL_1=$((ER1_BASE +  7 * 4))
   REG_EXP_FCTR_1=$((ER1_BASE +  8 * 4))
- REG_MALFORMED_1=$((ER1_BASE +  9 * 4))  
+   REG_EXP_SEQ_1=$((ER1_BASE +  9 * 4))
+ REG_MALFORMED_1=$((ER1_BASE + 10 * 4))  
   REG_ERR_DATA_1=$((ER1_BASE + 16 * 4))
 
 
@@ -579,23 +580,26 @@ show_errors()
     #
     printf "    error code: 0x%03X" $error_code
 
-    test $((error_code &     1)) -ne 0 && printf " (BAD_FD_MAGIC)"
-    test $((error_code &     2)) -ne 0 && printf " (BAD_FD_PSIZE)"
-    test $((error_code &     4)) -ne 0 && printf " (BAD_FD_TADDR)"
-    test $((error_code &     8)) -ne 0 && printf " (BAD_FD)"
-    test $((error_code &    16)) -ne 0 && printf " (BAD_FD_PLEN)"
+    test $((error_code & 0x00001)) -ne 0 && printf " (BAD_FD_MAGIC)"
+    test $((error_code & 0x00002)) -ne 0 && printf " (BAD_FD_SEQ)"
+    test $((error_code & 0x00004)) -ne 0 && printf " (BAD_FD_PSIZE)"
+    test $((error_code & 0x00008)) -ne 0 && printf " (BAD_FD_TADDR)"
+    test $((error_code & 0x00010)) -ne 0 && printf " (BAD_FD)"
+    test $((error_code & 0x00020)) -ne 0 && printf " (BAD_FD_PLEN)"
     
-    test $((error_code &    32)) -ne 0 && printf " (BAD_MD_MAGIC)"
-    test $((error_code &    64)) -ne 0 && printf " (BAD_MD_PSIZE)"
-    test $((error_code &   128)) -ne 0 && printf " (BAD_MD_TADDR)"
-    test $((error_code &   256)) -ne 0 && printf " (BAD_MD)"
-    test $((error_code &   512)) -ne 0 && printf " (BAD_MD_PLEN)"
+    test $((error_code & 0x00040)) -ne 0 && printf " (BAD_MD_MAGIC)"
+    test $((error_code & 0x00080)) -ne 0 && printf " (BAD_MD_SEQ)"    
+    test $((error_code & 0x00100)) -ne 0 && printf " (BAD_MD_PSIZE)"
+    test $((error_code & 0x00200)) -ne 0 && printf " (BAD_MD_TADDR)"
+    test $((error_code & 0x00400)) -ne 0 && printf " (BAD_MD)"
+    test $((error_code & 0x00800)) -ne 0 && printf " (BAD_MD_PLEN)"
 
-    test $((error_code &  1024)) -ne 0 && printf " (BAD_FC_MAGIC)"
-    test $((error_code &  2048)) -ne 0 && printf " (BAD_FC_PSIZE)"
-    test $((error_code &  4096)) -ne 0 && printf " (BAD_FC_TADDR)"
-    test $((error_code &  8192)) -ne 0 && printf " (BAD_FC)"
-    test $((error_code & 16384)) -ne 0 && printf " (BAD_FC_PLEN)"    
+    test $((error_code & 0x01000)) -ne 0 && printf " (BAD_FC_MAGIC)"
+    test $((error_code & 0x02000)) -ne 0 && printf " (BAD_FC_SEQ)"
+    test $((error_code & 0x04000)) -ne 0 && printf " (BAD_FC_PSIZE)"
+    test $((error_code & 0x08000)) -ne 0 && printf " (BAD_FC_TADDR)"
+    test $((error_code & 0x10000)) -ne 0 && printf " (BAD_FC)"
+    test $((error_code & 0x20000)) -ne 0 && printf " (BAD_FC_PLEN)"    
     printf "\n"
 
     # Display the expected frame data
