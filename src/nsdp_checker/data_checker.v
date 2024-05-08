@@ -356,6 +356,7 @@ always @(posedge clk) begin
             if (axis_pattern_handshake) begin
                 expected_frame_pattern <= axis_pattern_tdata;
                 expected_frame_data    <= {16{axis_pattern_tdata}};
+                expected_fc            <= expected_fc + 1;
                 fd_packet_count        <= 0;
                 fsm_state              <= FSM_GET_FDATA_HEADER;
             end
@@ -483,7 +484,6 @@ always @(posedge clk) begin
                 end
 
                 cycles_in_packet <= 1;
-                expected_fc      <= expected_fc + 1;
                 fsm_state        <= FSM_GET_FC_PACKET;
             end
 

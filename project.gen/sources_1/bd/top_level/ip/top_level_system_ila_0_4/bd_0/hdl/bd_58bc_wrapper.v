@@ -20,6 +20,8 @@ module bd_58bc_wrapper
     SLOT_1_AXIS_tuser,
     SLOT_1_AXIS_tvalid,
     clk,
+    probe0,
+    probe1,
     resetn);
   input [511:0]SLOT_0_AXIS_tdata;
   input [63:0]SLOT_0_AXIS_tkeep;
@@ -34,6 +36,8 @@ module bd_58bc_wrapper
   input [0:0]SLOT_1_AXIS_tuser;
   input SLOT_1_AXIS_tvalid;
   input clk;
+  input [0:0]probe0;
+  input [0:0]probe1;
   input resetn;
 
   wire [511:0]SLOT_0_AXIS_tdata;
@@ -49,6 +53,8 @@ module bd_58bc_wrapper
   wire [0:0]SLOT_1_AXIS_tuser;
   wire SLOT_1_AXIS_tvalid;
   wire clk;
+  wire [0:0]probe0;
+  wire [0:0]probe1;
   wire resetn;
 
   bd_58bc bd_58bc_i
@@ -65,5 +71,7 @@ module bd_58bc_wrapper
         .SLOT_1_AXIS_tuser(SLOT_1_AXIS_tuser),
         .SLOT_1_AXIS_tvalid(SLOT_1_AXIS_tvalid),
         .clk(clk),
+        .probe0(probe0),
+        .probe1(probe1),
         .resetn(resetn));
 endmodule

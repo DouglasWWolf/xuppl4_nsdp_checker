@@ -540,6 +540,9 @@ show_errors()
     # find out which channel the user wants to see
     local channel=$1
 
+    #
+    # Read the diagnostic information from the registers
+    #
     if [ $channel -eq 0 ]; then
           error_code=$(read_reg   $REG_ERR_CODE_0)
            exp_fdata=$(read_reg   $REG_EXP_FDATA_0)
@@ -571,7 +574,9 @@ show_errors()
     printf "\n"
     printf "       channel: %u (%u packets received)\n" $channel $packets_rcvd
 
+    #
     # Display the error code
+    #
     printf "    error code: 0x%03X" $error_code
 
     test $((error_code &     1)) -ne 0 && printf " (BAD_FD_MAGIC)"
@@ -602,7 +607,9 @@ show_errors()
     # Display the expected frame-counter
     printf " expected fctr: 0x%08X  (%u)\n" $exp_fctr $exp_fctr
 
+    #
     # Display the error data
+    #
     a=$(read_reg $((reg_err_data +  0)))
     b=$(read_reg $((reg_err_data +  4)))
     c=$(read_reg $((reg_err_data +  8)))
@@ -641,18 +648,17 @@ monitor()
     local malformed0=0
     local malformed1=0
 
-
     while [ 1 -eq 1 ] ; do
         
         # We'll check the run-status once per second
         sleep 1
 
         # If we detect that an error has occured on either channel, wait
-        # one second to allow time for the other channel to see an error
+        # a half second to allow time for the other channel to see an error
         # (in case one occurs), then report the error(s)
         if [ $error_trapped -eq 0 ] && [ $(get_run_status) -ne 3 ]; then
             error_trapped=1
-            sleep 1
+            sleep .5
             show_errors 0
             show_errors 1
         fi
@@ -671,7 +677,7 @@ monitor()
 
         # Warn the user if malformed packets are encountered on channel 1
         if [ $new_malformed1 -ne $malformed1 ]; then
-            malformed0=$new_malformed1
+            malformed1=$new_malformed1
             echo   "----------------------------------------------"
             printf ">>>> Channel 1: Malformed packets = %u\n" $malformed1
             echo   "----------------------------------------------"

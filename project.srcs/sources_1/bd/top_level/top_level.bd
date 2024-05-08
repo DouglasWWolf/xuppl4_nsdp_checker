@@ -46,13 +46,11 @@
       "datapath_checker": {
         "reporter_0": {
           "pattern_fifo": "",
-          "reporter_ila": "",
           "axi_reporter": "",
           "data_checker": ""
         },
         "reporter_1": {
           "pattern_fifo": "",
-          "reporter_ila": "",
           "axi_reporter": "",
           "data_checker": ""
         },
@@ -3194,39 +3192,6 @@
                 "xci_path": "ip/top_level_axis_data_fifo_0_1/top_level_axis_data_fifo_0_1.xci",
                 "inst_hier_path": "datapath_checker/reporter_0/pattern_fifo"
               },
-              "reporter_ila": {
-                "vlnv": "xilinx.com:ip:system_ila:1.1",
-                "xci_name": "top_level_system_ila_0_3",
-                "xci_path": "ip/top_level_system_ila_0_3/top_level_system_ila_0_3.xci",
-                "inst_hier_path": "datapath_checker/reporter_0/reporter_ila",
-                "parameters": {
-                  "C_MON_TYPE": {
-                    "value": "MIX"
-                  },
-                  "C_NUM_MONITOR_SLOTS": {
-                    "value": "1"
-                  },
-                  "C_NUM_OF_PROBES": {
-                    "value": "4"
-                  },
-                  "C_SLOT": {
-                    "value": "0"
-                  },
-                  "C_SLOT_0_INTF_TYPE": {
-                    "value": "xilinx.com:interface:axis_rtl:1.0"
-                  },
-                  "C_SLOT_1_INTF_TYPE": {
-                    "value": "xilinx.com:interface:axis_rtl:1.0"
-                  }
-                },
-                "interface_ports": {
-                  "SLOT_0_AXIS": {
-                    "mode": "Monitor",
-                    "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
-                    "vlnv": "xilinx.com:interface:axis_rtl:1.0"
-                  }
-                }
-              },
               "axi_reporter": {
                 "vlnv": "xilinx.com:module_ref:axi_reporter:1.0",
                 "xci_name": "top_level_axi_reporter_0_0",
@@ -3806,8 +3771,7 @@
               "ila0_eth_rx": {
                 "interface_ports": [
                   "eth_rx",
-                  "data_checker/axis_eth",
-                  "reporter_ila/SLOT_0_AXIS"
+                  "data_checker/axis_eth"
                 ]
               }
             },
@@ -3884,28 +3848,24 @@
                 "ports": [
                   "data_checker/all_good",
                   "chan_ok",
-                  "reporter_ila/probe0",
                   "axi_reporter/run_status"
                 ]
               },
               "ila0_error": {
                 "ports": [
                   "data_checker/error",
-                  "reporter_ila/probe1",
                   "axi_reporter/error"
                 ]
               },
               "ila0_error_data": {
                 "ports": [
                   "data_checker/error_data",
-                  "reporter_ila/probe3",
                   "axi_reporter/error_data"
                 ]
               },
               "ila0_expected_frame_pattern": {
                 "ports": [
                   "data_checker/expected_frame_pattern",
-                  "reporter_ila/probe2",
                   "axi_reporter/expected_fdata"
                 ]
               },
@@ -3925,7 +3885,6 @@
                 "ports": [
                   "clk",
                   "pattern_fifo/s_axis_aclk",
-                  "reporter_ila/clk",
                   "axi_reporter/clk",
                   "data_checker/clk"
                 ]
@@ -4003,39 +3962,6 @@
                 "xci_name": "top_level_pattern_fifo_0",
                 "xci_path": "ip/top_level_pattern_fifo_0/top_level_pattern_fifo_0.xci",
                 "inst_hier_path": "datapath_checker/reporter_1/pattern_fifo"
-              },
-              "reporter_ila": {
-                "vlnv": "xilinx.com:ip:system_ila:1.1",
-                "xci_name": "top_level_reporter_ila_0",
-                "xci_path": "ip/top_level_reporter_ila_0/top_level_reporter_ila_0.xci",
-                "inst_hier_path": "datapath_checker/reporter_1/reporter_ila",
-                "parameters": {
-                  "C_MON_TYPE": {
-                    "value": "MIX"
-                  },
-                  "C_NUM_MONITOR_SLOTS": {
-                    "value": "1"
-                  },
-                  "C_NUM_OF_PROBES": {
-                    "value": "4"
-                  },
-                  "C_SLOT": {
-                    "value": "0"
-                  },
-                  "C_SLOT_0_INTF_TYPE": {
-                    "value": "xilinx.com:interface:axis_rtl:1.0"
-                  },
-                  "C_SLOT_1_INTF_TYPE": {
-                    "value": "xilinx.com:interface:axis_rtl:1.0"
-                  }
-                },
-                "interface_ports": {
-                  "SLOT_0_AXIS": {
-                    "mode": "Monitor",
-                    "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
-                    "vlnv": "xilinx.com:interface:axis_rtl:1.0"
-                  }
-                }
               },
               "axi_reporter": {
                 "vlnv": "xilinx.com:module_ref:axi_reporter:1.0",
@@ -4616,8 +4542,7 @@
               "ila1_eth_rx": {
                 "interface_ports": [
                   "eth_rx",
-                  "data_checker/axis_eth",
-                  "reporter_ila/SLOT_0_AXIS"
+                  "data_checker/axis_eth"
                 ]
               }
             },
@@ -4694,28 +4619,24 @@
                 "ports": [
                   "data_checker/all_good",
                   "chan_ok",
-                  "reporter_ila/probe0",
                   "axi_reporter/run_status"
                 ]
               },
               "ila1_error": {
                 "ports": [
                   "data_checker/error",
-                  "reporter_ila/probe1",
                   "axi_reporter/error"
                 ]
               },
               "ila1_error_data": {
                 "ports": [
                   "data_checker/error_data",
-                  "reporter_ila/probe3",
                   "axi_reporter/error_data"
                 ]
               },
               "ila1_expected_frame_pattern": {
                 "ports": [
                   "data_checker/expected_frame_pattern",
-                  "reporter_ila/probe2",
                   "axi_reporter/expected_fdata"
                 ]
               },
@@ -4735,7 +4656,6 @@
                 "ports": [
                   "clk",
                   "pattern_fifo/s_axis_aclk",
-                  "reporter_ila/clk",
                   "axi_reporter/clk",
                   "data_checker/clk"
                 ]
@@ -5604,7 +5524,13 @@
             "xci_path": "ip/top_level_system_ila_0_4/top_level_system_ila_0_4.xci",
             "inst_hier_path": "datapath_checker/eth_rx_ila",
             "parameters": {
+              "C_MON_TYPE": {
+                "value": "MIX"
+              },
               "C_NUM_MONITOR_SLOTS": {
+                "value": "2"
+              },
+              "C_NUM_OF_PROBES": {
                 "value": "2"
               },
               "C_SLOT": {
@@ -5693,7 +5619,15 @@
           "ch0_ok": {
             "ports": [
               "reporter_0/chan_ok",
-              "ch0_ok"
+              "ch0_ok",
+              "eth_rx_ila/probe0"
+            ]
+          },
+          "ch1_ok": {
+            "ports": [
+              "reporter_1/chan_ok",
+              "ch1_ok",
+              "eth_rx_ila/probe1"
             ]
           },
           "checker_ctl_sys_resetn_out": {
@@ -5763,12 +5697,6 @@
               "mindy_core_ctl/clk",
               "axis_duplicate/clk",
               "eth_rx_ila/clk"
-            ]
-          },
-          "reporter_1_chan_ok": {
-            "ports": [
-              "reporter_1/chan_ok",
-              "ch1_ok"
             ]
           },
           "source_200Mhz_resetn": {
