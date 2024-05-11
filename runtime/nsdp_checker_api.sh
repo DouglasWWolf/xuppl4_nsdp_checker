@@ -706,7 +706,7 @@ monitor()
 
                 if [ $packets_rcvd0 -ne $packets_rcvd1 ]; then
                     echo   "----------------------------------------------"
-                    echo   ">>>> Packets received mismatch!!!!
+                    echo   ">>>> Packets received mismatch!"
                     echo   "----------------------------------------------"
                 fi
 
