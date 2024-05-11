@@ -298,6 +298,15 @@
               "pf0_bar0_size": {
                 "value": "1"
               },
+              "pf0_bar1_enabled": {
+                "value": "true"
+              },
+              "pf0_bar1_scale": {
+                "value": "Megabytes"
+              },
+              "pf0_bar1_size": {
+                "value": "1"
+              },
               "pf0_device_id": {
                 "value": "903F"
               },

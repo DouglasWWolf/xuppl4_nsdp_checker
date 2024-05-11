@@ -7633,11 +7633,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed May 08 07:39:49 UTC 2024</spirit:value>
+            <spirit:value>Sat May 11 22:12:13 UTC 2024</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:660f9588</spirit:value>
+            <spirit:value>9:2bba3dee</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -20096,12 +20096,12 @@
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF0_BAR1_APERTURE_SIZE</spirit:name>
         <spirit:displayName>Pf0 Bar1 Aperture Size</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF0_BAR1_APERTURE_SIZE" spirit:bitStringLength="9">0x000</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF0_BAR1_APERTURE_SIZE" spirit:bitStringLength="9">0x00D</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF0_BAR1_CONTROL</spirit:name>
         <spirit:displayName>Pf0 Bar1 Control</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF0_BAR1_CONTROL" spirit:bitStringLength="3">0x0</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF0_BAR1_CONTROL" spirit:bitStringLength="3">0x4</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF0_BAR2_APERTURE_SIZE</spirit:name>
@@ -20511,12 +20511,12 @@
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF1_BAR1_APERTURE_SIZE</spirit:name>
         <spirit:displayName>Pf1 Bar1 Aperture Size</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF1_BAR1_APERTURE_SIZE" spirit:bitStringLength="9">0x000</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF1_BAR1_APERTURE_SIZE" spirit:bitStringLength="9">0x00D</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF1_BAR1_CONTROL</spirit:name>
         <spirit:displayName>Pf1 Bar1 Control</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF1_BAR1_CONTROL" spirit:bitStringLength="3">0x0</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF1_BAR1_CONTROL" spirit:bitStringLength="3">0x4</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF1_BAR2_APERTURE_SIZE</spirit:name>
@@ -20781,12 +20781,12 @@
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF2_BAR1_APERTURE_SIZE</spirit:name>
         <spirit:displayName>Pf2 Bar1 Aperture Size</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF2_BAR1_APERTURE_SIZE" spirit:bitStringLength="9">0x000</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF2_BAR1_APERTURE_SIZE" spirit:bitStringLength="9">0x00D</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF2_BAR1_CONTROL</spirit:name>
         <spirit:displayName>Pf2 Bar1 Control</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF2_BAR1_CONTROL" spirit:bitStringLength="3">0x0</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF2_BAR1_CONTROL" spirit:bitStringLength="3">0x4</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF2_BAR2_APERTURE_SIZE</spirit:name>
@@ -21051,12 +21051,12 @@
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF3_BAR1_APERTURE_SIZE</spirit:name>
         <spirit:displayName>Pf3 Bar1 Aperture Size</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF3_BAR1_APERTURE_SIZE" spirit:bitStringLength="9">0x000</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF3_BAR1_APERTURE_SIZE" spirit:bitStringLength="9">0x00D</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF3_BAR1_CONTROL</spirit:name>
         <spirit:displayName>Pf3 Bar1 Control</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF3_BAR1_CONTROL" spirit:bitStringLength="3">0x0</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.PF3_BAR1_CONTROL" spirit:bitStringLength="3">0x4</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector">
         <spirit:name>PF3_BAR2_APERTURE_SIZE</spirit:name>
@@ -22318,6 +22318,11 @@
       <spirit:enumeration>X16</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
+      <spirit:name>choice_list_23a7629e</spirit:name>
+      <spirit:enumeration>BAR_0</spirit:enumeration>
+      <spirit:enumeration>BAR_1</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
       <spirit:name>choice_list_24b724fb</spirit:name>
       <spirit:enumeration>Basic</spirit:enumeration>
       <spirit:enumeration>Advanced</spirit:enumeration>
@@ -22334,10 +22339,6 @@
       <spirit:name>choice_list_38306dd1</spirit:name>
       <spirit:enumeration>SOFT</spirit:enumeration>
       <spirit:enumeration>HARD</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
-      <spirit:name>choice_list_3ca2cbc7</spirit:name>
-      <spirit:enumeration>BAR_0</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_list_504db607</spirit:name>
@@ -22897,7 +22898,7 @@
     <spirit:parameter>
       <spirit:name>PF0_MSIX_CAP_PBA_BIR</spirit:name>
       <spirit:displayName>Pf0 Msix Cap Pba Bir</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF0_MSIX_CAP_PBA_BIR" spirit:choiceRef="choice_list_3ca2cbc7" spirit:order="219">BAR_0</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF0_MSIX_CAP_PBA_BIR" spirit:choiceRef="choice_list_23a7629e" spirit:order="219">BAR_0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -22921,7 +22922,7 @@
     <spirit:parameter>
       <spirit:name>PF0_MSIX_CAP_TABLE_BIR</spirit:name>
       <spirit:displayName>Pf0 Msix Cap Table Bir</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF0_MSIX_CAP_TABLE_BIR" spirit:choiceRef="choice_list_3ca2cbc7" spirit:order="217">BAR_0</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF0_MSIX_CAP_TABLE_BIR" spirit:choiceRef="choice_list_23a7629e" spirit:order="217">BAR_0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -23046,7 +23047,7 @@
     <spirit:parameter>
       <spirit:name>PF1_MSIX_CAP_PBA_BIR</spirit:name>
       <spirit:displayName>Pf1 Msix Cap Pba Bir</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF1_MSIX_CAP_PBA_BIR" spirit:choiceRef="choice_list_3ca2cbc7" spirit:order="225">BAR_0</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF1_MSIX_CAP_PBA_BIR" spirit:choiceRef="choice_list_23a7629e" spirit:order="225">BAR_0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -23058,7 +23059,7 @@
     <spirit:parameter>
       <spirit:name>PF1_MSIX_CAP_TABLE_BIR</spirit:name>
       <spirit:displayName>Pf1 Msix Cap Table Bir</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF1_MSIX_CAP_TABLE_BIR" spirit:choiceRef="choice_list_3ca2cbc7" spirit:order="223">BAR_0</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF1_MSIX_CAP_TABLE_BIR" spirit:choiceRef="choice_list_23a7629e" spirit:order="223">BAR_0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -23180,7 +23181,7 @@
     <spirit:parameter>
       <spirit:name>PF2_MSIX_CAP_PBA_BIR</spirit:name>
       <spirit:displayName>Pf2 Msix Cap Pba Bir</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF2_MSIX_CAP_PBA_BIR" spirit:choiceRef="choice_list_3ca2cbc7" spirit:order="219.2">BAR_0</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF2_MSIX_CAP_PBA_BIR" spirit:choiceRef="choice_list_23a7629e" spirit:order="219.2">BAR_0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -23192,7 +23193,7 @@
     <spirit:parameter>
       <spirit:name>PF2_MSIX_CAP_TABLE_BIR</spirit:name>
       <spirit:displayName>Pf2 Msix Cap Table Bir</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF2_MSIX_CAP_TABLE_BIR" spirit:choiceRef="choice_list_3ca2cbc7" spirit:order="217.2">BAR_0</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF2_MSIX_CAP_TABLE_BIR" spirit:choiceRef="choice_list_23a7629e" spirit:order="217.2">BAR_0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -23314,7 +23315,7 @@
     <spirit:parameter>
       <spirit:name>PF3_MSIX_CAP_PBA_BIR</spirit:name>
       <spirit:displayName>Pf3 Msix Cap Pba Bir</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF3_MSIX_CAP_PBA_BIR" spirit:choiceRef="choice_list_3ca2cbc7" spirit:order="219.3">BAR_0</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF3_MSIX_CAP_PBA_BIR" spirit:choiceRef="choice_list_23a7629e" spirit:order="219.3">BAR_0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -23326,7 +23327,7 @@
     <spirit:parameter>
       <spirit:name>PF3_MSIX_CAP_TABLE_BIR</spirit:name>
       <spirit:displayName>Pf3 Msix Cap Table Bir</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF3_MSIX_CAP_TABLE_BIR" spirit:choiceRef="choice_list_3ca2cbc7" spirit:order="217.3">BAR_0</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PF3_MSIX_CAP_TABLE_BIR" spirit:choiceRef="choice_list_23a7629e" spirit:order="217.3">BAR_0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -24402,31 +24403,17 @@
     <spirit:parameter>
       <spirit:name>pf0_bar1_enabled</spirit:name>
       <spirit:displayName>Pf0 Bar1 Enabled</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_enabled" spirit:choiceRef="choice_list_7a7dde49" spirit:order="50">false</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_enabled" spirit:choiceRef="choice_list_7a7dde49" spirit:order="50">true</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>pf0_bar1_type</spirit:name>
       <spirit:displayName>Pf0 Bar1 Type</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_type" spirit:choiceRef="choice_list_ec64e624" spirit:order="51">N/A</spirit:value>
-      <spirit:vendorExtensions>
-        <xilinx:parameterInfo>
-          <xilinx:enablement>
-            <xilinx:isEnabled xilinx:id="PARAM_ENABLEMENT.pf0_bar1_type">false</xilinx:isEnabled>
-          </xilinx:enablement>
-        </xilinx:parameterInfo>
-      </spirit:vendorExtensions>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_type" spirit:choiceRef="choice_list_c3d223d9" spirit:order="51">Memory</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>pf0_bar1_64bit</spirit:name>
       <spirit:displayName>Pf0 Bar1 64bit</spirit:displayName>
       <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_64bit" spirit:choiceRef="choice_list_7a7dde49" spirit:order="52">false</spirit:value>
-      <spirit:vendorExtensions>
-        <xilinx:parameterInfo>
-          <xilinx:enablement>
-            <xilinx:isEnabled xilinx:id="PARAM_ENABLEMENT.pf0_bar1_64bit">false</xilinx:isEnabled>
-          </xilinx:enablement>
-        </xilinx:parameterInfo>
-      </spirit:vendorExtensions>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>pf0_bar1_prefetchable</spirit:name>
@@ -24443,26 +24430,12 @@
     <spirit:parameter>
       <spirit:name>pf0_bar1_scale</spirit:name>
       <spirit:displayName>Pf0 Bar1 Scale</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_scale" spirit:choiceRef="choice_list_52d29139" spirit:order="54">Kilobytes</spirit:value>
-      <spirit:vendorExtensions>
-        <xilinx:parameterInfo>
-          <xilinx:enablement>
-            <xilinx:isEnabled xilinx:id="PARAM_ENABLEMENT.pf0_bar1_scale">false</xilinx:isEnabled>
-          </xilinx:enablement>
-        </xilinx:parameterInfo>
-      </spirit:vendorExtensions>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_scale" spirit:choiceRef="choice_list_52d29139" spirit:order="54">Megabytes</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>pf0_bar1_size</spirit:name>
       <spirit:displayName>Pf0 Bar1 Size</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_size" spirit:choiceRef="choice_list_c15e8c67" spirit:order="55">128</spirit:value>
-      <spirit:vendorExtensions>
-        <xilinx:parameterInfo>
-          <xilinx:enablement>
-            <xilinx:isEnabled xilinx:id="PARAM_ENABLEMENT.pf0_bar1_size">false</xilinx:isEnabled>
-          </xilinx:enablement>
-        </xilinx:parameterInfo>
-      </spirit:vendorExtensions>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.pf0_bar1_size" spirit:choiceRef="choice_list_c15e8c67" spirit:order="55">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>pf0_bar2_enabled</spirit:name>
@@ -25352,7 +25325,7 @@
     <spirit:parameter>
       <spirit:name>pf1_bar1_enabled</spirit:name>
       <spirit:displayName>Pf1 Bar1 Enabled</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf1_bar1_enabled" spirit:choiceRef="choice_list_7a7dde49" spirit:order="88">false</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf1_bar1_enabled" spirit:choiceRef="choice_list_7a7dde49" spirit:order="88">true</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -25364,7 +25337,7 @@
     <spirit:parameter>
       <spirit:name>pf1_bar1_type</spirit:name>
       <spirit:displayName>Pf1 Bar1 Type</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf1_bar1_type" spirit:choiceRef="choice_list_ec64e624" spirit:order="89">N/A</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf1_bar1_type" spirit:choiceRef="choice_list_c3d223d9" spirit:order="89">Memory</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -25400,7 +25373,7 @@
     <spirit:parameter>
       <spirit:name>pf1_bar1_scale</spirit:name>
       <spirit:displayName>Pf1 Bar1 Scale</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf1_bar1_scale" spirit:choiceRef="choice_list_5e2921cd" spirit:order="92">Kilobytes</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf1_bar1_scale" spirit:choiceRef="choice_list_56bce82a" spirit:order="92">Megabytes</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -25412,7 +25385,7 @@
     <spirit:parameter>
       <spirit:name>pf1_bar1_size</spirit:name>
       <spirit:displayName>Pf1 Bar1 Size</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.pf1_bar1_size" spirit:choiceRef="choice_list_34d65ff4" spirit:order="93">128</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.pf1_bar1_size" spirit:choiceRef="choice_list_ae9f88f6" spirit:order="93">1</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -26230,7 +26203,7 @@
     <spirit:parameter>
       <spirit:name>pf2_bar1_enabled</spirit:name>
       <spirit:displayName>Pf2 Bar1 Enabled</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf2_bar1_enabled" spirit:choiceRef="choice_list_7a7dde49" spirit:order="88.2">false</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf2_bar1_enabled" spirit:choiceRef="choice_list_7a7dde49" spirit:order="88.2">true</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -26242,7 +26215,7 @@
     <spirit:parameter>
       <spirit:name>pf2_bar1_type</spirit:name>
       <spirit:displayName>Pf2 Bar1 Type</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf2_bar1_type" spirit:choiceRef="choice_list_ec64e624" spirit:order="89.2">N/A</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf2_bar1_type" spirit:choiceRef="choice_list_c3d223d9" spirit:order="89.2">Memory</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -26278,7 +26251,7 @@
     <spirit:parameter>
       <spirit:name>pf2_bar1_scale</spirit:name>
       <spirit:displayName>Pf2 Bar1 Scale</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf2_bar1_scale" spirit:choiceRef="choice_list_5e2921cd" spirit:order="92.2">Kilobytes</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf2_bar1_scale" spirit:choiceRef="choice_list_56bce82a" spirit:order="92.2">Megabytes</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -26290,7 +26263,7 @@
     <spirit:parameter>
       <spirit:name>pf2_bar1_size</spirit:name>
       <spirit:displayName>Pf2 Bar1 Size</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.pf2_bar1_size" spirit:choiceRef="choice_list_34d65ff4" spirit:order="93.2">128</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.pf2_bar1_size" spirit:choiceRef="choice_list_ae9f88f6" spirit:order="93.2">1</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -26949,7 +26922,7 @@
     <spirit:parameter>
       <spirit:name>pf3_bar1_enabled</spirit:name>
       <spirit:displayName>Pf3 Bar1 Enabled</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf3_bar1_enabled" spirit:choiceRef="choice_list_7a7dde49" spirit:order="88.3">false</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf3_bar1_enabled" spirit:choiceRef="choice_list_7a7dde49" spirit:order="88.3">true</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -26961,7 +26934,7 @@
     <spirit:parameter>
       <spirit:name>pf3_bar1_type</spirit:name>
       <spirit:displayName>Pf3 Bar1 Type</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf3_bar1_type" spirit:choiceRef="choice_list_ec64e624" spirit:order="89.3">N/A</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf3_bar1_type" spirit:choiceRef="choice_list_c3d223d9" spirit:order="89.3">Memory</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -26997,7 +26970,7 @@
     <spirit:parameter>
       <spirit:name>pf3_bar1_scale</spirit:name>
       <spirit:displayName>Pf3 Bar1 Scale</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf3_bar1_scale" spirit:choiceRef="choice_list_5e2921cd" spirit:order="92.3">Kilobytes</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.pf3_bar1_scale" spirit:choiceRef="choice_list_56bce82a" spirit:order="92.3">Megabytes</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -27009,7 +26982,7 @@
     <spirit:parameter>
       <spirit:name>pf3_bar1_size</spirit:name>
       <spirit:displayName>Pf3 Bar1 Size</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.pf3_bar1_size" spirit:choiceRef="choice_list_34d65ff4" spirit:order="93.3">128</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.pf3_bar1_size" spirit:choiceRef="choice_list_ae9f88f6" spirit:order="93.3">1</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -28223,6 +28196,10 @@
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar0_type" xilinx:valueSource="propagated"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar1_enabled" xilinx:valueSource="propagated"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar1_index" xilinx:valueSource="propagated"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar1_prefetchable" xilinx:valueSource="propagated"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar1_scale" xilinx:valueSource="propagated"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar1_size" xilinx:valueSource="propagated"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar1_type" xilinx:valueSource="propagated"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar2_enabled" xilinx:valueSource="propagated"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar2_index" xilinx:valueSource="propagated"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.pf0_bar3_enabled" xilinx:valueSource="propagated"/>
