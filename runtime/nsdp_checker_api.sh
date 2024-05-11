@@ -695,7 +695,23 @@ monitor()
 
         # If packets have stopped arriving, we're done
         if [ $(is_ethernet_active) -eq 0 ]; then
-            echo "Job completed with no errors"
+
+                echo "Job completed"
+
+                local packets_rcvd0=$(read_reg64 $REG_PKTS_RCVD_0)       
+                local packets_rcvd1=$(read_reg64 $REG_PKTS_RCVD_1)
+
+                printf "Packets received on Channel 0: %u\n", $packets_rcvd0
+                printf "Packets received on Channel 1: %u\n", $packets_rcvd1
+
+                if [ $packets_rcvd0 -ne $packets_rcvd1 ]; then
+                    echo   "----------------------------------------------"
+                    echo   ">>>> Packets received mismatch!!!!
+                    echo   "----------------------------------------------"
+                fi
+
+
+
             return
         fi
 
