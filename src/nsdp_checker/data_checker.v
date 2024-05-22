@@ -7,11 +7,16 @@
 // 27-Apr-24  DWW     1  Initial creation
 //
 // 04-May-24  DWW     2  Added support for checking RDMX target addresses
+//
+// 22-May-24  DWW     3  Added support for ignoring sensor-chip header data
 //=============================================================================
 
 module data_checker # (FREQ_HZ = 250000000)
 (
     input   clk, resetn,
+
+    // Tells us which Ethernet channel we are, 0 or 1
+    input   channel,
 
     // Input stream for the frame-data patterns
     input[31:0]     axis_pattern_tdata,
@@ -39,6 +44,9 @@ module data_checker # (FREQ_HZ = 250000000)
 
     // Expected address of RDMX target-address for frame-counter
     input[63:0]     RFC_ADDR,
+
+    // The number of packets in a ping-pong group
+    input[31:0]     PACKETS_PER_GROUP,
 
     // This is asserted when we detect activity on axis_eth
     output eth_active,
@@ -150,6 +158,31 @@ wire axis_eth_handshake     = axis_eth_tvalid     & axis_eth_tready;
 // is an ordinary data-cycle of frame-data, but with 0's in every byte defined
 // by "FRAME_HEADER_MASK"
 reg [511:0] expected_frame_data, expected_frame_header;
+
+
+
+//=============================================================================
+// This block computes "sensor_chip_hdr_packets".   This is the number of 
+// packets at the start of a frame that we should assume contain sensor-chip
+// header fields scattered within them.
+//=============================================================================
+reg [31:0] sensor_chip_hdr_packets;
+always @(posedge clk) begin
+    if (channel == 0) case(PACKETS_PER_GROUP)
+        1:       sensor_chip_hdr_packets <= 2;
+        2:       sensor_chip_hdr_packets <= 2;
+        3:       sensor_chip_hdr_packets <= 3;
+        default: sensor_chip_hdr_packets <= 4;
+    endcase
+
+    else case(PACKETS_PER_GROUP)
+        1:       sensor_chip_hdr_packets <= 2;
+        2:       sensor_chip_hdr_packets <= 2;
+        3:       sensor_chip_hdr_packets <= 1;
+        default: sensor_chip_hdr_packets <= 0;
+    endcase
+end
+//=============================================================================
 
 
 //=============================================================================
@@ -422,7 +455,7 @@ always @(posedge clk) begin
                 if (reg_well_formed) begin
                     
                     // If this packet contains sensor-chip "frame-header" cells...
-                    if (fd_packet_count < 3) begin
+                    if (fd_packet_count <= sensor_chip_hdr_packets) begin
                         if (reg_frame_header != expected_frame_header) begin
                             error_data    <= reg_tdata;
                             error[BAD_FD] <= 1;

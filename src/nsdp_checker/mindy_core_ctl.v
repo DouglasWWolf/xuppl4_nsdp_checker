@@ -22,6 +22,8 @@ module mindy_core_ctl
     output reg[31:0] FRAME_SIZE,
     output reg[15:0] PACKET_SIZE,
     output reg[31:0] PACKETS_PER_GROUP,
+    
+    output channel_0, channel_1,
 
     //================== This is an AXI4-Lite slave interface ==================
         
@@ -56,6 +58,9 @@ module mindy_core_ctl
     //==========================================================================
 );  
 
+// These are used to tell the reporter blocks which channel they are
+assign channel_0 = 0;
+assign channel_1 = 1;
 
 //=========================  AXI Register Map  =============================
 localparam REG_RFD_ADDR_H        =  0;

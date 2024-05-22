@@ -69,6 +69,9 @@ set_packet_size 0x1000
 # A frame is 4M bytes
 set_frame_size 0x40_0000
 
+# The number of packets sent in a single "packet-group"
+set_ping_pong_group 4
+
 # Define the address and size of the remote frame-data ring buffer
 define_fd_ring 0x0001_0000_0000_0000 0x4000
 
