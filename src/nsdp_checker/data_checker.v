@@ -129,6 +129,11 @@ localparam FSM_GET_MDATA_PACKET = 4;
 localparam FSM_GET_FC_HEADER    = 5;
 localparam FSM_GET_FC_PACKET    = 6;
 
+// The sensor-chip in the sequencer overlays certain bytes in the frame
+// data with "frame-header" information.    The mask we create here is
+// used to "mask off" those frame-header bytes, setting them to 0
+localparam[511:0] FRAME_HEADER_MASK = {8{64'hFFFF_FFFF_FFFF_FF00}};
+
 // 'axis_pattern_tready' is valid any time we're fetching a new pattern.  It's also
 // valid when we're in the "error" state because we need to allow patterns to be
 // consumed.
@@ -141,8 +146,11 @@ assign axis_eth_tready     = (resetn == 1) & (error || (fsm_state != FSM_GET_PAT
 wire axis_pattern_handshake = axis_pattern_tvalid & axis_pattern_tready;
 wire axis_eth_handshake     = axis_eth_tvalid     & axis_eth_tready;
 
-// This is the currently expected frame data
-reg[511:0] expected_frame_data;
+// This is the currently expected frame data and frame-header.  A "frame-header"
+// is an ordinary data-cycle of frame-data, but with 0's in every byte defined
+// by "FRAME_HEADER_MASK"
+reg [511:0] expected_frame_data, expected_frame_header;
+
 
 //=============================================================================
 // This block manages the expected incoming RDMX address of frame-data
@@ -262,7 +270,7 @@ reg[31:0] fd_packet_count;
 //=============================================================================
 reg        reg_valid;
 reg        reg_tlast;
-reg[511:0] reg_tdata, reg_be_tdata;
+reg[511:0] reg_tdata, reg_be_tdata, reg_frame_header;
 reg[ 15:0] reg_rdmx_magic;
 reg[ 63:0] reg_rdmx_address;
 reg[ 15:0] reg_rdmx_seq_num;
@@ -277,6 +285,7 @@ always @(posedge clk) begin
     if (axis_eth_handshake) begin
         reg_well_formed   <= (axis_eth_tuser == 0);
         reg_tdata         <= axis_eth_tdata;
+        reg_frame_header  <= axis_eth_tdata & FRAME_HEADER_MASK;
         reg_be_tdata      <= be_tdata;
         reg_tlast         <= axis_eth_tlast;
         reg_frame_counter <= axis_eth_tdata[31:0];
@@ -366,6 +375,7 @@ always @(posedge clk) begin
             if (axis_pattern_handshake) begin
                 expected_frame_pattern <= axis_pattern_tdata;
                 expected_frame_data    <= {16{axis_pattern_tdata}};
+                expected_frame_header  <= {16{axis_pattern_tdata}} & FRAME_HEADER_MASK;                
                 expected_fc            <= expected_fc + 1;
                 fd_packet_count        <= 0;
                 fsm_state              <= FSM_GET_FDATA_HEADER;
@@ -411,10 +421,21 @@ always @(posedge clk) begin
 
                 if (reg_well_formed) begin
                     
-                    // Check to see if the packet data is what we expect
-                    if (reg_tdata != expected_frame_data) begin
-                        error_data    <= reg_tdata;
-                        error[BAD_FD] <= 1;
+                    // If this packet contains sensor-chip "frame-header" cells...
+                    if (fd_packet_count < 3) begin
+                        if (reg_frame_header != expected_frame_header) begin
+                            error_data    <= reg_tdata;
+                            error[BAD_FD] <= 1;
+                        end
+                    end
+                    
+                    // Otherwise, we are looking an an ordinary packet of frame-data that
+                    // does not contain sensor-chip frame-header cells
+                    else begin
+                        if (reg_tdata != expected_frame_data) begin
+                            error_data    <= reg_tdata;
+                            error[BAD_FD] <= 1;
+                        end
                     end
 
                     // Check to see if we received the correct number of data-cycles
