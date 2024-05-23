@@ -29,16 +29,16 @@ preplace netloc ch1_ok 1 3 2 1340 440 NJ
 preplace netloc checker_ctl_sys_resetn_out 1 1 4 320 480 840 670 NJ 670 N
 preplace netloc mindy_core_ctl_0_FRAME_SIZE 1 2 1 740 240n
 preplace netloc mindy_core_ctl_0_PACKET_SIZE 1 2 1 760 200n
+preplace netloc mindy_core_ctl_PACKETS_PER_GROUP 1 2 1 720 260n
 preplace netloc mindy_core_ctl_RFC_ADDR 1 2 1 860 160n
 preplace netloc mindy_core_ctl_RFD_ADDR 1 2 1 800 180n
 preplace netloc mindy_core_ctl_RFD_SIZE 1 2 1 920 100n
 preplace netloc mindy_core_ctl_RMD_ADDR 1 2 1 900 120n
 preplace netloc mindy_core_ctl_RMD_SIZE 1 2 1 880 140n
-preplace netloc pcie_axi_aclk 1 0 4 20 460 340 40 820 340 NJ
-preplace netloc source_200Mhz_resetn 1 0 2 40 260 N
-preplace netloc mindy_core_ctl_PACKETS_PER_GROUP 1 2 1 720 260n
 preplace netloc mindy_core_ctl_channel0 1 2 1 N 220
 preplace netloc mindy_core_ctl_channel1 1 2 1 700 280n
+preplace netloc pcie_axi_aclk 1 0 4 20 460 340 40 820 340 NJ
+preplace netloc source_200Mhz_resetn 1 0 2 40 260 N
 preplace netloc S_AXI_ER1_1 1 3 2 1280 200 N
 preplace netloc S_AXI_ER_1 1 3 2 N 60 N
 preplace netloc S_AXI_MC_1 1 0 2 NJ 100 NJ

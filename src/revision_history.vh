@@ -20,7 +20,7 @@ localparam RTL_TYPE      = 12266;
 localparam RTL_SUBTYPE   = 0;
 
 localparam VERSION_MAJOR = 1;
-localparam VERSION_MINOR = 3;
+localparam VERSION_MINOR = 4;
 localparam VERSION_BUILD = 0;
 localparam VERSION_RCAND = 0;
 

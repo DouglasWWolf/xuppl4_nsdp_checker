@@ -313,7 +313,7 @@ reg[31:0] fd_packet_count;
 //=============================================================================
 reg        reg_valid;
 reg        reg_tlast;
-reg[511:0] reg_tdata, reg_be_tdata, reg_frame_header;
+reg[511:0] reg_tdata, reg_be_tdata, reg_frame_header, reg_frame_footer;
 reg[ 15:0] reg_rdmx_magic;
 reg[ 63:0] reg_rdmx_address;
 reg[ 15:0] reg_rdmx_seq_num;
@@ -329,6 +329,7 @@ always @(posedge clk) begin
         reg_well_formed   <= (axis_eth_tuser == 0);
         reg_tdata         <= axis_eth_tdata;
         reg_frame_header  <= axis_eth_tdata & FRAME_HEADER_MASK;
+        reg_frame_footer  <= axis_eth_tdata & FRAME_FOOTER_MASK;
         reg_be_tdata      <= be_tdata;
         reg_tlast         <= axis_eth_tlast;
         reg_frame_counter <= axis_eth_tdata[31:0];
@@ -484,7 +485,7 @@ always @(posedge clk) begin
 
                     // If this data-cycle contains sensor-chip "footer" cells...
                     else if (channel == 1 && hframe_cycle >= first_footer_hframe_cycle && hframe_cycle[1:0] == 3) begin
-                        if (reg_tdata != expected_frame_footer) begin
+                        if (reg_frame_footer != expected_frame_footer) begin
                             error_data    <= reg_tdata;
                             error[BAD_FD] <= 1;
                         end
