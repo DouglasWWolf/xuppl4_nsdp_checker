@@ -11,6 +11,22 @@
 // 22-May-24  DWW     3  Added support for ignoring sensor-chip header data
 //=============================================================================
 
+
+/*
+
+    NOTE:
+
+    This logic ignores sensor-chip frame-header bytes in the first 256 cycles
+    of a half-frame arriving on channel 0, and ignores the sensor-chip frame-
+    footer cycles arriving in the last 256 cycles of a half-frame arriving on
+    channel 1.
+
+    This means that PACKET_SIZE x PACKETS_PER_GROUP must always be 256 data-
+    cycles.   Since a single data-cycle is 64 bytes, that means that PACKET_
+    SIZE x PACKETS_PER_GROUP must always equal exactly 16K
+
+*/
+
 module data_checker # (FREQ_HZ = 250000000)
 (
     input   clk, resetn,
@@ -142,6 +158,15 @@ localparam FSM_GET_FC_PACKET    = 6;
 // used to "mask off" those frame-header bytes, setting them to 0
 localparam[511:0] FRAME_HEADER_MASK = {8{64'hFFFF_FFFF_FFFF_FF00}};
 
+
+// The sensor-chip in the sequencer overlays certain bytes in the frame
+// data with "frame-footer" information.    The mask we create here is
+// used to "mask off" those frame-footer bytes, setting them to 0
+localparam[255:0] FFMASK_1 = {4{64'h00FF_FFFF_FFFF_FFFF}};
+localparam[255:0] FFMASK_0 = {32{8'hFF}};
+localparam[511:0] FRAME_FOOTER_MASK = {FFMASK_1, FFMASK_0};
+
+
 // 'axis_pattern_tready' is valid any time we're fetching a new pattern.  It's also
 // valid when we're in the "error" state because we need to allow patterns to be
 // consumed.
@@ -157,32 +182,7 @@ wire axis_eth_handshake     = axis_eth_tvalid     & axis_eth_tready;
 // This is the currently expected frame data and frame-header.  A "frame-header"
 // is an ordinary data-cycle of frame-data, but with 0's in every byte defined
 // by "FRAME_HEADER_MASK"
-reg [511:0] expected_frame_data, expected_frame_header;
-
-
-
-//=============================================================================
-// This block computes "sensor_chip_hdr_packets".   This is the number of 
-// packets at the start of a frame that we should assume contain sensor-chip
-// header fields scattered within them.
-//=============================================================================
-reg [31:0] sensor_chip_hdr_packets;
-always @(posedge clk) begin
-    if (channel == 0) case(PACKETS_PER_GROUP)
-        1:       sensor_chip_hdr_packets <= 2;
-        2:       sensor_chip_hdr_packets <= 2;
-        3:       sensor_chip_hdr_packets <= 3;
-        default: sensor_chip_hdr_packets <= 4;
-    endcase
-
-    else case(PACKETS_PER_GROUP)
-        1:       sensor_chip_hdr_packets <= 2;
-        2:       sensor_chip_hdr_packets <= 2;
-        3:       sensor_chip_hdr_packets <= 1;
-        default: sensor_chip_hdr_packets <= 0;
-    endcase
-end
-//=============================================================================
+reg [511:0] expected_frame_data, expected_frame_header, expected_frame_footer;
 
 
 //=============================================================================
@@ -271,7 +271,7 @@ end
 // other instance of rdmx_shim.
 //=============================================================================
 reg [31:0] packets_per_frame;
-wire[31:0] packets_per_half_frame = packets_per_frame / 2;
+wire[31:0] packets_per_hframe = packets_per_frame / 2;
 always @* begin
     case (PACKET_SIZE)
           64:   packets_per_frame = FRAME_SIZE /   64;
@@ -291,8 +291,18 @@ end
 // This is the number of cycles in a frame-data packet
 wire[7:0] cycles_per_fdata_packet = PACKET_SIZE / 64;
 
-// The number of cycles in this packet
+// The number of cycles thus far in this packet.  1-based
 reg[7:0] cycles_in_packet;
+
+// The number of frame-data cycles thus far in this half-frame.  0-based
+reg[31:0] hframe_cycle;
+
+// The number of data-cycles in a half-frame.
+wire[31:0] cycles_per_hframe = (FRAME_SIZE / 64) / 2;
+
+// This is the hframe_cycle where we should expect to encounter the 
+// first set of sensor-chip footer data
+wire[31:0] first_footer_hframe_cycle = cycles_per_hframe - 256;
 
 // Number of frame-data packets encountered thus far
 reg[31:0] fd_packet_count;
@@ -408,9 +418,11 @@ always @(posedge clk) begin
             if (axis_pattern_handshake) begin
                 expected_frame_pattern <= axis_pattern_tdata;
                 expected_frame_data    <= {16{axis_pattern_tdata}};
-                expected_frame_header  <= {16{axis_pattern_tdata}} & FRAME_HEADER_MASK;                
+                expected_frame_header  <= {16{axis_pattern_tdata}} & FRAME_HEADER_MASK;
+                expected_frame_footer  <= {16{axis_pattern_tdata}} & FRAME_FOOTER_MASK;                
                 expected_fc            <= expected_fc + 1;
                 fd_packet_count        <= 0;
+                hframe_cycle           <= 0;
                 fsm_state              <= FSM_GET_FDATA_HEADER;
             end
 
@@ -454,16 +466,32 @@ always @(posedge clk) begin
 
                 if (reg_well_formed) begin
                     
-                    // If this packet contains sensor-chip "frame-header" cells...
-                    if (fd_packet_count <= sensor_chip_hdr_packets) begin
+                    // If this data-cycle contains sensor-chip "header" cells...
+                    if (channel == 0 && hframe_cycle < 256 && hframe_cycle[1:0] == 0) begin
                         if (reg_frame_header != expected_frame_header) begin
                             error_data    <= reg_tdata;
                             error[BAD_FD] <= 1;
                         end
                     end
-                    
-                    // Otherwise, we are looking an an ordinary packet of frame-data that
-                    // does not contain sensor-chip frame-header cells
+
+                    // If this data-cycle contains sensor-chip "header" cells...
+                    else if (channel == 0 && hframe_cycle < 256 && hframe_cycle[1:0] == 1) begin
+                        if (reg_frame_header != expected_frame_header) begin
+                            error_data    <= reg_tdata;
+                            error[BAD_FD] <= 1;
+                        end
+                    end
+
+                    // If this data-cycle contains sensor-chip "footer" cells...
+                    else if (channel == 1 && hframe_cycle >= first_footer_hframe_cycle && hframe_cycle[1:0] == 3) begin
+                        if (reg_tdata != expected_frame_footer) begin
+                            error_data    <= reg_tdata;
+                            error[BAD_FD] <= 1;
+                        end
+                    end
+
+                    // Otherwise, we are looking an an ordinary data-cycle of frame-data that
+                    // does not contain sensor-chip frame-header or frame-footer cells
                     else begin
                         if (reg_tdata != expected_frame_data) begin
                             error_data    <= reg_tdata;
@@ -478,9 +506,12 @@ always @(posedge clk) begin
                     end
                 end
 
+                // Keep track of which cycle within the half-frame this is
+                hframe_cycle <= hframe_cycle + 1;
+
                 // If this is the last cycle of the packet...
                 if (reg_tlast) begin
-                    if (fd_packet_count == packets_per_half_frame)
+                    if (fd_packet_count == packets_per_hframe)
                         fsm_state <= FSM_GET_MDATA_HEADER;
                     else
                         fsm_state <= FSM_GET_FDATA_HEADER;

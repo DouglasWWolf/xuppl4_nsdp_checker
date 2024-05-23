@@ -13,6 +13,8 @@
 //                          "PACKETS_PER_GROUP".  This is because the number of packets with 
 //                          sensor-chip headers that each channel sees depends on the number of
 //                          packets per ping-pong group.
+//
+// 22-May-2024  1.4.0  DWW  Added logic to ignore sensor-chip frame-footers
 //================================================================================================
 localparam RTL_TYPE      = 12266;
 localparam RTL_SUBTYPE   = 0;
