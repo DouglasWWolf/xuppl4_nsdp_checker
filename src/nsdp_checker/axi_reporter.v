@@ -18,7 +18,7 @@ module axi_reporter
 
     input        eth_active,
     input        run_status,  
-    input[ 17:0] error, 
+    input[ 31:0] error, 
     input[511:0] error_data,
     input[ 31:0] expected_fdata,
     input[ 63:0] expected_taddr,

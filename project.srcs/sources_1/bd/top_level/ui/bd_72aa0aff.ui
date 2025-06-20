@@ -51,8 +51,8 @@ preplace netloc smartconnect_M00_AXI 1 0 1 NJ 360
 levelinfo -pg 1 0 180 520 1090 1450 1570
 pagesize -pg 1 -db -bbox -sgen -120 0 1730 690
 ",
-   "No Loops_ScaleFactor":"0.732104",
-   "No Loops_TopLeft":"-117,-113",
+   "No Loops_ScaleFactor":"0.743492",
+   "No Loops_TopLeft":"-116,1",
    "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
 preplace port S_AXI -pg 1 -lvl 0 -x 0 -y 60 -defaultsOSRD

@@ -9,6 +9,8 @@
 // 04-May-24  DWW     2  Added support for checking RDMX target addresses
 //
 // 22-May-24  DWW     3  Added support for ignoring sensor-chip header data
+//
+// 19-Jun-25  DWW     4  Added support for BAD_SRC_QSFP and BAD_nn_FLAGS
 //=============================================================================
 
 
@@ -86,7 +88,7 @@ module data_checker # (FREQ_HZ = 250000000)
     output reg[15:0] expected_rdmx_seq,
 
     // Contains error status bits
-    output reg[17:0] error,
+    output reg[31:0] error,
 
     // Contains the data that failed to match
     output reg[511:0] error_data,
@@ -138,6 +140,8 @@ wire[15:0]  w_udp_checksum   = be_tdata[191:176];
 wire[15:0]  w_rdmx_magic     = be_tdata[175:160];
 wire[63:0]  w_rdmx_address   = be_tdata[159:096];
 wire[15:0]  w_rdmx_seq_num   = be_tdata[095:080];
+wire[31:0]  w_rdmx_user_fld  = be_tdata[079:048];
+wire[ 7:0]  w_rdmx_flags     = be_tdata[047:040];
 //=============================================================================
 
 // This is high when there is no error detected
@@ -317,9 +321,13 @@ reg[511:0] reg_tdata, reg_be_tdata, reg_frame_header, reg_frame_footer;
 reg[ 15:0] reg_rdmx_magic;
 reg[ 63:0] reg_rdmx_address;
 reg[ 15:0] reg_rdmx_seq_num;
+reg[  7:0] reg_rdmx_flags;
 reg[ 15:0] reg_ip4_length;
 reg[ 31:0] reg_frame_counter;
+reg[  7:0] reg_source_qsfp;
 reg        reg_well_formed;
+
+
 
 always @(posedge clk) begin
     reg_valid <= 0;
@@ -337,6 +345,8 @@ always @(posedge clk) begin
         reg_rdmx_address  <= w_rdmx_address;
         reg_rdmx_seq_num  <= w_rdmx_seq_num;
         reg_ip4_length    <= w_ip4_length;
+        reg_rdmx_flags    <= w_rdmx_flags;
+        reg_source_qsfp   <= w_eth_src_mac[7:0];
         reg_valid         <= 1;
     end
 end
@@ -367,6 +377,12 @@ localparam BAD_FC_PSIZE = 14;
 localparam BAD_FC_TADDR = 15;
 localparam BAD_FC       = 16;
 localparam BAD_FC_PLEN  = 17;
+
+localparam BAD_SRC_QSFP = 18;
+localparam BAD_FD_FLAGS = 19;
+localparam BAD_MD_FLAGS = 20;
+localparam BAD_FC_FLAGS = 21;
+
 //=============================================================================
 
 
@@ -440,6 +456,16 @@ always @(posedge clk) begin
                     if (reg_rdmx_seq_num != expected_rdmx_seq) begin
                         error[BAD_FD_SEQ] <= 1;
                         error_data        <= reg_be_tdata;                   
+                    end
+
+                    if (reg_source_qsfp != channel) begin
+                        error[BAD_SRC_QSFP] <= 1;
+                        error_data          <= reg_be_tdata;                   
+                    end
+
+                    if (reg_rdmx_flags != 0) begin
+                        error[BAD_FD_FLAGS] <= 1;
+                        error_data       <= reg_be_tdata;                   
                     end
 
                     if (reg_ip4_length != FD_IP_PACKET_SIZE) begin
@@ -536,6 +562,16 @@ always @(posedge clk) begin
                         error_data          <= reg_be_tdata;                   
                     end
 
+                    if (reg_source_qsfp != channel) begin
+                        error[BAD_SRC_QSFP] <= 1;
+                        error_data          <= reg_be_tdata;                   
+                    end
+
+                    if (reg_rdmx_flags != 0) begin
+                        error[BAD_MD_FLAGS] <= 1;
+                        error_data       <= reg_be_tdata;                   
+                    end
+
                     if (reg_ip4_length != MD_IP_PACKET_SIZE) begin
                         error[BAD_MD_PSIZE] <= 1;
                         error_data          <= reg_be_tdata;                    
@@ -581,6 +617,16 @@ always @(posedge clk) begin
                     if (reg_rdmx_seq_num != expected_rdmx_seq) begin
                         error[BAD_FC_SEQ]   <= 1;
                         error_data          <= reg_be_tdata;                   
+                    end
+
+                    if (reg_source_qsfp != channel) begin
+                        error[BAD_SRC_QSFP] <= 1;
+                        error_data          <= reg_be_tdata;                   
+                    end
+
+                    if (reg_rdmx_flags != 1) begin
+                        error[BAD_FC_FLAGS] <= 1;
+                        error_data       <= reg_be_tdata;                   
                     end
 
                     if (reg_ip4_length != FC_IP_PACKET_SIZE) begin

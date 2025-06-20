@@ -212,9 +212,6 @@
           }
         },
         "ports": {
-          "led_pcie_link_up": {
-            "direction": "O"
-          },
           "axi_aclk": {
             "type": "clk",
             "direction": "O"
@@ -457,12 +454,6 @@
               "pcie_bridge/axi_aclk",
               "axi_aclk",
               "reset_extender/slowest_sync_clk"
-            ]
-          },
-          "xdma_0_user_lnk_up": {
-            "ports": [
-              "pcie_bridge/user_lnk_up",
-              "led_pcie_link_up"
             ]
           }
         }
@@ -3273,7 +3264,7 @@
                   },
                   "error": {
                     "direction": "I",
-                    "left": "17",
+                    "left": "31",
                     "right": "0"
                   },
                   "error_data": {
@@ -3570,7 +3561,7 @@
                   },
                   "error": {
                     "direction": "O",
-                    "left": "17",
+                    "left": "31",
                     "right": "0"
                   },
                   "error_data": {
@@ -4088,7 +4079,7 @@
                   },
                   "error": {
                     "direction": "I",
-                    "left": "17",
+                    "left": "31",
                     "right": "0"
                   },
                   "error_data": {
@@ -4385,7 +4376,7 @@
                   },
                   "error": {
                     "direction": "O",
-                    "left": "17",
+                    "left": "31",
                     "right": "0"
                   },
                   "error_data": {
@@ -5709,7 +5700,7 @@
             "parameters": {
               "DATA_WIDTH": {
                 "value": "32",
-                "value_src": "auto"
+                "value_src": "constant"
               },
               "PROTOCOL": {
                 "value": "AXI4LITE",
@@ -5724,8 +5715,8 @@
                 "value_src": "constant"
               },
               "ADDR_WIDTH": {
-                "value": "5",
-                "value_src": "auto"
+                "value": "7",
+                "value_src": "constant"
               },
               "AWUSER_WIDTH": {
                 "value": "0",
@@ -5820,7 +5811,7 @@
               "AWADDR": {
                 "physical_name": "S_AXI_AWADDR",
                 "direction": "I",
-                "left": "4",
+                "left": "6",
                 "right": "0"
               },
               "AWPROT": {
@@ -5874,7 +5865,7 @@
               "ARADDR": {
                 "physical_name": "S_AXI_ARADDR",
                 "direction": "I",
-                "left": "4",
+                "left": "6",
                 "right": "0"
               },
               "ARPROT": {
