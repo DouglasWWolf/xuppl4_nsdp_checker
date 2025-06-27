@@ -96,6 +96,16 @@ module axi_eth_status
     // Stuff our status signals into a status word
     wire[31:0] status_word;
 
+
+    /*
+        @register Link status bits for the two Ethernet/QSFP ports
+        @rname REG_STATUS
+        @field qsfp0 1  0 RO n/a QSFP_0 link status
+        @field qsfp1 1 16 RO n/a QSFP_1 link_status   
+    */
+    localparam REG_ETH_STATUS = 0;
+
+
     // These are the bit positions in the status word
     localparam BIT_SS0_UP      =  0;
     localparam BIT_SS1_UP      = 16;

@@ -76,14 +76,34 @@ module checker_ctl #
     //=========================  AXI Register Map  =============================
     localparam REG_MODULE_REV = 0;      /*  RO   */
 
+    /*
+        @register Write a 1 to this register to reset the system to its initial state
+        @rdesc    This register will stay '1' until the reset completes at which point
+        @rdesc    it will auto-clear to 0.
+    */
     localparam REG_RESET   = 1;
+
+    /*
+        @register Writing a 32-bit value to this register writes that value to the 
+        @rdesc    frame-data FIFO.
+        @rdesc    Reading this register returns the number of items in the frame-
+        @rdesc    data-FIFO.
+        @rname    REG_LOAD
+    */
     localparam REG_LOAD_F0 = 2;         /*  R/W  */
     localparam REG_LOAD_F1 = 3;         /*  R/W  */
     
+    /*
+        @register  After loading the FIFO with the expected frame-data, write a 1 
+        @rdesc     to this register to begin accepting and check packets.
+    */
     localparam REG_START = 4;            
         localparam BIT_F0_START = 0;    /*  R/W  */
         localparam BIT_F1_START = 1;    /*  R/W  */
 
+    /*
+        @register  This register should contain a 1, which is its default value at reset
+    */
     localparam REG_CONT_MODE = 5;
     localparam REG_NSHOT_LIMIT = 6;
 

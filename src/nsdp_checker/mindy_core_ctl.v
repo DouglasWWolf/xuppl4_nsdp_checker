@@ -24,6 +24,8 @@ module mindy_core_ctl
     output reg[31:0] PACKETS_PER_GROUP,
     
     output channel_0, channel_1,
+    
+    output reg ignore_rdmx_flags,
 
     //================== This is an AXI4-Lite slave interface ==================
         
@@ -63,19 +65,67 @@ assign channel_0 = 0;
 assign channel_1 = 1;
 
 //=========================  AXI Register Map  =============================
+
+/*
+    @register RDMX address of the frame-data buffer
+    @rsize 64
+    @rname REG_RFD_ADDR
+*/
 localparam REG_RFD_ADDR_H        =  0;
 localparam REG_RFD_ADDR_L        =  1;
+
+/*
+    @register Size of the frame-data buffer (in bytes)
+    @rsize 64
+    @rname REG_RFD_SIZE
+*/
 localparam REG_RFD_SIZE_H        =  2;
 localparam REG_RFD_SIZE_L        =  3;
+
+/*
+    @register RDMX address of the meta-data buffer
+    @rsize 64
+    @rname REG_RMD_ADDR
+*/
 localparam REG_RMD_ADDR_H        =  4;
 localparam REG_RMD_ADDR_L        =  5;
+
+/*
+    @register Size of the meta-data buffer (in bytes)
+    @rsize 64
+    @rname REG_RMD_SIZE
+*/
 localparam REG_RMD_SIZE_H        =  6;
 localparam REG_RMD_SIZE_L        =  7;
+
+/*
+    @register RDMX address of the frame-counter
+    @rsize 64
+    @rname REG_RFC_ADDR
+
+*/
+
 localparam REG_RFC_ADDR_H        =  8;
 localparam REG_RFC_ADDR_L        =  9;
+
+/*
+    @register Size of a frame in bytes, typically 0x40_0000
+*/
 localparam REG_FRAME_SIZE        = 10;
+
+/*
+    @register Size of the payload in a frame-data packet, typically 4096
+*/
 localparam REG_PACKET_SIZE       = 11;
+
 localparam REG_PACKETS_PER_GROUP = 12;
+
+
+/*
+    @register If this is 1, checks of the RDMX flags are not performed
+*/
+localparam REG_IGNORE_RDMX_FLAGS = 13;
+
 //==========================================================================
 
 
@@ -128,6 +178,7 @@ always @(posedge clk) begin
     // If we're in reset, initialize important registers
     if (resetn == 0) begin
         ashi_write_state  <= 0;
+        ignore_rdmx_flags <= 0;
 
     // If we're not in reset, and a write-request has occured...        
     end else case (ashi_write_state)
@@ -150,9 +201,11 @@ always @(posedge clk) begin
                     REG_RFC_ADDR_H : RFC_ADDR[63:32] <= ashi_wdata;
                     REG_RFC_ADDR_L : RFC_ADDR[31:00] <= ashi_wdata;
 
-                    REG_FRAME_SIZE       : FRAME_SIZE        <=ashi_wdata;
+                    REG_FRAME_SIZE       : FRAME_SIZE        <= ashi_wdata;
                     REG_PACKET_SIZE      : PACKET_SIZE       <= ashi_wdata;
                     REG_PACKETS_PER_GROUP: PACKETS_PER_GROUP <= ashi_wdata;
+                    
+                    REG_IGNORE_RDMX_FLAGS: ignore_rdmx_flags <= ashi_wdata[0];
 
                     // Writes to any other register are a decode-error
                     default: ashi_wresp <= DECERR;
@@ -202,6 +255,8 @@ always @(posedge clk) begin
             REG_FRAME_SIZE        : ashi_rdata <= FRAME_SIZE;       
             REG_PACKET_SIZE       : ashi_rdata <= PACKET_SIZE;
             REG_PACKETS_PER_GROUP : ashi_rdata <= PACKETS_PER_GROUP;
+            
+            REG_IGNORE_RDMX_FLAGS : ashi_rdata <= ignore_rdmx_flags;
 
             // Reads of any other register are a decode-error
             default: ashi_rresp <= DECERR;

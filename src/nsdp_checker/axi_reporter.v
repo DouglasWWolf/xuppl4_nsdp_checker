@@ -5,6 +5,8 @@
 //   Date     Who   Ver  Changes
 //=============================================================================
 // 27-Apr-24  DWW     1  Initial creation
+//
+// 19-Apr-25  DWW     2  Expanded port "error" from 18 bits to 32
 //=============================================================================
 
 /*
@@ -62,19 +64,92 @@ module axi_reporter
 
 
 //=========================  AXI Register Map  =============================
+
+/*
+     @register This will be a 1 in normal operation and will change to 0
+     @rdesc    when an error occurs
+*/
 localparam REG_RUN_STATUS =  0;
+
+/*
+    @register 1 = Data activity detected on the Ethernet port
+    @rdesc    0 = No recent data activity detected on Ethernet port
+*/
 localparam REG_ETH_ACTIVE =  1;
+
+/*
+    @register Bitmap of errors detected.  
+
+    @field bad_fd_magic   1  0  RO  0  Bad magic number in frame-data header
+    @field bad_fd_magic   1  1  RO  0  Bad sequence number in frame-data header    
+    @field bad_fd_magic   1  2  RO  0  Bad IPv4 packet-size in frame-data header    
+    @field bad_fd_taddr   1  3  RO  0  Bad RDMX target address in frame-data header    
+    @field bad_fd         1  4  RO  0  Bad frame-data
+    @field bad_fd_plen    1  5  RO  0  Bad frame-data packet length
+
+    @field bad_md_magic   1  6  RO  0  Bad magic number in meta-data header
+    @field bad_md_magic   1  7  RO  0  Bad sequence number in meta-data header    
+    @field bad_md_magic   1  8  RO  0  Bad IPv4 packet-size in meta-data header    
+    @field bad_md_taddr   1  9  RO  0  Bad RDMX target address in meta-data header    
+    @field reserved_1     1 10  RO  0  Reserved
+    @field bad_md_plen    1 11  RO  0  Bad meta-data packet length
+
+    @field bad_fc_magic   1 12  RO  0  Bad magic number in frame-counter header
+    @field bad_fc_magic   1 13  RO  0  Bad sequence number in frame-counter header    
+    @field bad_fc_magic   1 14  RO  0  Bad IPv4 packet-size in frame-counter header    
+    @field bad_fc_taddr   1 15  RO  0  Bad RDMX target address in frame-counter header    
+    @field bad_fc         1 16  RO  0  Bad frame-counter
+    @field bad_fc_plen    1 17  RO  0  Bad frame-counter packet length
+
+    @field reserved_2    14 18  RO  0  Reserved
+*/
 localparam REG_ERROR      =  2;
+
+
+/*
+    @register Count of the number of packets received
+    @rsize 64
+    @rname REG_PKTS_RCVD
+*/
 localparam REG_PKTS_RCVDH =  3;
 localparam REG_PKTS_RCVDL =  4;
+
+/*
+    @register When an error occurs, this register holds the expected frame-data
+*/
 localparam REG_EXP_FDATA  =  5;
+
+/*
+    @register When an error occurs, this register holds the expected RDMX target address
+    @rsize 64
+    @rname REG_EXP_TADDR
+*/
 localparam REG_EXP_TADDRH =  6;
 localparam REG_EXP_TADDRL =  7;
+
+/*
+    @register When an error occurs, this register holds the expected frame counter
+*/
 localparam REG_EXP_FCTR   =  8;
+
+/*
+    @register When an error occurs, this register holds the expected RDMX sequence number
+*/
 localparam REG_EXP_SEQ    =  9;
+
+
+/*
+    @register Count of corrupted packets received
+    @rsize 64
+    @rname REG_MALFORMED
+*/
 localparam REG_MALFORMEDH = 10;
 localparam REG_MALFORMEDL = 11;
 
+/*
+    @register These registers hold the 64-bytes of data that caused the error.
+    @rsize An array of 16 32-bit registers
+*/
 localparam REG_ERR_DATA   = 16;
 //==========================================================================
 

@@ -65,6 +65,9 @@ module data_checker # (FREQ_HZ = 250000000)
 
     // The number of packets in a ping-pong group
     input[31:0]     PACKETS_PER_GROUP,
+    
+    // If this is asserted, we don't check the RDMX flags
+    input           ignore_rdmx_flags, 
 
     // This is asserted when we detect activity on axis_eth
     output eth_active,
@@ -463,9 +466,9 @@ always @(posedge clk) begin
                         error_data          <= reg_be_tdata;                   
                     end
 
-                    if (reg_rdmx_flags != 0) begin
+                    if (reg_rdmx_flags != 0 && ignore_rdmx_flags == 0) begin
                         error[BAD_FD_FLAGS] <= 1;
-                        error_data       <= reg_be_tdata;                   
+                        error_data          <= reg_be_tdata;                   
                     end
 
                     if (reg_ip4_length != FD_IP_PACKET_SIZE) begin
@@ -567,7 +570,7 @@ always @(posedge clk) begin
                         error_data          <= reg_be_tdata;                   
                     end
 
-                    if (reg_rdmx_flags != 0) begin
+                    if (reg_rdmx_flags != 0 && ignore_rdmx_flags == 0) begin
                         error[BAD_MD_FLAGS] <= 1;
                         error_data       <= reg_be_tdata;                   
                     end
@@ -624,7 +627,7 @@ always @(posedge clk) begin
                         error_data          <= reg_be_tdata;                   
                     end
 
-                    if (reg_rdmx_flags != 1) begin
+                    if (reg_rdmx_flags != 1 && ignore_rdmx_flags == 0) begin
                         error[BAD_FC_FLAGS] <= 1;
                         error_data       <= reg_be_tdata;                   
                     end

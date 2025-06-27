@@ -1,7 +1,7 @@
 //Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2021.1 (lin64) Build 3247384 Thu Jun 10 19:36:07 MDT 2021
-//Date        : Thu Jun 19 23:59:48 2025
+//Date        : Fri Jun 27 15:31:20 2025
 //Host        : wolf-super-server running 64-bit Ubuntu 20.04.6 LTS
 //Command     : generate_target top_level.bd
 //Design      : top_level
@@ -284,6 +284,7 @@ module datapath_checker_imp_17S0UTF
   wire [63:0]mindy_core_ctl_RMD_SIZE;
   wire mindy_core_ctl_channel0;
   wire mindy_core_ctl_channel1;
+  wire mindy_core_ctl_ignore_rdmx_flags;
   wire pcie_axi_aclk;
   wire [0:0]smartconnect_M00_AXI_ARADDR;
   wire smartconnect_M00_AXI_ARREADY;
@@ -483,6 +484,7 @@ module datapath_checker_imp_17S0UTF
         .channel_0(mindy_core_ctl_channel0),
         .channel_1(mindy_core_ctl_channel1),
         .clk(pcie_axi_aclk),
+        .ignore_rdmx_flags(mindy_core_ctl_ignore_rdmx_flags),
         .resetn(source_200Mhz_resetn));
   reporter_0_imp_14RIEO2 reporter_0
        (.FRAME_SIZE(mindy_core_ctl_0_FRAME_SIZE),
@@ -524,6 +526,7 @@ module datapath_checker_imp_17S0UTF
         .eth_rx_tready(bad_packet_filter_0_AXIS_OUT_TREADY),
         .eth_rx_tuser(bad_packet_filter_0_AXIS_OUT_TUSER),
         .eth_rx_tvalid(bad_packet_filter_0_AXIS_OUT_TVALID),
+        .ignore_rdmx_flags(mindy_core_ctl_ignore_rdmx_flags),
         .sys_resetn(checker_ctl_sys_resetn_out));
   reporter_1_imp_YQ6NLO reporter_1
        (.FRAME_SIZE(mindy_core_ctl_0_FRAME_SIZE),
@@ -565,6 +568,7 @@ module datapath_checker_imp_17S0UTF
         .eth_rx_tready(bad_packet_filter_1_AXIS_OUT_TREADY),
         .eth_rx_tuser(bad_packet_filter_1_AXIS_OUT_TUSER),
         .eth_rx_tvalid(bad_packet_filter_1_AXIS_OUT_TVALID),
+        .ignore_rdmx_flags(mindy_core_ctl_ignore_rdmx_flags),
         .sys_resetn(checker_ctl_sys_resetn_out));
 endmodule
 
@@ -1804,6 +1808,7 @@ module reporter_0_imp_14RIEO2
     eth_rx_tready,
     eth_rx_tuser,
     eth_rx_tvalid,
+    ignore_rdmx_flags,
     sys_resetn);
   input [31:0]FRAME_SIZE;
   input [31:0]PACKETS_PER_GROUP;
@@ -1844,6 +1849,7 @@ module reporter_0_imp_14RIEO2
   output eth_rx_tready;
   input eth_rx_tuser;
   input eth_rx_tvalid;
+  input ignore_rdmx_flags;
   input sys_resetn;
 
   wire [0:0]Conn1_ARADDR;
@@ -1885,6 +1891,7 @@ module reporter_0_imp_14RIEO2
   wire [15:0]data_checker_expected_rdmx_seq;
   wire [63:0]data_checker_malformed_packets;
   wire [63:0]data_checker_total_packets_rcvd;
+  wire ignore_rdmx_flags_1;
   wire ila0_all_good;
   wire [31:0]ila0_error;
   wire [511:0]ila0_error_data;
@@ -1930,6 +1937,7 @@ module reporter_0_imp_14RIEO2
   assign channel_1 = channel;
   assign checker_ctl_sys_resetn_out = sys_resetn;
   assign eth_rx_tready = ila0_eth_rx_TREADY;
+  assign ignore_rdmx_flags_1 = ignore_rdmx_flags;
   assign ila0_eth_rx_TDATA = eth_rx_tdata[511:0];
   assign ila0_eth_rx_TLAST = eth_rx_tlast;
   assign ila0_eth_rx_TUSER = eth_rx_tuser;
@@ -1996,6 +2004,7 @@ module reporter_0_imp_14RIEO2
         .expected_frame_pattern(ila0_expected_frame_pattern),
         .expected_rdmx_addr(data_checker_expected_rdmx_addr),
         .expected_rdmx_seq(data_checker_expected_rdmx_seq),
+        .ignore_rdmx_flags(ignore_rdmx_flags_1),
         .malformed_packets(data_checker_malformed_packets),
         .resetn(checker_ctl_sys_resetn_out),
         .total_packets_rcvd(data_checker_total_packets_rcvd));
@@ -2050,6 +2059,7 @@ module reporter_1_imp_YQ6NLO
     eth_rx_tready,
     eth_rx_tuser,
     eth_rx_tvalid,
+    ignore_rdmx_flags,
     sys_resetn);
   input [31:0]FRAME_SIZE;
   input [31:0]PACKETS_PER_GROUP;
@@ -2090,6 +2100,7 @@ module reporter_1_imp_YQ6NLO
   output eth_rx_tready;
   input eth_rx_tuser;
   input eth_rx_tvalid;
+  input ignore_rdmx_flags;
   input sys_resetn;
 
   wire [31:0]PACKETS_PER_GROUP_1;
@@ -2131,6 +2142,7 @@ module reporter_1_imp_YQ6NLO
   wire [15:0]data_checker_expected_rdmx_seq;
   wire [63:0]data_checker_malformed_packets;
   wire [63:0]data_checker_total_packets_rcvd;
+  wire ignore_rdmx_flags_1;
   wire ila1_all_good;
   wire [31:0]ila1_error;
   wire [511:0]ila1_error_data;
@@ -2176,6 +2188,7 @@ module reporter_1_imp_YQ6NLO
   assign channel_1 = channel;
   assign checker_ctl_sys_resetn_out = sys_resetn;
   assign eth_rx_tready = ila1_eth_rx_TREADY;
+  assign ignore_rdmx_flags_1 = ignore_rdmx_flags;
   assign ila1_eth_rx_TDATA = eth_rx_tdata[511:0];
   assign ila1_eth_rx_TLAST = eth_rx_tlast;
   assign ila1_eth_rx_TUSER = eth_rx_tuser;
@@ -2242,6 +2255,7 @@ module reporter_1_imp_YQ6NLO
         .expected_frame_pattern(ila1_expected_frame_pattern),
         .expected_rdmx_addr(data_checker_expected_rdmx_addr),
         .expected_rdmx_seq(data_checker_expected_rdmx_seq),
+        .ignore_rdmx_flags(ignore_rdmx_flags_1),
         .malformed_packets(data_checker_malformed_packets),
         .resetn(checker_ctl_sys_resetn_out),
         .total_packets_rcvd(data_checker_total_packets_rcvd));
