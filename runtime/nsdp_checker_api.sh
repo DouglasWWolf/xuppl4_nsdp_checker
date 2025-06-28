@@ -4,6 +4,7 @@
 # 27-Apr-24  1.0.0  DWW  Initial Creation
 # 17-Apr-25  2.0.0  DWW  Misc cleanup 
 # 19-Apr-25  2.1.0  DWW  Support for BAD_QSFP_PORT and BAD_xx_FLAGS errors
+#                        Added support for supressing BAD_xx_FLAGS
 #==============================================================================
 NSDP_CHECKER_API_VERSION=2.1.0
           VALID_RTL_TYPE=12266
@@ -36,6 +37,7 @@ MC_BASE=0x2000
        REG_FRAME_SIZE=$((MC_BASE + 10* 4))
       REG_PACKET_SIZE=$((MC_BASE + 11* 4))
 REG_PACKETS_PER_GROUP=$((MC_BASE + 12* 4))
+REG_IGNORE_RDMX_FLAGS=$((MC_BASE + 13* 4))
 
 
 ER0_BASE=0x3000
@@ -373,6 +375,26 @@ start_fifo()
     pcireg $REG_START $which_fifo
 }
 #==============================================================================
+
+
+#==============================================================================
+# Pass this a 1 or a 0 to ignore (or not) the check of RDMX flags
+#==============================================================================
+ignore_rdmx_flags()
+{
+    local new_value=$1
+
+    if [ -z $new_value ]; then
+        pcireg -dec $REG_IGNORE_RDMX_FLAGS
+        return
+    fi
+
+    pcireg $REG_IGNORE_RDMX_FLAGS $new_value
+
+}
+#==============================================================================
+
+
 
 
 
